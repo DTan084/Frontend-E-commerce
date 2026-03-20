@@ -1,0 +1,348 @@
+/* MegaMenu.css - Premium Desktop Mega Menu */
+
+.mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 4px solid #3b82f6;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 2.5rem 0;
+  z-index: 40;
+  animation: slideDown 300ms ease-out, fadeIn 300ms ease-out;
+}
+
+.mega-menu-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.mega-menu-grid {
+  display: grid;
+  grid-template-columns: 7fr 3fr 2fr;
+  gap: 2rem;
+  min-height: 400px;
+}
+
+/* Section Titles */
+.mega-menu-section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+/* CATEGORIES COLUMN */
+.mega-menu-categories {
+  animation: fadeInLeft 400ms ease-out;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.25rem 2rem;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 200ms ease;
+  background: transparent;
+  border: none;
+  text-align: left;
+  width: 100%;
+  animation: fadeInUp 400ms ease-out both;
+}
+
+.category-item:hover {
+  background: #eff6ff;
+  transform: translateX(4px);
+}
+
+.category-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 200ms ease;
+}
+
+.category-item:hover .category-icon {
+  transform: scale(1.1) rotate(3deg);
+}
+
+.category-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.category-name {
+  color: #111827;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.category-count {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.125rem;
+}
+
+/* FEATURED PRODUCTS COLUMN */
+.mega-menu-featured {
+  animation: fadeInUp 400ms ease-out 100ms both;
+}
+
+.featured-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.featured-product-card {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 200ms ease;
+  background: transparent;
+  border: none;
+  text-align: left;
+  width: 100%;
+  animation: fadeInUp 400ms ease-out both;
+}
+
+.featured-product-card:hover {
+  background: #f9fafb;
+  transform: translateY(-2px);
+}
+
+.product-thumbnail {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.product-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+.product-price {
+  color: #3b82f6;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.rating-count {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-left: 0.25rem;
+}
+
+.view-all-link {
+  font-size: 0.875rem;
+  color: #3b82f6;
+  font-weight: 500;
+  margin-top: 1rem;
+  display: inline-block;
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.view-all-link:hover {
+  color: #1d4ed8;
+}
+
+/* QUICK LINKS COLUMN */
+.mega-menu-quick-links {
+  animation: fadeInRight 400ms ease-out 200ms both;
+}
+
+.quick-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.quick-link-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 200ms ease;
+  background: transparent;
+  border: none;
+  text-align: left;
+  width: 100%;
+  animation: fadeInUp 400ms ease-out both;
+}
+
+.quick-link-item:hover {
+  background: #f9fafb;
+}
+
+.quick-link-label {
+  flex: 1;
+  color: #374151;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.quick-link-item:hover .quick-link-label {
+  color: #3b82f6;
+}
+
+.quick-link-badge {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+}
+
+.quick-links-divider {
+  border-top: 1px solid #e5e7eb;
+  margin: 1.5rem 0;
+}
+
+/* CTA BANNER */
+.cta-banner {
+  background: linear-gradient(135deg, #eff6ff 0%, #f3e8ff 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+  animation: fadeInUp 400ms ease-out both;
+}
+
+.cta-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.cta-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.cta-button {
+  background: #3b82f6;
+  color: white;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+/* ANIMATIONS */
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* RESPONSIVE - Hide on mobile/tablet */
+@media (max-width: 1024px) {
+  .mega-menu {
+    display: none;
+  }
+}

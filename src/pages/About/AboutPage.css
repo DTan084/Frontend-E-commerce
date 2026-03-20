@@ -1,0 +1,108 @@
+.about-page {
+  padding: 60px 20px;
+  min-height: 100vh;
+}
+
+.about-page h1 {
+  text-align: center;
+  font-size: 42px;
+  margin-bottom: 60px;
+  color: #333;
+}
+
+.about-section,
+.mission-section,
+.values-section,
+.why-choose-section {
+
+  margin: 0 auto 60px;
+}
+
+.about-section h2,
+.mission-section h2,
+.values-section h2,
+.why-choose-section h2 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #667eea;
+  text-align: center;
+}
+
+.about-section p,
+.mission-section p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #555;
+  text-align: center;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.value-card {
+  background: white;
+  padding: 30px 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.value-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.value-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.value-card p {
+  color: #666;
+  line-height: 1.6;
+}
+
+.reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.reason-item {
+  display: flex;
+  gap: 15px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  align-items: flex-start;
+  transition: background 0.3s;
+}
+
+.reason-item:hover {
+  background: #e9ecef;
+}
+
+.reason-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.reason-item h4 {
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: #333;
+  font-weight: 600;
+}
+
+.reason-item p {
+  color: #666;
+  font-size: 15px;
+  line-height: 1.5;
+}

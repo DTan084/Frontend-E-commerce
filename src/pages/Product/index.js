@@ -1,0 +1,9 @@
+export { default as ProductListPage } from './ProductListPage';
+export { default as ProductDetailPage } from './ProductDetailPage';
+export { default as CategoriesPage } from './CategoriesPage';
+export { default as CategoryDetailPage } from './CategoryDetailPage';
+export { default as CollectionPage } from './CollectionPage';
+export { default as TrendingPage } from './TrendingPage';
+export { default as BestSellersPage } from './BestSellersPage';
+export { default as NewArrivalsPage } from './NewArrivalsPage';
+export { default as OnSalePage } from './OnSalePage';

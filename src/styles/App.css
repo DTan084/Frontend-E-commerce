@@ -1,0 +1,75 @@
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px 0;
+}
+
+.main-layout .main-content {
+  padding-top: calc(var(--header-height, 76px) + 12px);
+}
+
+/* Layout Styles */
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Admin Layout */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.admin-main {
+  flex: 1;
+  background-color: #f5f5f5;
+}
+
+.admin-content {
+  padding: 24px;
+}
+
+/* Auth Layout */
+.auth-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.auth-container {
+  max-width: 500px;
+  width: 100%;
+  padding: 20px;
+}
+
+.auth-logo {
+  text-align: center;
+  color: white;
+  margin-bottom: 32px;
+}
+
+.auth-logo h1 {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.auth-content {
+  background: white;
+  padding: 32px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .main-layout .main-content {
+    padding-top: calc(var(--header-height, 68px) + 8px);
+  }
+}

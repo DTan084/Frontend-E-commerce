@@ -1,0 +1,111 @@
+.status-badge-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.status-icon {
+  font-size: 12px;
+  animation: pulse 2s infinite;
+}
+
+.status-label {
+  font-weight: 700;
+}
+
+/* Active Status - Green */
+.status-active {
+  background: linear-gradient(135deg, rgba(72, 187, 120, 0.15) 0%, rgba(56, 161, 105, 0.15) 100%);
+  color: #2f855a;
+  border: 2px solid rgba(72, 187, 120, 0.3);
+}
+
+/* Pending Status - Yellow/Orange */
+.status-pending {
+  background: linear-gradient(135deg, rgba(237, 137, 54, 0.15) 0%, rgba(221, 107, 32, 0.15) 100%);
+  color: #c05621;
+  border: 2px solid rgba(237, 137, 54, 0.3);
+}
+
+/* Rejected Status - Red */
+.status-rejected {
+  background: linear-gradient(135deg, rgba(229, 62, 62, 0.15) 0%, rgba(197, 48, 48, 0.15) 100%);
+  color: #c53030;
+  border: 2px solid rgba(229, 62, 62, 0.3);
+}
+
+/* Draft Status - Gray */
+.status-draft {
+  background: linear-gradient(135deg, rgba(160, 174, 192, 0.15) 0%, rgba(113, 128, 150, 0.15) 100%);
+  color: #4a5568;
+  border: 2px solid rgba(160, 174, 192, 0.3);
+}
+
+/* Rejection Reason */
+.rejection-reason {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+  border-left: 3px solid #e53e3e;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #742a2a;
+  line-height: 1.5;
+}
+
+.reason-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.reason-text {
+  font-weight: 600;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .status-badge {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .rejection-reason {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}

@@ -1,0 +1,234 @@
+.product-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 180px;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-icon {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.btn-text {
+  font-weight: 700;
+}
+
+/* Edit Button - Blue */
+.edit-btn {
+  color: #3182ce;
+}
+
+.edit-btn:hover {
+  border-color: #3182ce;
+  background: linear-gradient(135deg, rgba(49, 130, 206, 0.1) 0%, rgba(43, 108, 176, 0.1) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.2);
+}
+
+.edit-btn:hover .btn-icon {
+  transform: rotate(-10deg);
+}
+
+/* View Button - Purple */
+.view-btn {
+  color: #667eea;
+}
+
+.view-btn:hover {
+  border-color: #667eea;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.view-btn:hover .btn-icon {
+  transform: scale(1.2);
+}
+
+/* Delete Button - Red */
+.delete-btn {
+  color: #e53e3e;
+}
+
+.delete-btn:hover {
+  border-color: #e53e3e;
+  background: linear-gradient(135deg, rgba(229, 62, 62, 0.1) 0%, rgba(197, 48, 48, 0.1) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
+}
+
+.delete-btn:hover .btn-icon {
+  transform: rotate(10deg);
+}
+
+/* Delete Confirmation */
+.delete-confirmation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+  border: 2px solid #e53e3e;
+  border-radius: 12px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.confirm-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #742a2a;
+}
+
+.confirm-icon {
+  font-size: 16px;
+  animation: shake 0.5s ease-in-out;
+}
+
+.confirm-text {
+  white-space: nowrap;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.confirm-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.yes-btn {
+  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+  color: white;
+}
+
+.yes-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.4);
+}
+
+.no-btn {
+  background: white;
+  color: #4a5568;
+  border: 2px solid #e2e8f0;
+}
+
+.no-btn:hover {
+  background: #f7fafc;
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .action-buttons {
+    gap: 6px;
+  }
+
+  .action-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .btn-text {
+    display: none;
+  }
+
+  .btn-icon {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-actions {
+    min-width: auto;
+    flex-wrap: wrap;
+  }
+
+  .action-buttons {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .action-buttons {
+    gap: 4px;
+  }
+
+  .action-btn {
+    padding: 6px 8px;
+  }
+
+  .delete-confirmation {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .confirm-actions {
+    width: 100%;
+  }
+
+  .confirm-btn {
+    flex: 1;
+  }
+}
