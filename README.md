@@ -1,8 +1,8 @@
-# 🛍️ CodeMart — Frontend E-commerce Demo (Mock-Only)
+# CodeMart — Frontend E-commerce Demo (Mock-Only)
 
 Một dự án frontend mô phỏng sàn thương mại điện tử, tập trung vào UI flow và tổ chức code theo hướng dễ mở rộng.
 
-## Project Snapshot (dành cho HR)
+## Project Snapshot
 
 - **Vai trò:** Frontend Developer (cá nhân)
 - **Phạm vi:** React SPA, mock data 100%, không tích hợp backend thật
