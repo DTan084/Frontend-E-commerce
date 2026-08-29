@@ -223,7 +223,7 @@
   animation: slideIn 0.3s ease-out both;
 }
 
-.nav-link {
+.seller-sidebar .nav-link {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -238,7 +238,7 @@
   overflow: hidden;
 }
 
-.nav-link::before {
+.seller-sidebar .nav-link::before {
   content: '';
   position: absolute;
   left: 0;
@@ -249,27 +249,27 @@
   transition: width 0.3s ease;
 }
 
-.nav-link:hover {
+.seller-sidebar .nav-link:hover {
   background: #f7fafc;
   color: #667eea;
   transform: translateX(4px);
 }
 
-.nav-link:hover::before {
+.seller-sidebar .nav-link:hover::before {
   width: 100%;
 }
 
-.nav-link.active {
+.seller-sidebar .nav-link.active {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.nav-link.active .nav-arrow {
+.seller-sidebar .nav-link.active .nav-arrow {
   transform: translateX(4px);
 }
 
-.nav-icon {
+.seller-sidebar .nav-icon {
   font-size: 20px;
   display: flex;
   align-items: center;
@@ -278,22 +278,22 @@
   transition: transform 0.3s ease;
 }
 
-.nav-link:hover .nav-icon {
+.seller-sidebar .nav-link:hover .nav-icon {
   transform: scale(1.2);
 }
 
-.nav-label {
+.seller-sidebar .nav-label {
   flex: 1;
 }
 
-.nav-arrow {
+.seller-sidebar .nav-arrow {
   font-size: 18px;
   opacity: 0;
   transition: all 0.3s ease;
 }
 
-.nav-link:hover .nav-arrow,
-.nav-link.active .nav-arrow {
+.seller-sidebar .nav-link:hover .nav-arrow,
+.seller-sidebar .nav-link.active .nav-arrow {
   opacity: 1;
 }
 
