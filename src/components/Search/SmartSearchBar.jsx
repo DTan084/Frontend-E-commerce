@@ -1,5 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Search,
+  X,
+  Clock,
+  TrendingUp,
+  Hash,
+  Command,
+  Star,
+  FolderTree,
+  Sparkles,
+  SearchX,
+} from 'lucide-react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { getSearchSuggestions } from '../../data/mockSearch';
 import { searchDataService } from '../../services/data';
@@ -13,8 +25,7 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
   const [suggestions, setSuggestions] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [searchHistory, setSearchHistory] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter] = useState('all');
 
   const searchRef = useRef(null);
   const inputRef = useRef(null);
@@ -45,7 +56,6 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
     } else {
       setSuggestions(null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery, activeFilter]);
 
   // Click outside to close
@@ -62,9 +72,7 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
   const fetchSuggestions = async (searchQuery) => {
     setIsLoading(true);
     try {
-      // Simulate async mock query delay
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      // Use mock data
+      await new Promise((resolve) => setTimeout(resolve, 200));
       const results = getSearchSuggestions(searchQuery, activeFilter);
       setSuggestions(results);
     } catch (error) {
@@ -105,21 +113,18 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
   const handleSuggestionClick = (item) => {
     if (!item) return;
 
-    // Handle product click - navigate to product detail
     if (item.title && item.slug) {
       navigate(`/product/${item.slug}`);
       setIsFocused(false);
       return;
     }
 
-    // Handle category click - navigate to products with category filter
     if (item.name && item.slug && item.productCount !== undefined) {
       navigate(`/products?category=${item.slug}`);
       setIsFocused(false);
       return;
     }
 
-    // Handle tag click (technology) - search by tag name
     if (item.name && item.count && item.color) {
       const searchText = item.name;
       setQuery(searchText);
@@ -127,15 +132,12 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
       return;
     }
 
-    // Handle feature click - navigate to products with feature filter
     if (item.name && item.count !== undefined && !item.color && !item.slug && !item.productCount) {
-      // Navigate to products page with feature filter
       navigate(`/products?feature=${encodeURIComponent(item.name)}`);
       setIsFocused(false);
       return;
     }
 
-    // Handle popular search click
     if (item.text) {
       setQuery(item.text);
       handleSearch(item.text);
@@ -199,9 +201,12 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
     return (
       <div className="search-rating">
         {[...Array(5)].map((_, i) => (
-          <span key={i} className={`search-star ${i < rating ? 'filled' : ''}`}>
-            <StarIcon />
-          </span>
+          <Star
+            key={i}
+            size={12}
+            className={`search-star ${i < Math.floor(rating || 5) ? 'filled' : ''}`}
+            fill={i < Math.floor(rating || 5) ? '#fbbf24' : 'none'}
+          />
         ))}
       </div>
     );
@@ -212,13 +217,13 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
   return (
     <div className={`smart-search-bar ${variant}`} ref={searchRef}>
       <div className={`search-input-wrapper ${isFocused ? 'focused' : ''}`}>
-        <SearchIcon className="search-icon" />
+        <Search size={18} className="search-icon" />
 
         <input
           ref={inputRef}
           type="text"
           className="search-input"
-          placeholder="Tìm kiếm website bán hàng, quản lý, tin tức, giáo dục..."
+          placeholder="Tìm mã nguồn React, Vue, Flutter, Spring Boot, Laravel..."
           value={query}
           onChange={handleInputChange}
           onFocus={() => setIsFocused(true)}
@@ -227,12 +232,17 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
 
         <div className="search-actions">
           <kbd className="search-kbd">
-            <CommandIcon />K
+            <Command size={11} />K
           </kbd>
 
           {query && (
-            <button className="search-clear-btn" onClick={handleClear}>
-              <XIcon />
+            <button
+              type="button"
+              className="search-clear-btn"
+              onClick={handleClear}
+              aria-label="Xóa tìm kiếm"
+            >
+              <X size={14} />
             </button>
           )}
         </div>
@@ -243,7 +253,7 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
         <div className="search-dropdown">
           {isLoading ? (
             <div className="search-loading">
-              {[...Array(5)].map((_, i) => (
+              {[...Array(4)].map((_, i) => (
                 <div key={i} className="search-skeleton" />
               ))}
             </div>
@@ -252,11 +262,11 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
             <div className="search-section">
               <div className="search-section-header">
                 <div className="section-title">
-                  <ClockIcon />
+                  <Clock size={14} />
                   <span>Tìm kiếm gần đây</span>
                 </div>
-                <button className="clear-history-btn" onClick={clearHistory}>
-                  Xóa
+                <button type="button" className="clear-history-btn" onClick={clearHistory}>
+                  Xóa tất cả
                 </button>
               </div>
               {searchHistory.map((item, index) => (
@@ -265,7 +275,7 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
                   className={`search-item ${selectedIndex === index ? 'selected' : ''}`}
                   onClick={() => handleHistoryClick(item)}
                 >
-                  <ClockIcon className="item-icon" />
+                  <Clock size={14} className="item-icon" />
                   <span className="item-text">{item}</span>
                 </div>
               ))}
@@ -277,18 +287,22 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
               {suggestions.popular?.length > 0 && (
                 <div className="search-section">
                   <div className="search-section-header">
-                    <TrendingIcon />
-                    <span>Tìm kiếm phổ biến</span>
+                    <div className="section-title">
+                      <TrendingUp size={14} />
+                      <span>Phổ biến nhất</span>
+                    </div>
                   </div>
                   {suggestions.popular.map((item, index) => (
                     <div
-                      key={item.id}
+                      key={item.id || index}
                       className={`search-item ${selectedIndex === index ? 'selected' : ''}`}
                       onClick={() => handleSuggestionClick(item)}
                     >
-                      <TrendingIcon className="item-icon" />
+                      <TrendingUp size={14} className="item-icon" />
                       <span className="item-text">{highlightMatch(item.text, query)}</span>
-                      <span className="item-count">{item.count.toLocaleString()}</span>
+                      {item.count && (
+                        <span className="item-count">{item.count.toLocaleString()}</span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -297,8 +311,10 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
               {suggestions.products?.length > 0 && (
                 <div className="search-section">
                   <div className="search-section-header">
-                    <SearchIcon />
-                    <span>Sản phẩm</span>
+                    <div className="section-title">
+                      <Sparkles size={14} />
+                      <span>Sản phẩm gợi ý</span>
+                    </div>
                   </div>
                   {suggestions.products.map((item, index) => {
                     const itemIndex = (suggestions.popular?.length || 0) + index;
@@ -328,8 +344,10 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
               {suggestions.categories?.length > 0 && (
                 <div className="search-section">
                   <div className="search-section-header">
-                    <FolderIcon />
-                    <span>Danh mục</span>
+                    <div className="section-title">
+                      <FolderTree size={14} />
+                      <span>Danh mục liên quan</span>
+                    </div>
                   </div>
                   {suggestions.categories.map((item, index) => {
                     const itemIndex =
@@ -342,9 +360,9 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
                         className={`search-item ${selectedIndex === itemIndex ? 'selected' : ''}`}
                         onClick={() => handleSuggestionClick(item)}
                       >
-                        <FolderIcon className="item-icon" />
+                        <FolderTree size={14} className="item-icon" />
                         <span className="item-text">{highlightMatch(item.name, query)}</span>
-                        <span className="item-count">{item.productCount} sản phẩm</span>
+                        <span className="item-count">{item.productCount} mã nguồn</span>
                       </div>
                     );
                   })}
@@ -354,8 +372,10 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
               {suggestions.tags?.length > 0 && (
                 <div className="search-section">
                   <div className="search-section-header">
-                    <HashIcon />
-                    <span>Công nghệ</span>
+                    <div className="section-title">
+                      <Hash size={14} />
+                      <span>Công nghệ</span>
+                    </div>
                   </div>
                   {suggestions.tags.map((item, index) => {
                     const itemIndex =
@@ -365,39 +385,11 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
                       index;
                     return (
                       <div
-                        key={item.id}
+                        key={item.id || index}
                         className={`search-item ${selectedIndex === itemIndex ? 'selected' : ''}`}
                         onClick={() => handleSuggestionClick(item)}
                       >
-                        <HashIcon className="item-icon" />
-                        <span className="item-text">{highlightMatch(item.name, query)}</span>
-                        <span className="item-count">{item.count}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {suggestions.features?.length > 0 && (
-                <div className="search-section">
-                  <div className="search-section-header">
-                    <StarIcon />
-                    <span>Tính năng</span>
-                  </div>
-                  {suggestions.features.map((item, index) => {
-                    const itemIndex =
-                      (suggestions.popular?.length || 0) +
-                      (suggestions.products?.length || 0) +
-                      (suggestions.categories?.length || 0) +
-                      (suggestions.tags?.length || 0) +
-                      index;
-                    return (
-                      <div
-                        key={item.id}
-                        className={`search-item ${selectedIndex === itemIndex ? 'selected' : ''}`}
-                        onClick={() => handleSuggestionClick(item)}
-                      >
-                        <StarIcon className="item-icon" />
+                        <Hash size={14} className="item-icon" />
                         <span className="item-text">{highlightMatch(item.name, query)}</span>
                         <span className="item-count">{item.count}</span>
                       </div>
@@ -409,13 +401,24 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
           ) : query.length >= 2 ? (
             // No Results
             <div className="search-no-results">
-              <div className="no-results-icon">🔍</div>
+              <div className="no-results-icon-wrapper">
+                <SearchX size={36} />
+              </div>
               <h4>Không tìm thấy kết quả cho "{query}"</h4>
-              <p>Thử tìm kiếm:</p>
+              <p>Thử tìm kiếm với các từ khóa phổ biến:</p>
               <div className="suggested-chips">
-                {['React', 'PHP', 'Laravel', 'Bán hàng', 'Quản lý', 'Tin tức'].map((tag) => (
+                {[
+                  'React',
+                  'Spring Boot',
+                  'NodeJS',
+                  'Flutter',
+                  'Next.js',
+                  'Bán hàng',
+                  'Quản lý',
+                ].map((tag) => (
                   <button
                     key={tag}
+                    type="button"
                     className="suggested-chip"
                     onClick={() => {
                       setQuery(tag);
@@ -433,117 +436,5 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
     </div>
   );
 };
-
-// Custom SVG Icons
-const SearchIcon = ({ className }) => (
-  <svg
-    className={className}
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <circle cx="11" cy="11" r="8" />
-    <path d="m21 21-4.35-4.35" />
-  </svg>
-);
-
-const XIcon = ({ className }) => (
-  <svg
-    className={className}
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-);
-
-const ClockIcon = ({ className }) => (
-  <svg
-    className={className}
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <circle cx="12" cy="12" r="10" />
-    <polyline points="12 6 12 12 16 14" />
-  </svg>
-);
-
-const TrendingIcon = ({ className }) => (
-  <svg
-    className={className}
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-    <polyline points="17 6 23 6 23 12" />
-  </svg>
-);
-
-const HashIcon = ({ className }) => (
-  <svg
-    className={className}
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <line x1="4" y1="9" x2="20" y2="9" />
-    <line x1="4" y1="15" x2="20" y2="15" />
-    <line x1="10" y1="3" x2="8" y2="21" />
-    <line x1="16" y1="3" x2="14" y2="21" />
-  </svg>
-);
-
-const CommandIcon = ({ className }) => (
-  <svg
-    className={className}
-    width="12"
-    height="12"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z" />
-  </svg>
-);
-
-const StarIcon = ({ className }) => (
-  <svg className={className} width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-  </svg>
-);
-
-const FolderIcon = ({ className }) => (
-  <svg
-    className={className}
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-  </svg>
-);
 
 export default SmartSearchBar;

@@ -1,148 +1,111 @@
 /* Global styles for CodeMart e-commerce site */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  /* 
-  ╔═══════════════════════════════════════════════════════════════════════════════════╗
-  ║                        🎨 THEME CUSTOMIZATION GUIDE                               ║
-  ║                        Thay đổi màu chủ đạo của website                           ║
-  ╚═══════════════════════════════════════════════════════════════════════════════════╝
-  
-  🌈 HOW TO CHANGE THEME COLORS / CÁCH THAY ĐỔI MÀU CHỦ ĐẠO:
-  
-  1️⃣ Main Theme Color / Màu chủ đạo:
-     Thay đổi 2 biến sau để đổi màu gradient chính:
-     --primary-from: #667eea;  ← Màu bắt đầu gradient
-     --primary-to: #764ba2;    ← Màu kết thúc gradient
-  
-  2️⃣ Ready-to-use Theme Presets / Các mẫu màu có sẵn:
-     
-     🟣 PURPLE THEME (Current/Hiện tại):
-        --primary-from: #667eea; --primary-to: #764ba2;
-     
-     🟢 GREEN THEME (Xanh lá):
-        --primary-from: #10b981; --primary-to: #059669;
-     
-     🔴 RED THEME (Đỏ):
-        --primary-from: #ef4444; --primary-to: #dc2626;
-     
-     🔵 BLUE THEME (Xanh dương):
-        --primary-from: #3b82f6; --primary-to: #2563eb;
-     
-     🟠 ORANGE THEME (Cam):
-        --primary-from: #f97316; --primary-to: #ea580c;
-     
-     🌊 TEAL THEME (Xanh ngọc):
-        --primary-from: #14b8a6; --primary-to: #0d9488;
-  
-  3️⃣ Other Customizations / Tùy chỉnh khác:
-     - Status colors: --success-color, --danger-color, --warning-color, --info-color
-     - Backgrounds: --bg-secondary, --bg-light
-     - Text: --text-primary, --text-secondary, --text-muted
-     - Shadows: --shadow-sm, --shadow, --shadow-md, --shadow-lg
-     - Spacing: --spacing-xs to --spacing-2xl
-     - Radius: --border-radius-xs to --border-radius-2xl
-  
-  💡 TIP: Sau khi thay đổi, refresh trang để thấy kết quả!
-       After changing, refresh the page to see the changes!
-  
-  ═══════════════════════════════════════════════════════════════════════════════════
-  */
-
   /* ============================================
-     🎨 THEME COLORS - Easy to customize!
-     Change these values to update entire website
+     🎨 THEME COLORS - CodeMart Modern Tech Marketplace
      ============================================ */
 
-  /* Primary Brand Colors - Main gradient theme */
-  --primary-from: #667eea; /* Purple-Blue start */
-  --primary-to: #764ba2; /* Purple end */
-  --primary-color: #667eea; /* Solid primary for non-gradient uses */
-  --primary-hover: #5568d3;
-  --primary-light: rgba(102, 126, 234, 0.1);
+  /* Primary Brand Colors - Indigo/Violet Gradient */
+  --primary-from: #4f46e5; /* Indigo-600 */
+  --primary-to: #7c3aed; /* Violet-600 */
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-light: rgba(79, 70, 229, 0.08);
   --primary-gradient: linear-gradient(135deg, var(--primary-from) 0%, var(--primary-to) 100%);
+  --primary-gradient-subtle: linear-gradient(
+    135deg,
+    rgba(79, 70, 229, 0.08) 0%,
+    rgba(124, 58, 237, 0.08) 100%
+  );
 
   /* Secondary Colors */
-  --secondary-color: #6c757d;
-  --secondary-hover: #5a6268;
+  --secondary-color: #64748b;
+  --secondary-hover: #475569;
+  --secondary-light: #f1f5f9;
 
   /* Status Colors */
   --success-color: #10b981;
   --success-hover: #059669;
-  --success-light: #d1fae5;
+  --success-light: #ecfdf5;
   --success-dark: #065f46;
 
   --danger-color: #ef4444;
   --danger-hover: #dc2626;
-  --danger-light: #fee2e2;
+  --danger-light: #fef2f2;
   --danger-dark: #991b1b;
 
   --warning-color: #f59e0b;
   --warning-hover: #d97706;
-  --warning-light: #fef3c7;
+  --warning-light: #fffbeb;
   --warning-dark: #92400e;
 
-  --info-color: #3b82f6;
-  --info-hover: #2563eb;
-  --info-light: #dbeafe;
-  --info-dark: #1e40af;
+  --info-color: #0ea5e9;
+  --info-hover: #0284c7;
+  --info-light: #f0f9ff;
+  --info-dark: #0369a1;
 
-  /* Additional Brand Colors */
-  --purple-color: #a855f7;
-  --purple-hover: #9333ea;
-  --teal-color: #14b8a6;
-  --teal-hover: #0d9488;
-  --orange-color: #f97316;
-  --indigo-color: #6366f1;
+  /* Additional Brand Accents */
+  --accent-cyan: #06b6d4;
+  --accent-purple: #8b5cf6;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
 
-  /* Neutral Colors */
-  --light-color: #f8f9fa;
-  --dark-color: #2d3748;
-  --gray-50: #f9fafb;
-  --gray-100: #f3f4f6;
-  --gray-200: #e5e7eb;
-  --gray-300: #d1d5db;
-  --gray-400: #9ca3af;
-  --gray-500: #6b7280;
-  --gray-600: #4b5563;
-  --gray-700: #374151;
-  --gray-800: #1f2937;
-  --gray-900: #111827;
+  /* Neutral Slate Palette */
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --gray-950: #020617;
 
   /* Background colors */
   --bg-primary: #ffffff;
-  --bg-secondary: #f7fafc;
-  --bg-light: #edf2f7;
-  --bg-dark: #1a202c;
-  --bg-gradient: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  --bg-secondary: #f8fafc;
+  --bg-light: #f1f5f9;
+  --bg-dark: #0f172a;
+  --bg-gradient: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 
   /* Sidebar/Admin Dark Theme */
-  --sidebar-bg: linear-gradient(180deg, #1a202c 0%, #2d3748 100%);
-  --sidebar-text: #e2e8f0;
-  --sidebar-hover: rgba(102, 126, 234, 0.1);
+  --sidebar-bg: #0f172a;
+  --sidebar-card: #1e293b;
+  --sidebar-text: #f8fafc;
+  --sidebar-text-muted: #94a3b8;
+  --sidebar-hover: rgba(255, 255, 255, 0.06);
+  --sidebar-active: #4f46e5;
 
   /* Text colors */
-  --text-primary: #2d3748;
-  --text-secondary: #718096;
-  --text-muted: #a0aec0;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
   --text-white: #ffffff;
-  --text-dark: #1a202c;
+  --text-dark: #020617;
 
   /* Border colors */
   --border-color: #e2e8f0;
-  --border-light: #edf2f7;
-  --border-dark: #cbd5e0;
+  --border-light: #f1f5f9;
+  --border-dark: #cbd5e1;
+  --border-focus: #818cf8;
 
-  /* Shadows - Modern, softer shadows */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.15);
-  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.3);
-  --shadow-primary: 0 4px 12px rgba(102, 126, 234, 0.3);
-  --shadow-primary-lg: 0 6px 20px rgba(102, 126, 234, 0.4);
+  /* Layout */
+  --header-height: 72px;
 
-  /* Border radius - Modern, rounder corners */
+  /* Shadows - Modern ambient diffusion */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+  --shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
+  --shadow-primary: 0 4px 14px rgba(79, 70, 229, 0.25);
+  --shadow-primary-lg: 0 10px 25px rgba(79, 70, 229, 0.35);
+
+  /* Border radius */
   --border-radius-xs: 0.25rem; /* 4px */
   --border-radius-sm: 0.5rem; /* 8px */
   --border-radius: 0.75rem; /* 12px */
@@ -152,7 +115,7 @@
   --border-radius-2xl: 1.5rem; /* 24px */
   --border-radius-full: 9999px; /* Circle */
 
-  /* Spacing - Consistent spacing scale */
+  /* Spacing */
   --spacing-xs: 0.25rem; /* 4px */
   --spacing-sm: 0.5rem; /* 8px */
   --spacing: 1rem; /* 16px */
@@ -163,14 +126,20 @@
 
   /* Typography */
   --font-family-base:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-family-heading: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-heading:
+    'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
   --font-size-base: 1rem;
   --font-size-sm: 0.875rem;
-  --font-size-lg: 1.25rem;
+  --font-size-xs: 0.75rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
+  --font-weight-semibold: 600;
   --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
 
   /* Z-index */
   --z-index-dropdown: 1000;
@@ -182,9 +151,9 @@
   --z-index-tooltip: 1070;
 
   /* Transitions */
-  --transition-base: all 0.2s ease-in-out;
-  --transition-fast: all 0.1s ease-in-out;
-  --transition-slow: all 0.3s ease-in-out;
+  --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Reset and base styles */
@@ -251,7 +220,7 @@ a {
 
 a:hover {
   color: var(--primary-hover);
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* Utility classes */
@@ -1089,21 +1058,15 @@ img {
   }
 }
 
-/* Fade transition */
-.fade-enter {
-  opacity: 0;
+/* Desktop vs Mobile display utilities */
+@media (min-width: 769px) {
+  .mobile-only {
+    display: none !important;
+  }
 }
 
-.fade-enter-active {
-  opacity: 1;
-  transition: opacity 300ms;
-}
-
-.fade-exit {
-  opacity: 1;
-}
-
-.fade-exit-active {
-  opacity: 0;
-  transition: opacity 300ms;
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
 }

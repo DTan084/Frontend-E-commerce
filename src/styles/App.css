@@ -2,15 +2,11 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-.main-content {
-  flex: 1;
-  padding: 20px 0;
-}
-
-.main-layout .main-content {
-  padding-top: calc(var(--header-height, 76px) + 12px);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Layout Styles */
@@ -18,21 +14,35 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: var(--bg-secondary);
+}
+
+.main-layout .main-content {
+  flex: 1;
+  padding-top: var(--header-height, 72px);
+  min-height: calc(100vh - var(--header-height, 72px));
+  display: flex;
+  flex-direction: column;
 }
 
 /* Admin Layout */
 .admin-layout {
   display: flex;
   min-height: 100vh;
+  background-color: #0b0f19;
 }
 
 .admin-main {
   flex: 1;
-  background-color: #f5f5f5;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .admin-content {
-  padding: 24px;
+  flex: 1;
+  padding: 32px;
 }
 
 /* Auth Layout */
@@ -41,35 +51,46 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #31104b 100%);
+  padding: 24px;
 }
 
 .auth-container {
-  max-width: 500px;
+  max-width: 480px;
   width: 100%;
-  padding: 20px;
 }
 
 .auth-logo {
   text-align: center;
-  color: white;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .auth-logo h1 {
-  font-size: 48px;
-  margin-bottom: 8px;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 6px;
 }
 
 .auth-content {
   background: white;
-  padding: 32px;
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 36px;
+  border-radius: var(--border-radius-xl, 20px);
+  box-shadow:
+    0 20px 40px -15px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 768px) {
   .main-layout .main-content {
-    padding-top: calc(var(--header-height, 68px) + 8px);
+    padding-top: var(--header-height, 68px);
+  }
+
+  .auth-content {
+    padding: 24px;
   }
 }
