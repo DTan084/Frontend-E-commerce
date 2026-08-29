@@ -1,54 +1,60 @@
 import React from 'react';
+import { Code2, Download, Users, Star } from 'lucide-react';
 import './StatsBar.css';
 
 const StatsBar = () => {
   const stats = [
     {
-      icon: '📦',
+      icon: Code2,
       value: '10,000+',
-      label: 'Sản phẩm cao cấp',
-      color: '#667eea'
+      label: 'Mã nguồn cao cấp',
+      color: '#4f46e5',
+      bg: 'rgba(79, 70, 229, 0.1)',
     },
     {
-      icon: '📥',
+      icon: Download,
       value: '50,000+',
-      label: 'Lượt tải xuống',
-      color: '#f093fb'
+      label: 'Lượt tải & Giao dịch',
+      color: '#06b6d4',
+      bg: 'rgba(6, 182, 212, 0.1)',
     },
     {
-      icon: '👥',
+      icon: Users,
       value: '25,000+',
-      label: 'Người dùng hoạt động',
-      color: '#4facfe'
+      label: 'Lập trình viên tin dùng',
+      color: '#10b981',
+      bg: 'rgba(16, 185, 129, 0.1)',
     },
     {
-      icon: '⭐',
-      value: '4.8',
-      label: 'Đánh giá trung bình',
-      color: '#ffd93d'
-    }
+      icon: Star,
+      value: '4.9/5',
+      label: 'Đánh giá chất lượng',
+      color: '#f59e0b',
+      bg: 'rgba(245, 158, 11, 0.1)',
+    },
   ];
 
   return (
     <section className="stats-bar">
       <div className="container">
-        <div className="stats-grid">
-          {stats.map((stat, index) => (
-            <div 
-              key={index} 
-              className="stat-card"
-              style={{ '--stat-color': stat.color }}
-            >
-              <div className="stat-icon">{stat.icon}</div>
-              <div className="stat-content">
-                <div className="stat-value" data-value={stat.value}>
-                  {stat.value}
+        <div className="stats-bar-grid">
+          {stats.map((stat, index) => {
+            const IconComponent = stat.icon;
+            return (
+              <div key={index} className="stats-bar-card">
+                <div
+                  className="stats-bar-icon"
+                  style={{ backgroundColor: stat.bg, color: stat.color }}
+                >
+                  <IconComponent size={26} />
                 </div>
-                <div className="stat-label">{stat.label}</div>
+                <div className="stats-bar-content">
+                  <div className="stats-bar-value">{stat.value}</div>
+                  <div className="stats-bar-label">{stat.label}</div>
+                </div>
               </div>
-              <div className="stat-background"></div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

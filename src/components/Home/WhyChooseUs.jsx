@@ -1,72 +1,70 @@
 import React from 'react';
+import { Sparkles, Headphones, ShieldCheck, Coins } from 'lucide-react';
 import './WhyChooseUs.css';
 
 const WhyChooseUs = () => {
   const features = [
     {
-      icon: '✨',
+      icon: Sparkles,
       title: 'Mã nguồn chất lượng cao',
-      description: 'Tất cả mã nguồn đều được kiểm duyệt, kiểm tra và tối ưu hóa bởi các chuyên gia. Mã sạch, có tài liệu rõ ràng và sẵn sàng sử dụng.',
-      color: '#667eea'
+      description:
+        'Tất cả mã nguồn đều được kiểm duyệt cấu trúc, quét bảo mật và tối ưu hóa trước khi xuất bản. Code sạch, tài liệu rõ ràng.',
+      color: '#4f46e5',
+      bg: 'rgba(79, 70, 229, 0.1)',
     },
     {
-      icon: '⚡',
-      title: 'Hỗ trợ nhanh 24/7',
-      description: 'Nhận trợ giúp ngay lập tức từ đội ngũ hỗ trợ tận tâm bất cứ lúc nào. Vấn đề kỹ thuật, yêu cầu tùy chỉnh hay câu hỏi - chúng tôi luôn sẵn sàng hỗ trợ.',
-      color: '#f093fb'
+      icon: Headphones,
+      title: 'Hỗ trợ kỹ thuật 24/7',
+      description:
+        'Nhận trợ giúp cài đặt và hướng dẫn tích hợp từ tác giả mã nguồn và đội ngũ kỹ thuật CodeMart bất kỳ lúc nào.',
+      color: '#06b6d4',
+      bg: 'rgba(6, 182, 212, 0.1)',
     },
     {
-      icon: '🔐',
-      title: 'Mã nguồn an toàn và đáng tin cậy',
-      description: 'Bảo mật là ưu tiên hàng đầu. Mọi mã nguồn tuân theo thực hành tốt nhất trong ngành để đảm bảo độ tin cậy và an toàn cho ứng dụng.',
-      color: '#e4da48ff'
+      icon: ShieldCheck,
+      title: 'Giao dịch an toàn & minh bạch',
+      description:
+        'Mọi thanh toán được bảo vệ và xử lý qua cổng bảo mật tiêu chuẩn. Tải link mã nguồn ngay lập tức sau khi thanh toán.',
+      color: '#10b981',
+      bg: 'rgba(16, 185, 129, 0.1)',
     },
     {
-      icon: '💎',
-      title: 'Bảo hành hoàn tiền',
-      description: 'Đảm bảo hài lòng 100% hoặc hoàn tiền trong vòng 30 ngày. Không cần lý do. Chúng tôi cam kết về chất lượng mọi sản phẩm.',
-      color: '#f5576c'
-    }
+      icon: Coins,
+      title: 'Chính sách hoàn tiền',
+      description:
+        'Cam kết hoàn tiền trong trường hợp mã nguồn lỗi kỹ thuật không thể khắc phục hoặc không đúng mô tả cam kết.',
+      color: '#f59e0b',
+      bg: 'rgba(245, 158, 11, 0.1)',
+    },
   ];
 
   return (
     <section className="why-choose-section">
       <div className="container">
         <div className="section-header">
-          <h2 className="section-title">Tại sao chọn chúng tôi?</h2>
+          <h2 className="section-title">Tại sao chọn CodeMart?</h2>
           <p className="section-subtitle">
-            Tham gia cùng hàng nghìn lập trình viên hài lòng tin tưởng chúng tôi về mã nguồn cao cấp và dịch vụ xuất sắc
+            Nền tảng mua bán mã nguồn uy tín được hơn 25.000 lập trình viên và doanh nghiệp tin cậy
           </p>
         </div>
 
         <div className="features-grid">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="feature-card"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="feature-icon-wrapper">
+          {features.map((feature, index) => {
+            const IconComponent = feature.icon;
+            return (
+              <div key={index} className="feature-card">
                 <div
-                  className="feature-icon"
-                  style={{ background: `linear-gradient(135deg, ${feature.color}, ${feature.color}dd)` }}
+                  className="feature-icon-wrapper"
+                  style={{ backgroundColor: feature.bg, color: feature.color }}
                 >
-                  <span className="icon-emoji">{feature.icon}</span>
+                  <IconComponent size={26} />
                 </div>
-                <div className="icon-glow" style={{ background: feature.color }}></div>
+                <h3 className="feature-title">{feature.title}</h3>
+                <p className="feature-description">{feature.description}</p>
               </div>
-
-              <h3 className="feature-title">{feature.title}</h3>
-              <p className="feature-description">{feature.description}</p>
-
-              <div className="feature-badge">
-                <span className="badge-text">Được hơn 25.000 lập trình viên tin tưởng</span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
-
-
       </div>
     </section>
   );

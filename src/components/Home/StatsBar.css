@@ -1,173 +1,107 @@
+/* ==========================================================================
+   Stats Bar Styles - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
 .stats-bar {
-  padding: 60px 20px;
-  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+  padding: 0 0 48px;
+  margin-top: -36px;
   position: relative;
+  z-index: 20;
 }
 
-.stats-bar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
-}
-
-.stats-grid {
+.stats-bar-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
-.stat-card {
+.stats-bar-card {
   position: relative;
-  background: white;
-  padding: 40px 30px;
-  border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  overflow: hidden;
+  background: #ffffff;
+  padding: 22px 20px;
+  border-radius: var(--border-radius-lg, 16px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stats-bar-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.12);
+  border-color: rgba(79, 70, 229, 0.3);
+}
+
+.stats-bar-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.stats-bar-card:hover .stats-bar-icon {
+  transform: scale(1.08);
+}
+
+.stats-bar-content {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  cursor: pointer;
 }
 
-.stat-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-}
-
-.stat-card:hover .stat-icon {
-  transform: scale(1.2) rotate(5deg);
-}
-
-.stat-card:hover .stat-background {
-  opacity: 0.1;
-  transform: scale(1.2);
-}
-
-.stat-background {
-  position: absolute;
-  inset: 0;
-  background: var(--stat-color, #667eea);
-  opacity: 0.05;
-  transition: all 0.4s ease;
-  border-radius: 20px;
-  transform: scale(1);
-}
-
-.stat-icon {
-  font-size: 48px;
-  margin-bottom: 20px;
-  transition: transform 0.4s ease;
-  z-index: 1;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-}
-
-.stat-content {
-  z-index: 1;
-}
-
-.stat-value {
-  font-size: 42px;
+.stats-bar-value {
+  font-size: 24px;
   font-weight: 800;
-  color: #333;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, var(--stat-color, #667eea), #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1;
-  position: relative;
+  color: var(--text-primary, #0f172a) !important;
+  margin-bottom: 2px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  -webkit-text-fill-color: initial !important;
+  background: none !important;
 }
 
-.stat-value::after {
-  content: attr(data-value);
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: -1;
-  color: rgba(0, 0, 0, 0.05);
-  -webkit-text-fill-color: rgba(0, 0, 0, 0.05);
-  transform: translate(4px, 4px);
-}
-
-.stat-label {
-  font-size: 16px;
-  color: #666;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-/* Counter animation on scroll */
-@keyframes countUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.stat-card {
-  animation: countUp 0.6s ease-out;
-}
-
-.stat-card:nth-child(1) {
-  animation-delay: 0.1s;
-}
-
-.stat-card:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.stat-card:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-.stat-card:nth-child(4) {
-  animation-delay: 0.4s;
+.stats-bar-label {
+  font-size: 13px;
+  color: var(--text-secondary, #64748b) !important;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .stats-bar {
-    padding: 40px 20px;
-  }
-
-  .stats-grid {
+@media (max-width: 1024px) {
+  .stats-bar-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .stat-card {
-    padding: 30px 20px;
-  }
-
-  .stat-icon {
-    font-size: 36px;
-    margin-bottom: 15px;
-  }
-
-  .stat-value {
-    font-size: 32px;
-  }
-
-  .stat-label {
-    font-size: 13px;
+    gap: 16px;
   }
 }
 
-@media (max-width: 480px) {
-  .stats-grid {
+@media (max-width: 640px) {
+  .stats-bar {
+    margin-top: -24px;
+    padding-bottom: 32px;
+  }
+
+  .stats-bar-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stats-bar-card {
+    padding: 18px 16px;
+  }
+
+  .stats-bar-value {
+    font-size: 20px;
   }
 }
