@@ -94,13 +94,13 @@
   margin: 0 0 8px 0;
 }
 
-.stat-value {
+.stat-card .stat-value {
   font-size: 36px;
   font-weight: 800;
   color: #2d3748;
   margin-bottom: 4px;
   line-height: 1;
-  background: linear-gradient(135deg, var(--card-color) 0%, #2d3748 100%);
+  background: linear-gradient(135deg, var(--card-color, #4f46e5) 0%, #2d3748 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

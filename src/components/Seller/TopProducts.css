@@ -52,7 +52,7 @@
   text-transform: uppercase;
 }
 
-.stat-value {
+.top-products-container .stat-value {
   font-size: 24px;
   font-weight: 700;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -92,17 +92,17 @@
 }
 
 .top-product-card.rank-1::before {
-  background: linear-gradient(90deg, #FFD700, #FFA500);
+  background: linear-gradient(90deg, #ffd700, #ffa500);
   opacity: 1;
 }
 
 .top-product-card.rank-2::before {
-  background: linear-gradient(90deg, #C0C0C0, #A8A8A8);
+  background: linear-gradient(90deg, #c0c0c0, #a8a8a8);
   opacity: 1;
 }
 
 .top-product-card.rank-3::before {
-  background: linear-gradient(90deg, #CD7F32, #A0522D);
+  background: linear-gradient(90deg, #cd7f32, #a0522d);
   opacity: 1;
 }
 
