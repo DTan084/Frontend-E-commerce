@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { PlusCircle, Store, Sparkles, LifeBuoy, ShieldCheck, Zap } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import Breadcrumb from '../../components/Product/Breadcrumb';
 import SellerSidebar from '../../components/Seller/SellerSidebar';
 import SellerStatsCards from '../../components/Seller/SellerStatsCards';
 import SalesChart from '../../components/Seller/SalesChart';
@@ -18,12 +20,11 @@ const SellerDashboard = () => {
     totalProducts: 25,
     activeProducts: 20,
     pendingProducts: 3,
-    totalRevenue: mockRevenueStats.totalRevenue,
-    totalSales: mockRevenueStats.totalOrders,
+    totalRevenue: mockRevenueStats.totalRevenue || 124500000,
+    totalSales: mockRevenueStats.totalOrders || 142,
     averageRating: 4.8,
   };
 
-  // Combine user data with seller stats
   const sellerData = {
     ...user,
     ...sellerStats,
@@ -31,94 +32,109 @@ const SellerDashboard = () => {
 
   const getCurrentGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 18) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return 'Chào buổi sáng';
+    if (hour < 18) return 'Chào buổi chiều';
+    return 'Chào buổi tối';
   };
 
   return (
-    <div className="seller-dashboard-page">
-      <div className="seller-dashboard-container">
-        {/* Sidebar */}
-        <SellerSidebar seller={sellerData} />
+    <div className="seller-dashboard-page-modern">
+      <div className="seller-container-inner">
+        {/* Breadcrumb */}
+        <Breadcrumb items={[{ label: 'Kênh người bán', path: null }]} />
 
-        {/* Main Content */}
-        <main className="seller-main-content">
-          {/* Page Header */}
-          <div className="dashboard-header">
-            <div className="header-content">
-              <h1 className="dashboard-title">
-                {getCurrentGreeting()}, {user?.name?.split(' ')[0] || 'Seller'}! 👋
-              </h1>
-              <p className="dashboard-subtitle">
-                Here's what's happening with your store today
-              </p>
+        <div className="seller-layout-split-row">
+          {/* Sidebar */}
+          <SellerSidebar seller={sellerData} />
+
+          {/* Main Workspace */}
+          <main className="seller-main-workspace">
+            {/* Header Hero Greeting Card */}
+            <div className="seller-welcome-hero-card">
+              <div className="seller-hero-text-side">
+                <div className="seller-hero-badge">
+                  <Zap size={13} />
+                  <span>Kênh Tác Giả & Nhà Phát Triển CodeMart</span>
+                </div>
+                <h1 className="seller-hero-title">
+                  {getCurrentGreeting()},{' '}
+                  <span className="text-gradient">{user?.name || 'Tác giả'}!</span>
+                </h1>
+                <p className="seller-hero-subtitle">
+                  Theo dõi hiệu suất bán mã nguồn, quản lý doanh thu và chăm sóc khách hàng mua code
+                  của bạn.
+                </p>
+              </div>
+
+              <div className="seller-hero-actions-side">
+                <button
+                  type="button"
+                  className="btn-hero-seller primary"
+                  onClick={() => navigate('/seller/upload')}
+                >
+                  <PlusCircle size={16} />
+                  <span>Đăng bán code mới</span>
+                </button>
+                <button
+                  type="button"
+                  className="btn-hero-seller secondary"
+                  onClick={() => navigate('/seller/products')}
+                >
+                  <Store size={16} />
+                  <span>Kho mã nguồn</span>
+                </button>
+              </div>
             </div>
-            
-            <div className="header-actions">
-              <button className="action-button notification-btn">
-                <span className="btn-icon">🔔</span>
-                <span className="notification-badge">5</span>
-              </button>
-              <button className="action-button upload-btn" onClick={() => navigate('/seller/upload')}>
-                <span className="btn-icon">⬆️</span>
-                <span className="btn-text">Upload Product</span>
-              </button>
-            </div>
-          </div>
 
-          {/* Stats Cards */}
-          <SellerStatsCards stats={sellerStats} />
+            {/* Metrics Stats Cards */}
+            <SellerStatsCards stats={sellerStats} />
 
-          {/* Sales Chart */}
-          <SalesChart />
+            {/* Interactive Sales Chart */}
+            <SalesChart />
 
-          {/* Two Column Layout */}
-          <div className="dashboard-two-column">
-            {/* Recent Sales - Left Column */}
-            <div className="column-left">
+            {/* 2-Column Split: Recent Sales & Top Products */}
+            <div className="seller-two-col-grid">
               <RecentSales />
-            </div>
-
-            {/* Top Products - Right Column */}
-            <div className="column-right">
               <TopProducts />
             </div>
-          </div>
 
-          {/* Latest Reviews */}
-          <LatestReviews />
+            {/* Reviews from Buyers */}
+            <LatestReviews />
 
-          {/* Quick Actions Footer */}
-          <div className="dashboard-footer">
-            <div className="footer-card">
-              <div className="footer-icon">📊</div>
-              <div className="footer-content">
-                <h4>Need Help?</h4>
-                <p>Check our seller guide for tips</p>
+            {/* Help & Creator Assurance Banner */}
+            <div className="seller-creator-footer-cards">
+              <div className="creator-tip-card">
+                <div className="tip-card-icon indigo">
+                  <Sparkles size={20} />
+                </div>
+                <div className="tip-card-text">
+                  <h4>Bí quyết tăng doanh số</h4>
+                  <p>Cập nhật tài liệu hướng dẫn và video demo giúp tỷ lệ mua hàng tăng 40%.</p>
+                </div>
               </div>
-              <button className="footer-btn">Learn More</button>
-            </div>
 
-            <div className="footer-card">
-              <div className="footer-icon">💡</div>
-              <div className="footer-content">
-                <h4>Boost Your Sales</h4>
-                <p>Upgrade to Premium Seller</p>
+              <div className="creator-tip-card">
+                <div className="tip-card-icon emerald">
+                  <ShieldCheck size={20} />
+                </div>
+                <div className="tip-card-text">
+                  <h4>Bảo vệ tác quyền 100%</h4>
+                  <p>Mỗi lượt mua được cấp License Key và mã hóa bản quyền riêng biệt.</p>
+                </div>
               </div>
-              <button className="footer-btn premium">Upgrade Now</button>
-            </div>
 
-            <div className="footer-card">
-              <div className="footer-icon">📞</div>
-              <div className="footer-content">
-                <h4>Contact Support</h4>
-                <p>We're here to help 24/7</p>
+              <div className="creator-tip-card">
+                <div className="tip-card-icon purple">
+                  <LifeBuoy size={20} />
+                </div>
+                <div className="tip-card-text">
+                  <h4>Hỗ trợ kỹ thuật tác giả 24/7</h4>
+                  <p>Đội ngũ kiểm duyệt CodeMart sẵn sàng hỗ trợ giải đáp mọi thắc mắc.</p>
+                </div>
               </div>
-              <button className="footer-btn">Get Support</button>
             </div>
-          </div>
-        </main>
+          </main>
+        </div>
       </div>
     </div>
   );
