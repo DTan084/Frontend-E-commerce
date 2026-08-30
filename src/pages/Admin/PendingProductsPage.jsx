@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import {
+  Clock,
+  ShieldCheck,
+  CheckCircle2,
+  Eye,
+  Check,
+  X,
+  AlertTriangle,
+  FileArchive,
+  Layers,
+} from 'lucide-react';
 import { getPendingProducts } from '../../data/mockPendingProducts';
 import './PendingProductsPage.css';
 
 const PendingProductsPage = () => {
   const [products, setProducts] = useState(getPendingProducts);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'VND'
+      currency: 'VND',
     }).format(price);
   };
 
@@ -21,173 +31,308 @@ const PendingProductsPage = () => {
   };
 
   const handleApprove = (productId) => {
-    if (window.confirm('Phê duyệt sản phẩm này?')) {
-      setProducts(products.filter(p => p.id !== productId));
-    }
+    setProducts((prev) => prev.filter((p) => p.id !== productId));
+    alert(`Đã phê duyệt mở bán thành công mã nguồn #${productId}!`);
   };
 
-  const handleReject = (product) => {
+  const openRejectModal = (product) => {
     setSelectedProduct(product);
-    setShowModal(true);
+    setRejectReason('Mã nguồn chưa kèm tệp hướng dẫn README.md chi tiết cấu hình database.');
+    setShowRejectModal(true);
   };
 
   const submitReject = () => {
     if (!rejectReason.trim()) {
-      alert('Vui lòng nhập lý do từ chối!');
+      alert('Vui lòng nhập lý do từ chối để tác giả chỉnh sửa!');
       return;
     }
 
-    setProducts(products.filter(p => p.id !== selectedProduct.id));
-    setShowModal(false);
+    setProducts((prev) => prev.filter((p) => p.id !== selectedProduct.id));
+    setShowRejectModal(false);
     setRejectReason('');
+    alert(`Đã gửi thông báo từ chối mã nguồn #${selectedProduct.id} kèm lý do đến tác giả.`);
     setSelectedProduct(null);
   };
 
-  const handleViewDetail = (product) => {
-    setSelectedProduct(product);
-  };
-
   return (
-    <div className="pending-products-page">
-      {/* Header */}
-      <section className="page-hero">
-        <div className="container">
-          <div className="breadcrumb">
-            <Link to="/">Trang chủ</Link>
-            <span>/</span>
-            <Link to="/admin">Admin</Link>
-            <span>/</span>
-            <span>Sản phẩm chờ duyệt</span>
+    <div className="admin-page-container pending-products-page-modern">
+      {/* Header Banner */}
+      <div className="admin-page-header-banner">
+        <div className="header-banner-copy">
+          <div className="header-tag-pill">
+            <Clock size={13} />
+            <span>Pipeline Kiểm Duyệt Mã Nguồn</span>
           </div>
+          <h1 className="admin-page-main-title">Xét Duyệt Mã Nguồn Mới</h1>
+          <p className="admin-page-main-desc">
+            Kiểm tra tính an toàn, quét mã độc trong file ZIP và đối soát bản quyền trước khi mở bán
+            công khai trên CodeMart
+          </p>
+        </div>
 
-          <h1>⏳ Sản phẩm chờ duyệt</h1>
-          <p>Xét duyệt sản phẩm mới từ sellers</p>
-          
-          <div className="hero-stats">
-            <div className="stat">
-              📦 <strong>{products.length}</strong> sản phẩm đang chờ
-            </div>
+        <div className="header-stats-badges-row">
+          <div className="stat-chip amber">
+            <Clock size={14} />
+            <span>{products.length} Source code chờ duyệt</span>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Products Grid */}
-      <section className="products-section">
-        <div className="container">
-          {products.length > 0 ? (
-            <div className="products-grid">
-              {products.map(product => (
-                <div key={product.id} className="product-card">
-                  <div className="product-image">
-                    <img src={product.images[0]} alt={product.name} />
-                    <div className="product-badge">Chờ duyệt</div>
+      {/* Grid of Pending Products */}
+      {products.length === 0 ? (
+        <div className="pending-empty-state-card">
+          <ShieldCheck size={48} className="text-emerald" />
+          <h3>Không còn mã nguồn nào chờ duyệt!</h3>
+          <p>Tất cả source code mới từ các tác giả đã được kiểm tra và xử lý xong.</p>
+        </div>
+      ) : (
+        <div className="pending-products-grid">
+          {products.map((product) => (
+            <div key={product.id} className="pending-prod-card">
+              {/* Image with status badge */}
+              <div className="pending-card-media">
+                <img src={product.images[0]} alt={product.name} className="pending-prod-cover" />
+                <span className="pending-card-badge">
+                  <Clock size={12} />
+                  <span>Chờ duyệt 24h</span>
+                </span>
+              </div>
+
+              {/* Body */}
+              <div className="pending-card-body">
+                <div className="pending-cat-tag">
+                  <Layers size={12} />
+                  <span>{product.category}</span>
+                </div>
+
+                <h3 className="pending-card-title">{product.name}</h3>
+
+                <div className="pending-price-tag">
+                  <strong>{formatPrice(product.price)}</strong>
+                </div>
+
+                <div className="pending-specs-list">
+                  <div className="spec-row">
+                    <span className="spec-lbl">Tác giả:</span>
+                    <strong className="spec-val">{product.seller}</strong>
                   </div>
-
-                  <div className="product-content">
-                    <div className="product-header">
-                      <h3>{product.name}</h3>
-                      <div className="product-meta">
-                        <span className="category">📁 {product.category}</span>
-                        <span className="price">{formatPrice(product.price)}</span>
-                      </div>
-                    </div>
-
-                    <div className="product-info">
-                      <div className="info-row">
-                        <strong>Người bán:</strong>
-                        <span>{product.seller}</span>
-                      </div>
-                      <div className="info-row">
-                        <strong>Ngày gửi:</strong>
-                        <span>{formatDate(product.submitDate)}</span>
-                      </div>
-                      <div className="info-row">
-                        <strong>Công nghệ:</strong>
-                        <div className="tech-tags">
-                          {product.technology.map((tech, idx) => (
-                            <span key={idx} className="tech-tag">{tech}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="product-description">
-                      <strong>Mô tả:</strong>
-                      <p>{product.description}</p>
-                    </div>
-
-                    <div className="product-actions">
-                      <button
-                        className="btn-approve"
-                        onClick={() => handleApprove(product.id)}
-                      >
-                        ✅ Phê duyệt
-                      </button>
-                      <button
-                        className="btn-reject"
-                        onClick={() => handleReject(product)}
-                      >
-                        ❌ Từ chối
-                      </button>
-                      <button
-                        className="btn-detail"
-                        onClick={() => handleViewDetail(product)}
-                      >
-                        👁️ Chi tiết
-                      </button>
-                    </div>
+                  <div className="spec-row">
+                    <span className="spec-lbl">Ngày nộp:</span>
+                    <span className="spec-val">{formatDate(product.submitDate)}</span>
+                  </div>
+                  <div className="spec-row">
+                    <span className="spec-lbl">File .ZIP:</span>
+                    <span className="spec-val text-emerald">
+                      <FileArchive size={12} /> 48.5 MB (Đã quét sạch)
+                    </span>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-state">
-              <div className="empty-icon">✅</div>
-              <h3>Không có sản phẩm chờ duyệt</h3>
-              <p>Tất cả sản phẩm đã được xử lý</p>
-            </div>
-          )}
-        </div>
-      </section>
 
-      {/* Reject Modal */}
-      {showModal && (
-        <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>❌ Từ chối sản phẩm</h2>
-              <button className="modal-close" onClick={() => setShowModal(false)}>
-                ✕
+                {/* Tags */}
+                {product.tags && (
+                  <div className="pending-tags-wrap">
+                    {product.tags.slice(0, 3).map((tag, idx) => (
+                      <span key={idx} className="pending-tag-chip">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Actions */}
+              <div className="pending-card-actions-bar">
+                <button
+                  type="button"
+                  className="btn-pending-inspect"
+                  onClick={() => setSelectedProduct(product)}
+                >
+                  <Eye size={13} />
+                  <span>Xem chi tiết</span>
+                </button>
+
+                <div className="decision-btn-group">
+                  <button
+                    type="button"
+                    className="btn-pending-reject"
+                    onClick={() => openRejectModal(product)}
+                    title="Từ chối"
+                  >
+                    <X size={15} />
+                    <span>Từ chối</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn-pending-approve"
+                    onClick={() => handleApprove(product.id)}
+                    title="Phê duyệt mở bán"
+                  >
+                    <Check size={15} />
+                    <span>Duyệt mở bán</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Inspect Modal */}
+      {selectedProduct && !showRejectModal && (
+        <div className="modal-backdrop-overlay" onClick={() => setSelectedProduct(null)}>
+          <div className="modal-inspect-box" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-user-head">
+              <h3>Hồ sơ Kiểm duyệt Mã Nguồn #{selectedProduct.id}</h3>
+              <button
+                type="button"
+                className="btn-modal-close"
+                onClick={() => setSelectedProduct(null)}
+              >
+                <X size={18} />
               </button>
             </div>
 
-            <div className="modal-body">
-              <div className="reject-product-info">
-                <strong>Sản phẩm:</strong> {selectedProduct?.name}
-              </div>
-              <div className="reject-product-info">
-                <strong>Người bán:</strong> {selectedProduct?.seller}
-              </div>
-
-              <div className="form-group">
-                <label>Lý do từ chối *</label>
-                <textarea
-                  value={rejectReason}
-                  onChange={(e) => setRejectReason(e.target.value)}
-                  rows="5"
-                  placeholder="Nhập lý do từ chối sản phẩm..."
-                  required
+            <div className="modal-user-body">
+              <div className="inspect-header-row">
+                <img
+                  src={selectedProduct.images[0]}
+                  alt={selectedProduct.name}
+                  className="inspect-thumb-lg"
                 />
+                <div className="inspect-meta-col">
+                  <h4>{selectedProduct.name}</h4>
+                  <p>
+                    Tác giả: <strong>{selectedProduct.seller}</strong> •{' '}
+                    {formatDate(selectedProduct.submitDate)}
+                  </p>
+                  <span className="modal-price-highlight">
+                    {formatPrice(selectedProduct.price)}
+                  </span>
+                </div>
               </div>
 
-              <div className="modal-actions">
-                <button className="btn-cancel" onClick={() => setShowModal(false)}>
-                  Hủy
+              <div className="inspect-security-checklist">
+                <h5>Kết quả Quét An Toàn Tự Động:</h5>
+                <div className="security-check-item passed">
+                  <CheckCircle2 size={15} className="text-emerald" />
+                  <span>Không phát hiện mã độc, backdoor hoặc trojan trong file .ZIP</span>
+                </div>
+                <div className="security-check-item passed">
+                  <CheckCircle2 size={15} className="text-emerald" />
+                  <span>Đầy đủ cấu trúc thư mục dự án và file cấu hình môi trường</span>
+                </div>
+              </div>
+
+              <div className="inspect-desc-box">
+                <h5>Mô tả tính năng từ tác giả:</h5>
+                <p>{selectedProduct.description}</p>
+              </div>
+            </div>
+
+            <div className="modal-user-footer">
+              <button
+                type="button"
+                className="btn-modal-reject-act"
+                onClick={() => {
+                  setShowRejectModal(true);
+                }}
+              >
+                Từ chối mã nguồn
+              </button>
+              <button
+                type="button"
+                className="btn-modal-approve-act"
+                onClick={() => {
+                  handleApprove(selectedProduct.id);
+                  setSelectedProduct(null);
+                }}
+              >
+                Phê duyệt & Đăng bán ngay
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reject Modal */}
+      {showRejectModal && selectedProduct && (
+        <div className="modal-backdrop-overlay" onClick={() => setShowRejectModal(false)}>
+          <div className="modal-reject-box" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-user-head">
+              <div className="reject-head-title">
+                <AlertTriangle size={18} className="text-danger" />
+                <h3>Từ chối phê duyệt mã nguồn #{selectedProduct.id}</h3>
+              </div>
+              <button
+                type="button"
+                className="btn-modal-close"
+                onClick={() => setShowRejectModal(false)}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="modal-user-body">
+              <p className="reject-note-txt">
+                Vui lòng nêu rõ lý do để tác giả <strong>{selectedProduct.seller}</strong> có thể
+                cập nhật và nộp lại:
+              </p>
+
+              <textarea
+                className="form-textarea-box"
+                rows={4}
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                placeholder="Nhập lý do từ chối chi tiết..."
+              />
+
+              <div className="quick-reason-chips">
+                <button
+                  type="button"
+                  className="btn-quick-reason"
+                  onClick={() =>
+                    setRejectReason(
+                      'Thiếu tệp README.md hướng dẫn cài đặt và cấu hình cơ sở dữ liệu.'
+                    )
+                  }
+                >
+                  Thiếu README.md
                 </button>
-                <button className="btn-submit" onClick={submitReject}>
-                  Xác nhận từ chối
+                <button
+                  type="button"
+                  className="btn-quick-reason"
+                  onClick={() =>
+                    setRejectReason('Ảnh demo chụp màn hình bị mờ hoặc không khớp với mã nguồn.')
+                  }
+                >
+                  Ảnh demo chưa đạt
+                </button>
+                <button
+                  type="button"
+                  className="btn-quick-reason"
+                  onClick={() =>
+                    setRejectReason(
+                      'Phát hiện thiếu tệp phụ thuộc (package.json / composer.json / pom.xml).'
+                    )
+                  }
+                >
+                  Thiếu dependencies
                 </button>
               </div>
+            </div>
+
+            <div className="modal-user-footer">
+              <button
+                type="button"
+                className="btn-modal-close-action"
+                onClick={() => setShowRejectModal(false)}
+              >
+                Hủy bỏ
+              </button>
+              <button type="button" className="btn-modal-confirm-reject" onClick={submitReject}>
+                Xác nhận từ chối
+              </button>
             </div>
           </div>
         </div>
