@@ -1,200 +1,159 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ShoppingBag, ArrowRight, Clock, CheckCircle2 } from 'lucide-react';
 import './RecentSales.css';
 
 const RecentSales = () => {
+  const navigate = useNavigate();
+
   const recentSales = [
     {
       id: 1,
+      orderCode: '#ORD-8821',
       product: {
-        name: 'Premium Admin Panel',
-        image: 'https://via.placeholder.com/60x60/667eea/ffffff?text=Admin',
-        category: 'Dashboard',
+        name: 'Mã Nguồn E-commerce React + Laravel',
+        image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=100',
+        category: 'Thương mại điện tử',
       },
       buyer: {
-        name: 'John Doe',
-        avatar: 'https://via.placeholder.com/40x40/48bb78/ffffff?text=JD',
-        email: 'john@example.com',
+        name: 'Nguyễn Văn Long',
+        email: 'long.dev@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100',
       },
-      amount: 99,
-      date: '1 hour ago',
+      amount: 1500000,
+      license: 'Regular',
+      date: '25 phút trước',
       status: 'completed',
     },
     {
       id: 2,
+      orderCode: '#ORD-8820',
       product: {
-        name: 'E-commerce UI Kit',
-        image: 'https://via.placeholder.com/60x60/48bb78/ffffff?text=Ecom',
-        category: 'UI Kit',
+        name: 'Giao Diện Admin Dashboard Pro Vue.js',
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=100',
+        category: 'Admin Template',
       },
       buyer: {
-        name: 'Jane Smith',
-        avatar: 'https://via.placeholder.com/40x40/ed8936/ffffff?text=JS',
-        email: 'jane@example.com',
+        name: 'Phạm Minh Tuấn',
+        email: 'tuanpm@tech.vn',
+        avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100',
       },
-      amount: 149,
-      date: '3 hours ago',
+      amount: 1200000,
+      license: 'Regular',
+      date: '2 giờ trước',
       status: 'completed',
     },
     {
       id: 3,
+      orderCode: '#ORD-8819',
       product: {
-        name: 'Landing Page Builder',
-        image: 'https://via.placeholder.com/60x60/ed8936/ffffff?text=Land',
-        category: 'Template',
+        name: 'Fullstack SaaS Boilerplate Next.js',
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=100',
+        category: 'Fullstack App',
       },
       buyer: {
-        name: 'Bob Martin',
-        avatar: 'https://via.placeholder.com/40x40/9f7aea/ffffff?text=BM',
-        email: 'bob@example.com',
+        name: 'Lê Hoàng Sơn',
+        email: 'son.le@startup.io',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100',
       },
-      amount: 79,
-      date: '5 hours ago',
+      amount: 3500000,
+      license: 'Extended',
+      date: '5 giờ trước',
       status: 'completed',
     },
     {
       id: 4,
+      orderCode: '#ORD-8818',
       product: {
-        name: 'Mobile App Template',
-        image: 'https://via.placeholder.com/60x60/9f7aea/ffffff?text=Mobile',
-        category: 'Mobile',
+        name: 'Ứng Dụng Flutter Đặt Đồ Ăn 2 Đầu',
+        image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=100',
+        category: 'Mobile App',
       },
       buyer: {
-        name: 'Sarah Wilson',
-        avatar: 'https://via.placeholder.com/40x40/f093fb/ffffff?text=SW',
-        email: 'sarah@example.com',
+        name: 'Vũ Thị Hằng',
+        email: 'hang.vu@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100',
       },
-      amount: 129,
-      date: '8 hours ago',
-      status: 'pending',
-    },
-    {
-      id: 5,
-      product: {
-        name: 'SaaS Dashboard Pro',
-        image: 'https://via.placeholder.com/60x60/f093fb/ffffff?text=SaaS',
-        category: 'Dashboard',
-      },
-      buyer: {
-        name: 'Mike Johnson',
-        avatar: 'https://via.placeholder.com/40x40/38b2ac/ffffff?text=MJ',
-        email: 'mike@example.com',
-      },
-      amount: 199,
-      date: '12 hours ago',
+      amount: 2800000,
+      license: 'Regular',
+      date: '1 ngày trước',
       status: 'completed',
     },
   ];
 
-  const getStatusBadge = (status) => {
-    const badges = {
-      completed: { text: 'Completed', color: '#48bb78', icon: '✓' },
-      pending: { text: 'Pending', color: '#ed8936', icon: '⏳' },
-      refunded: { text: 'Refunded', color: '#e53e3e', icon: '↩' },
-    };
-    return badges[status] || badges.completed;
+  const formatVND = (price) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price);
   };
 
   return (
-    <div className="recent-sales-container">
-      <div className="recent-sales-header">
-        <div className="header-title-section">
-          <h2 className="section-title">
-            💸 Recent Sales
-          </h2>
-          <p className="section-subtitle">
-            Your latest transactions
-          </p>
+    <div className="recent-sales-card-modern">
+      <div className="recent-sales-head">
+        <div className="sales-head-title-wrap">
+          <ShoppingBag size={18} className="text-emerald" />
+          <div>
+            <h2 className="recent-sales-title">Đơn bán gần đây</h2>
+            <p className="recent-sales-subtitle">Lượt mua mã nguồn mới nhất từ khách hàng</p>
+          </div>
         </div>
-        <button className="view-all-btn">
-          View All →
+        <button
+          type="button"
+          className="btn-view-all-sales"
+          onClick={() => navigate('/seller/sales')}
+        >
+          <span>Xem tất cả</span>
+          <ArrowRight size={13} />
         </button>
       </div>
 
-      <div className="sales-list">
-        {recentSales.map((sale, index) => {
-          const statusBadge = getStatusBadge(sale.status);
-          return (
-            <div
-              key={sale.id}
-              className="sale-item"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Product Info */}
-              <div className="sale-product">
-                <div className="product-image-wrapper">
-                  <img
-                    src={sale.product.image}
-                    alt={sale.product.name}
-                    className="product-image"
-                  />
-                  <div className="product-category-badge">
-                    {sale.product.category}
-                  </div>
-                </div>
-                <div className="product-details">
-                  <h4 className="product-name">{sale.product.name}</h4>
-                  <span className="product-category">{sale.product.category}</span>
-                </div>
-              </div>
-
-              {/* Buyer Info */}
-              <div className="sale-buyer">
-                <img
-                  src={sale.buyer.avatar}
-                  alt={sale.buyer.name}
-                  className="buyer-avatar"
-                />
-                <div className="buyer-details">
-                  <h4 className="buyer-name">{sale.buyer.name}</h4>
-                  <span className="buyer-email">{sale.buyer.email}</span>
-                </div>
-              </div>
-
-              {/* Date */}
-              <div className="sale-date">
-                <span className="date-icon">🕒</span>
-                <span className="date-text">{sale.date}</span>
-              </div>
-
-              {/* Amount */}
-              <div className="sale-amount">
-                <strong className="amount-value">${sale.amount}</strong>
-                <span className="amount-label">USD</span>
-              </div>
-
-              {/* Status */}
-              <div className="sale-status">
-                <span
-                  className="status-badge"
-                  style={{ background: `${statusBadge.color}15`, color: statusBadge.color }}
-                >
-                  <span className="status-icon">{statusBadge.icon}</span>
-                  {statusBadge.text}
+      <div className="recent-sales-feed-list">
+        {recentSales.map((sale) => (
+          <div key={sale.id} className="sale-record-row">
+            {/* Product Media & Info */}
+            <div className="sale-product-col">
+              <img
+                src={sale.product.image}
+                alt={sale.product.name}
+                className="sale-product-thumb"
+              />
+              <div className="sale-product-text">
+                <span className="sale-product-name">{sale.product.name}</span>
+                <span className="sale-order-meta">
+                  {sale.orderCode} • {sale.product.category}
                 </span>
               </div>
+            </div>
 
-              {/* Actions */}
-              <div className="sale-actions">
-                <button className="action-btn view-btn" title="View Details">
-                  👁️
-                </button>
-                <button className="action-btn invoice-btn" title="Download Invoice">
-                  📄
-                </button>
+            {/* Buyer Col */}
+            <div className="sale-buyer-col">
+              <img src={sale.buyer.avatar} alt={sale.buyer.name} className="sale-buyer-avatar" />
+              <div className="sale-buyer-info">
+                <span className="sale-buyer-name">{sale.buyer.name}</span>
+                <span className="sale-time-pill">
+                  <Clock size={11} />
+                  <span>{sale.date}</span>
+                </span>
               </div>
             </div>
-          );
-        })}
-      </div>
 
-      {/* Empty State (hidden when there are sales) */}
-      {recentSales.length === 0 && (
-        <div className="empty-sales">
-          <div className="empty-icon">💤</div>
-          <h3>No Sales Yet</h3>
-          <p>Your recent sales will appear here</p>
-        </div>
-      )}
+            {/* Amount & License */}
+            <div className="sale-financial-col">
+              <strong className="sale-price-val">{formatVND(sale.amount)}</strong>
+              <span className="sale-license-badge">{sale.license} License</span>
+            </div>
+
+            {/* Status */}
+            <div className="sale-status-col">
+              <span className="badge-sale-status completed">
+                <CheckCircle2 size={12} />
+                <span>Thành công</span>
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

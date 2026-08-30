@@ -1,4 +1,5 @@
 import React from 'react';
+import { MessageSquare, Star, ThumbsUp, CornerDownRight } from 'lucide-react';
 import './LatestReviews.css';
 
 const LatestReviews = () => {
@@ -6,179 +7,130 @@ const LatestReviews = () => {
     {
       id: 1,
       rating: 5,
-      comment: 'Absolutely amazing! The code quality is exceptional and documentation is crystal clear. Highly recommended!',
+      comment:
+        'Mã nguồn viết cực kỳ sạch và chuẩn cấu trúc. Backend Laravel và Frontend React giao tiếp mượt mà, tài liệu deploy Docker rất chi tiết!',
       reviewer: {
-        name: 'Sarah Johnson',
-        avatar: 'https://via.placeholder.com/50x50/48bb78/ffffff?text=SJ',
+        name: 'Hoàng Nam',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100',
+        role: 'Tech Lead',
       },
       product: {
-        name: 'Premium Admin Dashboard',
-        image: 'https://via.placeholder.com/60x60/667eea/ffffff?text=Admin',
+        name: 'Mã Nguồn E-commerce React + Laravel',
+        image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=100',
       },
-      date: '2 hours ago',
+      date: '2 giờ trước',
       helpful: 24,
     },
     {
       id: 2,
-      rating: 4,
-      comment: 'Great template with lots of features. Would love to see more color schemes in future updates.',
+      rating: 5,
+      comment:
+        'Giao diện Admin rất đẹp và dễ tùy biến. Tác giả hỗ trợ cài đặt qua UltraView cực kỳ nhiệt tình và chuyên nghiệp.',
       reviewer: {
-        name: 'Michael Chen',
-        avatar: 'https://via.placeholder.com/50x50/ed8936/ffffff?text=MC',
+        name: 'Trần Minh Tuấn',
+        avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100',
+        role: 'Frontend Developer',
       },
       product: {
-        name: 'E-commerce UI Kit',
-        image: 'https://via.placeholder.com/60x60/48bb78/ffffff?text=Ecom',
+        name: 'Giao Diện Admin Dashboard Pro Vue.js',
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=100',
       },
-      date: '5 hours ago',
+      date: '5 giờ trước',
       helpful: 18,
     },
     {
       id: 3,
       rating: 5,
-      comment: 'Perfect for my project! Saved me weeks of development time. Worth every penny!',
+      comment:
+        'Tiết kiệm cho team mình hơn 1 tháng dựng base dự án. Hoàn toàn xứng đáng với mức giá!',
       reviewer: {
-        name: 'Emily Davis',
-        avatar: 'https://via.placeholder.com/50x50/9f7aea/ffffff?text=ED',
+        name: 'Đặng Thảo Vy',
+        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100',
+        role: 'Product Owner',
       },
       product: {
-        name: 'Landing Page Bundle',
-        image: 'https://via.placeholder.com/60x60/ed8936/ffffff?text=Land',
+        name: 'Fullstack SaaS Boilerplate Next.js',
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=100',
       },
-      date: '1 day ago',
+      date: '1 ngày trước',
       helpful: 31,
-    },
-    {
-      id: 4,
-      rating: 4,
-      comment: 'Solid template with clean code. Minor issue with responsive design on tablets, but seller fixed it quickly!',
-      reviewer: {
-        name: 'David Wilson',
-        avatar: 'https://via.placeholder.com/50x50/f093fb/ffffff?text=DW',
-      },
-      product: {
-        name: 'Mobile App Template',
-        image: 'https://via.placeholder.com/60x60/9f7aea/ffffff?text=Mobile',
-      },
-      date: '2 days ago',
-      helpful: 15,
     },
   ];
 
-  const renderStars = (rating) => {
-    return [...Array(5)].map((_, index) => (
-      <span
-        key={index}
-        className={`review-star ${index < rating ? 'filled' : ''}`}
-      >
-        ⭐
-      </span>
-    ));
-  };
-
-  const getRatingColor = (rating) => {
-    if (rating >= 5) return '#48bb78';
-    if (rating >= 4) return '#667eea';
-    if (rating >= 3) return '#ed8936';
-    return '#e53e3e';
-  };
-
   return (
-    <div className="latest-reviews-container">
-      <div className="reviews-header">
-        <div className="header-title-section">
-          <h2 className="section-title">
-            💬 Latest Reviews
-          </h2>
-          <p className="section-subtitle">
-            What customers are saying about your products
-          </p>
-        </div>
-        <div className="reviews-summary">
-          <div className="summary-rating">
-            <strong className="rating-value">4.8</strong>
-            <div className="rating-stars">
-              {renderStars(5)}
-            </div>
-            <span className="rating-count">{reviews.length} reviews</span>
+    <div className="latest-reviews-card-modern">
+      <div className="reviews-head">
+        <div className="reviews-head-title-wrap">
+          <MessageSquare size={18} className="text-purple" />
+          <div>
+            <h2 className="reviews-title">Đánh giá mới nhất từ khách hàng</h2>
+            <p className="reviews-subtitle">
+              Phản hồi và nhận xét thực tế từ cộng đồng lập trình viên
+            </p>
           </div>
+        </div>
+
+        <div className="reviews-summary-badge">
+          <Star size={14} fill="#f59e0b" color="#f59e0b" />
+          <span className="summary-rating-num">4.9</span>
+          <span className="summary-rating-count">(158 nhận xét)</span>
         </div>
       </div>
 
-      <div className="reviews-list">
-        {reviews.map((review, index) => (
-          <div
-            key={review.id}
-            className="review-card"
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            {/* Review Header */}
-            <div className="review-card-header">
-              <div className="reviewer-info">
+      <div className="reviews-feed-grid">
+        {reviews.map((review) => (
+          <div key={review.id} className="review-item-card">
+            {/* Reviewer & Product Info */}
+            <div className="review-top-row">
+              <div className="reviewer-profile-group">
                 <img
                   src={review.reviewer.avatar}
                   alt={review.reviewer.name}
-                  className="reviewer-avatar"
+                  className="reviewer-img"
                 />
-                <div className="reviewer-details">
-                  <h4 className="reviewer-name">{review.reviewer.name}</h4>
-                  <span className="review-date">{review.date}</span>
+                <div>
+                  <div className="reviewer-name-row">
+                    <span className="reviewer-name">{review.reviewer.name}</span>
+                    <span className="reviewer-role-tag">{review.reviewer.role}</span>
+                  </div>
+                  <span className="review-date-text">{review.date}</span>
                 </div>
               </div>
 
-              <div className="product-preview">
-                <img
-                  src={review.product.image}
-                  alt={review.product.name}
-                  className="product-thumb"
-                />
-                <span className="product-name-small">{review.product.name}</span>
+              <div className="review-stars-row">
+                {[...Array(review.rating)].map((_, i) => (
+                  <Star key={i} size={13} fill="#f59e0b" color="#f59e0b" />
+                ))}
               </div>
             </div>
 
-            {/* Rating */}
-            <div className="review-rating-section">
-              <div className="review-stars">
-                {renderStars(review.rating)}
-              </div>
-              <span
-                className="rating-badge"
-                style={{ background: `${getRatingColor(review.rating)}15`, color: getRatingColor(review.rating) }}
-              >
-                {review.rating}.0
-              </span>
+            {/* Target Product Strip */}
+            <div className="review-product-strip">
+              <img
+                src={review.product.image}
+                alt={review.product.name}
+                className="review-product-thumb"
+              />
+              <span className="review-product-title">{review.product.name}</span>
             </div>
 
-            {/* Comment */}
-            <p className="review-comment">{review.comment}</p>
+            {/* Content */}
+            <p className="review-text-content">"{review.comment}"</p>
 
-            {/* Footer */}
-            <div className="review-card-footer">
-              <button className="helpful-btn">
-                <span className="btn-icon">👍</span>
-                <span className="btn-text">Helpful ({review.helpful})</span>
+            {/* Footer Actions */}
+            <div className="review-card-bottom">
+              <button type="button" className="btn-helpful-action">
+                <ThumbsUp size={12} />
+                <span>Hữu ích ({review.helpful})</span>
               </button>
-              <button className="reply-btn">
-                <span className="btn-icon">💬</span>
-                <span className="btn-text">Reply</span>
-              </button>
-              <button className="more-btn">
-                <span className="btn-icon">⋯</span>
+
+              <button type="button" className="btn-reply-action">
+                <CornerDownRight size={12} />
+                <span>Trả lời nhận xét</span>
               </button>
             </div>
-
-            {/* Decorative Elements */}
-            <div className="review-glow" style={{ background: getRatingColor(review.rating) }}></div>
           </div>
         ))}
-      </div>
-
-      {/* View All Button */}
-      <div className="reviews-footer">
-        <button className="view-all-reviews-btn">
-          View All Reviews
-          <span className="btn-arrow">→</span>
-        </button>
       </div>
     </div>
   );

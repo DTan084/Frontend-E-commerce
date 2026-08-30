@@ -1,5 +1,17 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  Package,
+  PlusCircle,
+  TrendingUp,
+  Wallet,
+  Star,
+  LogOut,
+  CheckCircle2,
+  ShieldCheck,
+  Zap,
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import './SellerSidebar.css';
 
@@ -10,51 +22,33 @@ const SellerSidebar = ({ seller }) => {
   const menuItems = [
     {
       id: 'dashboard',
-      label: 'Dashboard',
-      icon: '📊',
+      label: 'Tổng quan Dashboard',
+      icon: LayoutDashboard,
       path: '/seller/dashboard',
     },
     {
       id: 'products',
-      label: 'My Products',
-      icon: '📦',
+      label: 'Mã nguồn của tôi',
+      icon: Package,
       path: '/seller/products',
     },
     {
       id: 'upload',
-      label: 'Upload New',
-      icon: '⬆️',
+      label: 'Đăng bán mã nguồn',
+      icon: PlusCircle,
       path: '/seller/upload',
     },
     {
       id: 'sales',
-      label: 'Sales',
-      icon: '💰',
+      label: 'Lịch sử doanh thu',
+      icon: TrendingUp,
       path: '/seller/sales',
     },
     {
-      id: 'revenue',
-      label: 'Revenue',
-      icon: '💵',
-      path: '/seller/revenue',
-    },
-    {
-      id: 'reviews',
-      label: 'Reviews',
-      icon: '⭐',
-      path: '/seller/reviews',
-    },
-    {
-      id: 'withdraw',
-      label: 'Withdraw',
-      icon: '🏦',
-      path: '/seller/withdraw',
-    },
-    {
-      id: 'settings',
-      label: 'Settings',
-      icon: '⚙️',
-      path: '/seller/settings',
+      id: 'withdrawals',
+      label: 'Rút tiền & Ngân hàng',
+      icon: Wallet,
+      path: '/seller/withdrawals',
     },
   ];
 
@@ -62,7 +56,7 @@ const SellerSidebar = ({ seller }) => {
     if (!name) return 'S';
     return name
       .split(' ')
-      .map(word => word[0])
+      .map((word) => word[0])
       .join('')
       .toUpperCase()
       .slice(0, 2);
@@ -74,110 +68,99 @@ const SellerSidebar = ({ seller }) => {
   };
 
   return (
-    <aside className="seller-sidebar">
-      {/* Seller Info Card */}
-      <div className="seller-info-card">
-        <div className="seller-badge-crown">👑</div>
-        
-        <div className="seller-avatar-wrapper">
+    <aside className="seller-sidebar-modern">
+      {/* Creator Info Card */}
+      <div className="seller-profile-card">
+        <div className="seller-avatar-container">
           {seller?.avatar ? (
-            <img src={seller.avatar} alt={seller.name} className="seller-avatar" />
+            <img src={seller.avatar} alt={seller.name} className="seller-avatar-img" />
           ) : (
-            <div className="seller-avatar-placeholder">
-              {getInitials(seller?.name)}
-            </div>
+            <div className="seller-avatar-fallback">{getInitials(seller?.name)}</div>
           )}
-          <div className="avatar-status-online"></div>
-        </div>
-        
-        <div className="seller-details">
-          <h3 className="seller-name">{seller?.name || 'Seller'}</h3>
-          <span className="seller-role-badge">
-            🏪 Seller
-          </span>
-          {seller?.isPremium && (
-            <span className="premium-seller-badge">
-              ⚡ Premium
-            </span>
-          )}
+          <span className="seller-online-dot" title="Tác giả trực tuyến"></span>
         </div>
 
-        <div className="seller-stats-mini">
-          <div className="stat-mini-item">
-            <span className="stat-mini-icon">📦</span>
-            <div className="stat-mini-content">
-              <strong>{seller?.totalProducts || 0}</strong>
-              <span>Products</span>
-            </div>
+        <div className="seller-meta-info">
+          <div className="seller-name-row">
+            <h3 className="seller-display-name">{seller?.name || 'Tác giả CodeMart'}</h3>
+            <CheckCircle2 size={16} className="text-emerald" title="Tác giả đã xác minh" />
           </div>
-          <div className="stat-mini-divider"></div>
-          <div className="stat-mini-item">
-            <span className="stat-mini-icon">💰</span>
-            <div className="stat-mini-content">
-              <strong>{seller?.totalSales || 0}</strong>
-              <span>Sales</span>
+          <div className="seller-badge-row">
+            <span className="seller-pill-badge">
+              <Zap size={11} />
+              <span>Tác giả Verified</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Creator Mini Metric Summary */}
+        <div className="seller-mini-summary-grid">
+          <div className="mini-summary-item">
+            <span className="mini-summary-val">{seller?.totalProducts || 25}</span>
+            <span className="mini-summary-lbl">Source Code</span>
+          </div>
+          <div className="mini-summary-divider"></div>
+          <div className="mini-summary-item">
+            <span className="mini-summary-val">{seller?.totalSales || 142}</span>
+            <span className="mini-summary-lbl">Đã bán</span>
+          </div>
+          <div className="mini-summary-divider"></div>
+          <div className="mini-summary-item">
+            <div className="rating-mini-row">
+              <Star size={12} fill="#f59e0b" color="#f59e0b" />
+              <span className="mini-summary-val">4.8</span>
             </div>
+            <span className="mini-summary-lbl">Đánh giá</span>
           </div>
         </div>
       </div>
 
-      {/* Navigation Menu */}
-      <nav className="seller-nav">
-        <h4 className="nav-title">MENU</h4>
-        <ul className="nav-list">
-          {menuItems.map((item, index) => (
-            <li 
-              key={item.id} 
-              className="nav-item"
-              style={{ animationDelay: `${index * 0.05}s` }}
-            >
+      {/* Navigation Links */}
+      <nav className="seller-nav-section">
+        <span className="seller-nav-group-title">QUẢN LÝ GIAN HÀNG</span>
+        <div className="seller-nav-menu">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            return (
               <NavLink
+                key={item.id}
                 to={item.path}
-                className={({ isActive }) =>
-                  `nav-link ${isActive ? 'active' : ''}`
-                }
+                className={({ isActive }) => `seller-nav-item-link ${isActive ? 'active' : ''}`}
                 end={item.id === 'dashboard'}
               >
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-label">{item.label}</span>
-                <span className="nav-arrow">›</span>
+                <div className="nav-item-icon-box">
+                  <Icon size={17} />
+                </div>
+                <span className="nav-item-text">{item.label}</span>
               </NavLink>
-            </li>
-          ))}
-        </ul>
+            );
+          })}
+        </div>
       </nav>
 
-      {/* Quick Actions */}
-      <div className="quick-actions">
-        <h4 className="nav-title">QUICK ACTIONS</h4>
-        <button className="quick-action-btn upload-btn">
-          <span className="btn-icon">⬆️</span>
-          <span>Upload Product</span>
-        </button>
-        <button className="quick-action-btn withdraw-btn">
-          <span className="btn-icon">💸</span>
-          <span>Request Payout</span>
-        </button>
-      </div>
-
-      {/* Logout Button */}
-      <div className="sidebar-footer">
-        <button className="logout-btn" onClick={handleLogout}>
-          <span className="icon">🚪</span>
-          <span>Logout</span>
+      {/* Quick Action CTA Box */}
+      <div className="seller-cta-box">
+        <button
+          type="button"
+          className="btn-seller-upload-cta"
+          onClick={() => navigate('/seller/upload')}
+        >
+          <PlusCircle size={15} />
+          <span>Đăng bán code mới</span>
         </button>
       </div>
 
-      {/* Performance Badge */}
-      <div className="performance-badge">
-        <div className="performance-icon">🎯</div>
-        <div className="performance-content">
-          <strong>Performance</strong>
-          <div className="performance-bar">
-            <div className="performance-fill" style={{ width: '85%' }}></div>
-          </div>
-          <small>85% rating</small>
+      {/* Trust Badge & Logout */}
+      <div className="seller-sidebar-footer">
+        <div className="seller-escrow-trust-pill">
+          <ShieldCheck size={14} className="text-emerald" />
+          <span>Hoa hồng 80% • Bảo hộ Escrow</span>
         </div>
+
+        <button type="button" className="btn-seller-logout" onClick={handleLogout}>
+          <LogOut size={15} />
+          <span>Đăng xuất tài khoản</span>
+        </button>
       </div>
     </aside>
   );

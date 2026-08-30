@@ -1,4 +1,5 @@
 import React from 'react';
+import { Flame, Star, TrendingUp, TrendingDown, Package, Award } from 'lucide-react';
 import './TopProducts.css';
 
 const TopProducts = () => {
@@ -6,10 +7,10 @@ const TopProducts = () => {
     {
       id: 1,
       rank: 1,
-      name: 'Premium Admin Dashboard',
-      image: 'https://via.placeholder.com/150x100/667eea/ffffff?text=Admin+Dashboard',
+      name: 'Mã Nguồn E-commerce React + Laravel',
+      image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400',
       sales: 156,
-      revenue: 15444,
+      revenue: 234000000,
       rating: 4.9,
       reviews: 89,
       trend: 'up',
@@ -18,10 +19,10 @@ const TopProducts = () => {
     {
       id: 2,
       rank: 2,
-      name: 'E-commerce UI Kit Pro',
-      image: 'https://via.placeholder.com/150x100/48bb78/ffffff?text=E-commerce+Kit',
+      name: 'Giao Diện Admin Dashboard Pro Vue.js',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400',
       sales: 142,
-      revenue: 21188,
+      revenue: 170400000,
       rating: 4.8,
       reviews: 76,
       trend: 'up',
@@ -30,10 +31,10 @@ const TopProducts = () => {
     {
       id: 3,
       rank: 3,
-      name: 'Landing Page Bundle',
-      image: 'https://via.placeholder.com/150x100/ed8936/ffffff?text=Landing+Pages',
+      name: 'Fullstack SaaS Boilerplate Next.js',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400',
       sales: 138,
-      revenue: 10902,
+      revenue: 483000000,
       rating: 4.7,
       reviews: 65,
       trend: 'up',
@@ -42,10 +43,10 @@ const TopProducts = () => {
     {
       id: 4,
       rank: 4,
-      name: 'Mobile App Template',
-      image: 'https://via.placeholder.com/150x100/9f7aea/ffffff?text=Mobile+App',
+      name: 'Ứng Dụng Flutter Đặt Đồ Ăn 2 Đầu',
+      image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400',
       sales: 125,
-      revenue: 16125,
+      revenue: 350000000,
       rating: 4.6,
       reviews: 58,
       trend: 'down',
@@ -53,118 +54,68 @@ const TopProducts = () => {
     },
   ];
 
-  const getRankEmoji = (rank) => {
-    const emojis = {
-      1: '🥇',
-      2: '🥈',
-      3: '🥉',
-      4: '🏅',
-    };
-    return emojis[rank] || '🏅';
-  };
-
-  const renderStars = (rating) => {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-    const stars = [];
-
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<span key={`full-${i}`} className="star full">⭐</span>);
-    }
-    if (hasHalfStar) {
-      stars.push(<span key="half" className="star half">⭐</span>);
-    }
-
-    return stars;
+  const formatVND = (price) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price);
   };
 
   return (
-    <div className="top-products-container">
-      <div className="top-products-header">
-        <div className="header-title-section">
-          <h2 className="section-title">
-            🏆 Top Selling Products
-          </h2>
-          <p className="section-subtitle">
-            Your best performers this month
-          </p>
-        </div>
-        <div className="header-stats">
-          <div className="header-stat-item">
-            <span className="stat-label">Total Sales</span>
-            <strong className="stat-value">{topProducts.reduce((sum, p) => sum + p.sales, 0)}</strong>
+    <div className="top-products-card-modern">
+      <div className="top-products-head">
+        <div className="top-head-title-wrap">
+          <Flame size={18} className="text-amber" />
+          <div>
+            <h2 className="top-products-title">Mã nguồn bán chạy nhất</h2>
+            <p className="top-products-subtitle">Top source code mang lại doanh thu cao nhất</p>
           </div>
+        </div>
+        <div className="top-products-counter">
+          <Award size={14} className="text-amber" />
+          <span>Top {topProducts.length}</span>
         </div>
       </div>
 
-      <div className="top-products-grid">
-        {topProducts.map((product, index) => (
-          <div
-            key={product.id}
-            className={`top-product-card rank-${product.rank}`}
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            {/* Rank Badge */}
-            <div className="rank-badge">
-              <span className="rank-emoji">{getRankEmoji(product.rank)}</span>
-              <span className="rank-number">#{product.rank}</span>
+      <div className="top-products-grid-list">
+        {topProducts.map((product) => (
+          <div key={product.id} className="top-product-row-card">
+            {/* Rank Number Badge */}
+            <div className={`rank-pill-badge rank-${product.rank}`}>
+              <span>#{product.rank}</span>
             </div>
 
-            {/* Product Image */}
-            <div className="product-image-container">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="product-image"
-              />
-              <div className="image-overlay">
-                <button className="overlay-btn">View Details</button>
-              </div>
+            {/* Media */}
+            <div className="top-product-media-wrap">
+              <img src={product.image} alt={product.name} className="top-product-img" />
             </div>
 
-            {/* Product Info */}
-            <div className="product-info">
-              <h3 className="product-title">{product.name}</h3>
-              
-              {/* Rating */}
-              <div className="product-rating">
-                <div className="stars">
-                  {renderStars(product.rating)}
+            {/* Info */}
+            <div className="top-product-details">
+              <h3 className="top-product-name">{product.name}</h3>
+
+              <div className="top-product-meta-strip">
+                <div className="rating-pill">
+                  <Star size={12} fill="#f59e0b" color="#f59e0b" />
+                  <span>{product.rating}</span>
+                  <span className="reviews-count">({product.reviews})</span>
                 </div>
-                <span className="rating-text">
-                  {product.rating} ({product.reviews} reviews)
+                <span className="meta-dot-divider">•</span>
+                <span className="sales-total-pill">
+                  <Package size={12} />
+                  <span>{product.sales} lượt tải</span>
                 </span>
               </div>
-
-              {/* Stats */}
-              <div className="product-stats">
-                <div className="stat-item">
-                  <span className="stat-icon">📦</span>
-                  <div className="stat-content">
-                    <strong>{product.sales}</strong>
-                    <span>Sales</span>
-                  </div>
-                </div>
-                <div className="stat-divider"></div>
-                <div className="stat-item">
-                  <span className="stat-icon">💰</span>
-                  <div className="stat-content">
-                    <strong>${product.revenue.toLocaleString()}</strong>
-                    <span>Revenue</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Trend */}
-              <div className={`product-trend ${product.trend}`}>
-                <span className="trend-icon">{product.trend === 'up' ? '📈' : '📉'}</span>
-                <span className="trend-value">{product.trendValue}</span>
-                <span className="trend-label">vs last month</span>
-              </div>
             </div>
 
-            {/* Card Shine Effect */}
-            <div className="card-shine"></div>
+            {/* Revenue & Trend */}
+            <div className="top-product-finance-col">
+              <strong className="top-revenue-val">{formatVND(product.revenue)}</strong>
+              <div className={`trend-pill ${product.trend}`}>
+                {product.trend === 'up' ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
+                <span>{product.trendValue}</span>
+              </div>
+            </div>
           </div>
         ))}
       </div>

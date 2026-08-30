@@ -1,94 +1,91 @@
 import React from 'react';
+import {
+  TrendingUp,
+  Package,
+  ShoppingBag,
+  Clock,
+  ArrowUpRight,
+  ArrowDownRight,
+} from 'lucide-react';
 import './SellerStatsCards.css';
 
 const SellerStatsCards = ({ stats }) => {
+  const formatVND = (price) => {
+    if (!price && price !== 0) return '0 ₫';
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price);
+  };
+
   const statCards = [
     {
-      id: 'total-products',
-      title: 'Total Products',
-      value: stats?.totalProducts || 25,
-      icon: '📦',
-      color: '#667eea',
-      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      change: '+3',
-      changeType: 'increase',
-      subtitle: 'All time',
+      id: 'total-revenue',
+      title: 'Tổng doanh thu',
+      value: formatVND(stats?.totalRevenue || 124500000),
+      icon: TrendingUp,
+      badgeText: '+15.2%',
+      badgeType: 'positive',
+      subtext: 'So với tháng trước',
+      colorClass: 'indigo',
     },
     {
       id: 'active-products',
-      title: 'Active Products',
+      title: 'Mã nguồn đang bán',
       value: stats?.activeProducts || 20,
-      icon: '✅',
-      color: '#48bb78',
-      gradient: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
-      change: '+2',
-      changeType: 'increase',
-      subtitle: 'Currently listed',
+      icon: Package,
+      badgeText: '+2 mới',
+      badgeType: 'neutral',
+      subtext: 'Trên tổng số 25 mã nguồn',
+      colorClass: 'emerald',
+    },
+    {
+      id: 'total-sales',
+      title: 'Đơn bán thành công',
+      value: `${stats?.totalSales || 142} đơn`,
+      icon: ShoppingBag,
+      badgeText: '+18 đơn',
+      badgeType: 'positive',
+      subtext: 'Đã hoàn tất thanh toán',
+      colorClass: 'blue',
     },
     {
       id: 'pending-approval',
-      title: 'Pending Approval',
-      value: stats?.pendingProducts || 3,
-      icon: '⏳',
-      color: '#ed8936',
-      gradient: 'linear-gradient(135deg, #ed8936 0%, #dd6b20 100%)',
-      change: '-1',
-      changeType: 'decrease',
-      subtitle: 'Under review',
-    },
-    {
-      id: 'total-revenue',
-      title: 'Total Revenue',
-      value: `$${stats?.totalRevenue?.toLocaleString() || '5,240'}`,
-      icon: '💰',
-      color: '#f093fb',
-      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-      change: '+$450',
-      changeType: 'increase',
-      subtitle: 'This month',
+      title: 'Đang chờ duyệt',
+      value: `${stats?.pendingProducts || 3} code`,
+      icon: Clock,
+      badgeText: 'Đang xử lý',
+      badgeType: 'warning',
+      subtext: 'Dự kiến duyệt trong 24h',
+      colorClass: 'amber',
     },
   ];
 
   return (
-    <div className="seller-stats-cards">
-      {statCards.map((card, index) => (
-        <div
-          key={card.id}
-          className="stat-card"
-          style={{ animationDelay: `${index * 0.1}s` }}
-        >
-          <div className="stat-card-header">
-            <div className="stat-icon-wrapper" style={{ background: card.gradient }}>
-              <span className="stat-icon">{card.icon}</span>
+    <div className="seller-stats-cards-grid">
+      {statCards.map((card) => {
+        const Icon = card.icon;
+        return (
+          <div key={card.id} className={`seller-stat-card-modern ${card.colorClass}`}>
+            <div className="stat-card-top-row">
+              <div className={`stat-icon-wrapper-modern ${card.colorClass}`}>
+                <Icon size={20} />
+              </div>
+              <span className={`stat-trend-badge ${card.badgeType}`}>
+                {card.badgeType === 'positive' && <ArrowUpRight size={12} />}
+                {card.badgeType === 'negative' && <ArrowDownRight size={12} />}
+                <span>{card.badgeText}</span>
+              </span>
             </div>
-            <div className={`stat-change ${card.changeType}`}>
-              {card.changeType === 'increase' ? '↑' : '↓'} {card.change}
-            </div>
-          </div>
 
-          <div className="stat-card-body">
-            <h3 className="stat-value">{card.value}</h3>
-            <p className="stat-title">{card.title}</p>
-            <span className="stat-subtitle">{card.subtitle}</span>
-          </div>
-
-          <div className="stat-card-footer">
-            <div className="stat-progress-bar">
-              <div
-                className="stat-progress-fill"
-                style={{
-                  background: card.gradient,
-                  width: card.id === 'pending-approval' ? '30%' : '75%',
-                }}
-              ></div>
+            <div className="stat-card-main-data">
+              <span className="stat-card-label">{card.title}</span>
+              <h3 className="stat-card-primary-val">{card.value}</h3>
+              <p className="stat-card-sub-info">{card.subtext}</p>
             </div>
           </div>
-
-          {/* Decorative Elements */}
-          <div className="stat-card-glow" style={{ background: card.gradient }}></div>
-          <div className="stat-card-shine"></div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
