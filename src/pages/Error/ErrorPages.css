@@ -1,43 +1,206 @@
-.error-page {
+/* ==========================================================================
+   Error Pages - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
+.error-page-modern {
   min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  background: var(--bg-secondary, #f8fafc);
+  padding: 60px 20px;
 }
 
-.error-content {
+.error-card-box {
+  max-width: 640px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: var(--border-radius-xl, 24px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+  padding: 50px 40px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.error-content h1 {
-  font-size: 120px;
-  color: #007bff;
-  margin-bottom: 20px;
+.error-code-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 12px;
 }
 
-.error-content h2 {
-  font-size: 32px;
-  margin-bottom: 15px;
+.error-giant-title {
+  font-size: 80px;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.error-content p {
-  color: #666;
-  margin-bottom: 30px;
-  font-size: 18px;
+.error-main-heading {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary, #0f172a);
+  margin: 16px 0 8px;
 }
 
-.btn-home {
-  display: inline-block;
-  padding: 12px 30px;
-  background: #007bff;
-  color: white;
-  border-radius: 4px;
+.error-sub-description {
+  font-size: 14px;
+  color: var(--text-secondary, #64748b);
+  line-height: 1.6;
+  margin: 0 0 28px;
+  max-width: 480px;
+}
+
+/* Quick Search */
+.error-quick-search-form {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.error-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted, #94a3b8);
+}
+
+.error-search-input {
+  width: 100%;
+  padding: 11px 110px 11px 40px;
+  background: var(--gray-50, #f8fafc);
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: var(--border-radius-md, 10px);
+  font-size: 13px;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.error-search-input:focus {
+  background: #ffffff;
+  border-color: var(--primary-color, #4f46e5);
+}
+
+.btn-error-search-submit {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
+  padding: 0 16px;
+  background: var(--primary-color, #4f46e5);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-error-search-submit:hover {
+  background: var(--primary-hover, #4338ca);
+}
+
+/* Actions Group */
+.error-actions-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-error-home-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: var(--primary-color, #4f46e5);
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
   text-decoration: none;
-  transition: background 0.3s;
+  transition: all 0.15s ease;
 }
 
-.btn-home:hover {
-  background: #0056b3;
+.btn-error-home-primary:hover {
+  background: var(--primary-hover, #4338ca);
+}
+
+.btn-error-explore-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: var(--gray-50, #f8fafc);
+  border: 1px solid var(--border-color, #cbd5e1);
+  color: var(--text-primary, #0f172a);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
   text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.btn-error-explore-secondary:hover {
+  background: #ffffff;
+  border-color: var(--primary-color, #4f46e5);
+  color: var(--primary-color, #4f46e5);
+}
+
+.btn-error-help-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: transparent;
+  color: var(--text-secondary, #64748b);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.btn-error-help-outline:hover {
+  color: var(--primary-color, #4f46e5);
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .error-card-box {
+    padding: 36px 20px;
+  }
+  .error-giant-title {
+    font-size: 60px;
+  }
+  .error-actions-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btn-error-home-primary,
+  .btn-error-explore-secondary,
+  .btn-error-help-outline {
+    width: 100%;
+    justify-content: center;
+  }
 }
