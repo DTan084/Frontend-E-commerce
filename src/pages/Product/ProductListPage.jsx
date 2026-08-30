@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
+import {
+  Sparkles,
+  Filter,
+  X,
+  RotateCcw,
+  Star,
+  Lightbulb,
+  Package,
+  Layers,
+  Cpu,
+} from 'lucide-react';
 import { filterProducts } from '../../data/mockProducts';
 import Breadcrumb from '../../components/Product/Breadcrumb';
 import FilterSidebar from '../../components/Product/FilterSidebar';
@@ -18,12 +29,12 @@ const ProductListPage = () => {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid');
   const [currentPage, setCurrentPage] = useState(1);
-  const [fallbackMessage, setFallbackMessage] = useState(null); // Separate state for fallback
-  const [showFilters, setShowFilters] = useState(true); // Filter sidebar toggle (default open on desktop)
-  const itemsPerPage = 20;
+  const [fallbackMessage, setFallbackMessage] = useState(null);
+  const [showFilters, setShowFilters] = useState(true);
+  const itemsPerPage = 12;
 
   // Check if this is a search page (from /search route or has 'q' param)
-  const isSearchPage = location.pathname.includes('/search') || searchParams.get('q');
+  const isSearchPage = location.pathname.includes('/search') || Boolean(searchParams.get('q'));
 
   // Initialize filters with proper defaults
   const [filters, setFilters] = useState(() => {
@@ -31,7 +42,7 @@ const ProductListPage = () => {
     return {
       categories: searchParams.get('category') ? [searchParams.get('category')] : [],
       technologies: searchParams.get('technology') ? [searchParams.get('technology')] : [],
-      features: [],
+      features: searchParams.get('feature') ? [searchParams.get('feature')] : [],
       search: searchQuery,
       minPrice: 0,
       maxPrice: 5000000,
@@ -42,7 +53,7 @@ const ProductListPage = () => {
 
   useEffect(() => {
     setLoading(true);
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       const filteredProducts = filterProducts({
         category: filters.categories[0] || '',
         technology: filters.technologies[0] || '',
@@ -54,15 +65,16 @@ const ProductListPage = () => {
         sortBy: filters.sortBy,
       });
 
-      // Check if any product has isFallback flag (from advanced search)
       const hasFallbackResults = filteredProducts.some((p) => p.isFallback);
       const fallbackMsg = hasFallbackResults && filteredProducts[0]?.fallbackMessage;
 
       setProducts(filteredProducts);
-      setFallbackMessage(fallbackMsg || null); // Update separate state
+      setFallbackMessage(fallbackMsg || null);
       setLoading(false);
       setCurrentPage(1);
-    }, 300);
+    }, 250);
+
+    return () => clearTimeout(timer);
   }, [filters]);
 
   useEffect(() => {
@@ -71,9 +83,8 @@ const ProductListPage = () => {
     const feature = searchParams.get('feature');
     const q = searchParams.get('q') || searchParams.get('search');
     const sort = searchParams.get('sort');
-    const filter = searchParams.get('filter'); // From SmartSearchBar
+    const filter = searchParams.get('filter');
 
-    // Map filter to category if present
     const categoryFromFilter = filter && filter !== 'all' ? filter : null;
 
     setFilters((prev) => ({
@@ -105,11 +116,11 @@ const ProductListPage = () => {
   };
 
   const handleSortChange = (sortBy) => {
-    setFilters({ ...filters, sortBy });
+    setFilters((prev) => ({ ...prev, sortBy }));
   };
 
   const handleSearchChange = (search) => {
-    setFilters({ ...filters, search });
+    setFilters((prev) => ({ ...prev, search }));
   };
 
   const handleViewModeChange = (mode) => {
@@ -118,24 +129,24 @@ const ProductListPage = () => {
 
   const handleRemoveFilter = (type, value) => {
     if (type === 'category') {
-      setFilters({
-        ...filters,
-        categories: filters.categories.filter((c) => c !== value),
-      });
+      setFilters((prev) => ({
+        ...prev,
+        categories: prev.categories.filter((c) => c !== value),
+      }));
     } else if (type === 'technology') {
-      setFilters({
-        ...filters,
-        technologies: filters.technologies.filter((t) => t !== value),
-      });
+      setFilters((prev) => ({
+        ...prev,
+        technologies: prev.technologies.filter((t) => t !== value),
+      }));
     } else if (type === 'feature') {
-      setFilters({
-        ...filters,
-        features: filters.features.filter((f) => f !== value),
-      });
+      setFilters((prev) => ({
+        ...prev,
+        features: prev.features.filter((f) => f !== value),
+      }));
     } else if (type === 'rating') {
-      setFilters({ ...filters, rating: null });
+      setFilters((prev) => ({ ...prev, rating: null }));
     } else if (type === 'search') {
-      setFilters({ ...filters, search: '' });
+      setFilters((prev) => ({ ...prev, search: '' }));
     }
   };
 
@@ -144,7 +155,9 @@ const ProductListPage = () => {
       (filters.categories?.length || 0) +
       (filters.technologies?.length || 0) +
       (filters.features?.length || 0) +
-      (filters.rating ? 1 : 0)
+      (filters.rating ? 1 : 0) +
+      (filters.search ? 1 : 0) +
+      (filters.minPrice > 0 || filters.maxPrice < 5000000 ? 1 : 0)
     );
   };
 
@@ -155,7 +168,6 @@ const ProductListPage = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const breadcrumbItems = [
@@ -169,7 +181,6 @@ const ProductListPage = () => {
     });
   }
 
-  // Dynamic page title based on context
   const getPageTitle = () => {
     if (isSearchPage && filters?.search) {
       return `"${filters.search}"`;
@@ -177,46 +188,46 @@ const ProductListPage = () => {
     if (filters?.categories && filters.categories.length > 0) {
       return getCategoryName(filters.categories[0], 'vi');
     }
-    return 'Duyệt mã nguồn';
+    return 'Khám phá Kho Mã nguồn';
   };
 
   const getPageSubtitle = () => {
     if (isSearchPage && filters?.search) {
       if (fallbackMessage) {
-        return fallbackMessage; // Show smart fallback message
+        return fallbackMessage;
       }
       if (products.length === 0) {
-        return 'Không tìm thấy sản phẩm phù hợp';
+        return 'Không tìm thấy mã nguồn phù hợp với từ khóa này';
       }
-      return `Tìm thấy ${products.length} sản phẩm phù hợp`;
+      return `Tìm thấy ${products.length} mã nguồn phù hợp`;
     }
     if (filters?.categories && filters.categories.length > 0) {
       const categoryName = getCategoryName(filters.categories[0], 'vi');
-      return `Khám phá các sản phẩm trong danh mục ${categoryName}`;
+      return `Duyệt các mã nguồn và giải pháp chất lượng cao trong danh mục ${categoryName}`;
     }
-    return 'Khám phá mã nguồn cao cấp, giao diện và dịch vụ thiết kế cho dự án tiếp theo của bạn';
+    return 'Tiết kiệm thời gian phát triển với hàng nghìn mã nguồn website, app và module chất lượng cao đã kiểm duyệt.';
   };
 
   return (
     <div className="product-list-page">
       <Breadcrumb items={breadcrumbItems} />
 
-      <section className="page-header-section">
+      {/* Modern High-Contrast Hero Banner */}
+      <section className="catalog-hero-banner">
         <div className="container">
-          <div className="header-content">
-            {isSearchPage && filters?.search ? (
-              <>
-                <div className="search-label">Kết quả tìm kiếm {getPageTitle()}</div>
-              </>
-            ) : (
-              <h1 className="page-title">{getPageTitle()}</h1>
-            )}
-            <p className="page-subtitle">{getPageSubtitle()}</p>
+          <div className="catalog-hero-content">
+            <div className="catalog-hero-badge">
+              <Sparkles size={14} />
+              <span>{isSearchPage ? 'KẾT QUẢ TÌM KIẾM' : 'KHO MÃ NGUỒN CHẤT LƯỢNG'}</span>
+            </div>
+
+            <h1 className="catalog-hero-title">{getPageTitle()}</h1>
+            <p className="catalog-hero-subtitle">{getPageSubtitle()}</p>
           </div>
         </div>
       </section>
 
-      <section className="products-content">
+      <section className="products-content-section">
         <div className="container">
           <div className={`products-layout ${showFilters ? 'filters-visible' : 'filters-hidden'}`}>
             <FilterSidebar
@@ -227,7 +238,7 @@ const ProductListPage = () => {
               onClose={() => setShowFilters(false)}
             />
 
-            <div className="products-main">
+            <div className="products-main-content">
               <ProductToolbar
                 totalProducts={products?.length || 0}
                 viewMode={viewMode}
@@ -241,84 +252,115 @@ const ProductListPage = () => {
                 onToggleFilters={() => setShowFilters(!showFilters)}
               />
 
-              {/* Active Filters Display */}
+              {/* Active Filter Tags Bar */}
               {getActiveFiltersCount() > 0 && (
                 <div className="active-filters-bar">
-                  <div className="active-filters-label">
-                    <span className="icon">🔍</span>
-                    <span>Bộ lọc đang áp dụng:</span>
+                  <div className="active-filters-title">
+                    <Filter size={14} />
+                    <span>Bộ lọc:</span>
                   </div>
-                  <div className="active-filters-list">
+
+                  <div className="active-filters-chips-list">
+                    {filters.search && (
+                      <span className="filter-chip-item tag-search">
+                        <span>"{filters.search}"</span>
+                        <button
+                          type="button"
+                          className="remove-chip-btn"
+                          onClick={() => handleRemoveFilter('search')}
+                          aria-label="Xóa từ khóa"
+                        >
+                          <X size={12} />
+                        </button>
+                      </span>
+                    )}
+
                     {filters.categories?.map((cat) => (
-                      <span key={cat} className="filter-tag tag-category">
-                        {getCategoryName(cat, 'vi')}
+                      <span key={cat} className="filter-chip-item tag-category">
+                        <Layers size={12} />
+                        <span>{getCategoryName(cat, 'vi')}</span>
                         <button
-                          className="remove-tag"
+                          type="button"
+                          className="remove-chip-btn"
                           onClick={() => handleRemoveFilter('category', cat)}
-                          title="Xóa bộ lọc"
+                          aria-label="Xóa danh mục"
                         >
-                          ✕
+                          <X size={12} />
                         </button>
                       </span>
                     ))}
+
                     {filters.technologies?.map((tech) => (
-                      <span key={tech} className="filter-tag tag-technology">
-                        {tech}
+                      <span key={tech} className="filter-chip-item tag-technology">
+                        <Cpu size={12} />
+                        <span>{tech}</span>
                         <button
-                          className="remove-tag"
+                          type="button"
+                          className="remove-chip-btn"
                           onClick={() => handleRemoveFilter('technology', tech)}
-                          title="Xóa bộ lọc"
+                          aria-label="Xóa công nghệ"
                         >
-                          ✕
+                          <X size={12} />
                         </button>
                       </span>
                     ))}
+
                     {filters.features?.map((feature) => (
-                      <span key={feature} className="filter-tag tag-feature">
-                        ⭐ {feature}
+                      <span key={feature} className="filter-chip-item tag-feature">
+                        <Sparkles size={12} />
+                        <span>{feature}</span>
                         <button
-                          className="remove-tag"
+                          type="button"
+                          className="remove-chip-btn"
                           onClick={() => handleRemoveFilter('feature', feature)}
-                          title="Xóa bộ lọc"
+                          aria-label="Xóa tính năng"
                         >
-                          ✕
+                          <X size={12} />
                         </button>
                       </span>
                     ))}
+
                     {filters.rating && (
-                      <span className="filter-tag tag-rating">
-                        {'⭐'.repeat(filters.rating)}+ Đánh giá
+                      <span className="filter-chip-item tag-rating">
+                        <Star size={12} fill="#f59e0b" color="#f59e0b" />
+                        <span>{filters.rating} sao trở lên</span>
                         <button
-                          className="remove-tag"
+                          type="button"
+                          className="remove-chip-btn"
                           onClick={() => handleRemoveFilter('rating')}
-                          title="Xóa bộ lọc"
+                          aria-label="Xóa đánh giá"
                         >
-                          ✕
+                          <X size={12} />
                         </button>
                       </span>
                     )}
                   </div>
-                  <button className="clear-all-filters" onClick={handleClearAll}>
-                    Xóa tất cả
+
+                  <button type="button" className="btn-clear-all-chips" onClick={handleClearAll}>
+                    <RotateCcw size={12} />
+                    <span>Xóa tất cả</span>
                   </button>
                 </div>
               )}
 
-              {/* Fallback Info Banner */}
+              {/* Fallback Search Suggestion Banner */}
               {fallbackMessage && products.length > 0 && (
-                <div className="fallback-info-banner">
-                  <div className="fallback-icon">💡</div>
-                  <div className="fallback-content">
-                    <strong>Tìm kiếm thông minh đang hoạt động</strong>
+                <div className="smart-fallback-banner">
+                  <div className="fallback-icon-box">
+                    <Lightbulb size={20} />
+                  </div>
+                  <div className="fallback-text-content">
+                    <h4>Tìm kiếm thông minh đang kích hoạt</h4>
                     <p>{fallbackMessage}</p>
                   </div>
                 </div>
               )}
 
+              {/* Products Rendering State */}
               {loading ? (
-                <div className="loading-state">
-                  <div className="spinner"></div>
-                  <p>Đang tải sản phẩm tuyệt vời...</p>
+                <div className="catalog-loading-state">
+                  <div className="catalog-spinner" />
+                  <p>Đang tìm kiếm mã nguồn phù hợp...</p>
                 </div>
               ) : currentProducts.length > 0 ? (
                 <div className={`products-grid ${viewMode === 'list' ? 'list-view' : ''}`}>
@@ -331,17 +373,20 @@ const ProductListPage = () => {
                 filters?.technologies?.length > 0 ||
                 filters?.rating ? (
                 <EmptySearchState
-                  query={filters.search || 'filtered products'}
+                  query={filters.search || 'bộ lọc'}
                   allProducts={getAllProducts()}
                   onClearSearch={handleClearAll}
                 />
               ) : (
-                <div className="empty-state">
-                  <div className="empty-icon"></div>
-                  <h3>Không có sản phẩm</h3>
-                  <p>Hiện tại không có sản phẩm nào để hiển thị</p>
-                  <button className="reset-btn" onClick={handleClearAll}>
-                    Làm mới
+                <div className="catalog-empty-state">
+                  <div className="empty-state-icon-box">
+                    <Package size={48} />
+                  </div>
+                  <h3>Không tìm thấy mã nguồn</h3>
+                  <p>Hiện tại không có sản phẩm nào phù hợp với điều kiện lọc của bạn.</p>
+                  <button type="button" className="btn-reset-filters" onClick={handleClearAll}>
+                    <RotateCcw size={15} />
+                    <span>Làm mới bộ lọc</span>
                   </button>
                 </div>
               )}
