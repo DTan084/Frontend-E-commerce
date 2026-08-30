@@ -32,6 +32,7 @@ export const ROUTE_PATHS = {
   USER: {
     DASHBOARD: 'user/dashboard',
     ORDERS: 'user/orders',
+    PURCHASES: 'user/purchases',
     CHECKOUT: 'checkout',
     CHECKOUT_SUCCESS: 'checkout/success',
     PROFILE: 'profile',
