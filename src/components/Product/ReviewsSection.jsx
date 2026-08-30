@@ -1,67 +1,26 @@
-// File: src/components/Product/ReviewsSection.jsx
-// Premium reviews section with rating distribution and review management
-
 import React, { useState, useEffect } from 'react';
+import { Star, ThumbsUp, MessageCircle, X, ChevronDown, Edit3, MessageSquare } from 'lucide-react';
 import './ReviewsSection.css';
 
-// Icon Components
-const StarIcon = ({ filled = false }) => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-  </svg>
-);
-
-const ThumbsUpIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
-  </svg>
-);
-
-const MessageCircleIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-  </svg>
-);
-
-const XIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
-  </svg>
-);
-
-const ChevronDownIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="6 9 12 15 18 9"></polyline>
-  </svg>
-);
-
-const EditIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-  </svg>
-);
-
-const ReviewsSection = ({ 
-  productId, 
-  reviews = [], 
-  averageRating = 0, 
+const ReviewsSection = ({
+  productId,
+  reviews = [],
+  averageRating = 0,
   totalReviews = 0,
   userHasPurchased = false,
   currentUser = null,
-  onSubmitReview = null 
+  onSubmitReview = null,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sortBy, setSortBy] = useState('recent'); // recent, rating, helpful
   const [visibleReviews, setVisibleReviews] = useState(5);
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
-  
+
   // Review form state
   const [reviewForm, setReviewForm] = useState({
     rating: 0,
     comment: '',
-    hoverRating: 0
+    hoverRating: 0,
   });
 
   // Review interactions
@@ -72,7 +31,7 @@ const ReviewsSection = ({
   // Calculate rating distribution
   const getRatingDistribution = () => {
     const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
-    reviews.forEach(review => {
+    reviews.forEach((review) => {
       if (distribution[review.rating] !== undefined) {
         distribution[review.rating]++;
       }
@@ -106,7 +65,7 @@ const ReviewsSection = ({
     const now = new Date();
     const diffTime = Math.abs(now - date);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
     if (diffDays < 7) return `${diffDays} days ago`;
@@ -119,7 +78,7 @@ const ReviewsSection = ({
   const getInitials = (name) => {
     return name
       .split(' ')
-      .map(n => n[0])
+      .map((n) => n[0])
       .join('')
       .toUpperCase()
       .slice(0, 2);
@@ -137,7 +96,7 @@ const ReviewsSection = ({
         productId,
         rating: reviewForm.rating,
         comment: reviewForm.comment,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       });
     }
 
@@ -148,16 +107,16 @@ const ReviewsSection = ({
 
   // Handle helpful click
   const handleHelpfulClick = (reviewId) => {
-    setHelpfulClicks(prev => ({
+    setHelpfulClicks((prev) => ({
       ...prev,
-      [reviewId]: !prev[reviewId]
+      [reviewId]: !prev[reviewId],
     }));
   };
 
   // Handle reply submission
   const handleReplySubmit = (reviewId) => {
     if (replyText.trim() === '') return;
-    
+
     console.log('Reply to review:', reviewId, replyText);
     setReplyText('');
     setReplyingTo(null);
@@ -166,20 +125,34 @@ const ReviewsSection = ({
   // Render star rating
   const renderStars = (rating, size = 'medium', interactive = false) => {
     return (
-      <div className={`star-rating ${size} ${interactive ? 'interactive' : ''}`}>
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type="button"
-            className={`star ${star <= (interactive ? (reviewForm.hoverRating || reviewForm.rating) : rating) ? 'filled' : ''}`}
-            onClick={interactive ? () => setReviewForm({ ...reviewForm, rating: star }) : undefined}
-            onMouseEnter={interactive ? () => setReviewForm({ ...reviewForm, hoverRating: star }) : undefined}
-            onMouseLeave={interactive ? () => setReviewForm({ ...reviewForm, hoverRating: 0 }) : undefined}
-            disabled={!interactive}
-          >
-            <StarIcon filled={star <= (interactive ? (reviewForm.hoverRating || reviewForm.rating) : rating)} />
-          </button>
-        ))}
+      <div className={`star-rating-box ${size} ${interactive ? 'interactive' : ''}`}>
+        {[1, 2, 3, 4, 5].map((star) => {
+          const isFilled =
+            star <= (interactive ? reviewForm.hoverRating || reviewForm.rating : rating);
+          return (
+            <button
+              key={star}
+              type="button"
+              className={`star-btn ${isFilled ? 'filled' : 'empty'}`}
+              onClick={
+                interactive ? () => setReviewForm({ ...reviewForm, rating: star }) : undefined
+              }
+              onMouseEnter={
+                interactive ? () => setReviewForm({ ...reviewForm, hoverRating: star }) : undefined
+              }
+              onMouseLeave={
+                interactive ? () => setReviewForm({ ...reviewForm, hoverRating: 0 }) : undefined
+              }
+              disabled={!interactive}
+            >
+              <Star
+                size={size === 'large' ? 24 : size === 'small' ? 14 : 18}
+                fill={isFilled ? '#f59e0b' : 'none'}
+                color={isFilled ? '#f59e0b' : '#cbd5e1'}
+              />
+            </button>
+          );
+        })}
       </div>
     );
   };
@@ -211,14 +184,14 @@ const ReviewsSection = ({
   return (
     <div className="reviews-section-modern">
       {/* Section Header */}
-      <div className="section-header">
-        <h2 className="section-title">Đánh giá của khách hàng</h2>
+      <div className="reviews-section-header">
+        <div className="header-left-title">
+          <MessageSquare size={20} className="title-icon" />
+          <h2 className="section-title">Đánh giá của khách hàng</h2>
+        </div>
         {userHasPurchased && (
-          <button 
-            className="write-review-btn"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <EditIcon />
+          <button type="button" className="write-review-btn" onClick={() => setIsModalOpen(true)}>
+            <Edit3 size={15} />
             <span>Viết đánh giá</span>
           </button>
         )}
@@ -227,33 +200,30 @@ const ReviewsSection = ({
       {totalReviews > 0 ? (
         <>
           {/* Overview Section */}
-          <div className="reviews-overview">
+          <div className="reviews-overview-card">
             {/* Overall Rating */}
-            <div className="overall-rating">
-              <div className="rating-number">{averageRating.toFixed(1)}</div>
-              {renderStars(Math.round(averageRating), 'large')}
-              <div className="rating-count">{totalReviews} đánh giá</div>
+            <div className="overall-rating-box">
+              <div className="overall-score">{averageRating.toFixed(1)}</div>
+              {renderStars(Math.round(averageRating), 'medium')}
+              <div className="total-reviews-label">{totalReviews} đánh giá đã xác minh</div>
             </div>
 
             {/* Rating Distribution */}
-            <div className="rating-distribution">
+            <div className="rating-distribution-bars">
               {[5, 4, 3, 2, 1].map((stars) => {
                 const count = ratingDistribution[stars] || 0;
                 const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
-                
+
                 return (
-                  <div key={stars} className="distribution-row">
-                    <div className="star-label">
+                  <div key={stars} className="distribution-row-item">
+                    <div className="star-level-label">
                       <span>{stars}</span>
-                      <StarIcon filled />
+                      <Star size={13} fill="#f59e0b" color="#f59e0b" />
                     </div>
-                    <div className="distribution-bar">
-                      <div 
-                        className="distribution-fill"
-                        style={{ width: `${percentage}%` }}
-                      ></div>
+                    <div className="distribution-track">
+                      <div className="distribution-bar-fill" style={{ width: `${percentage}%` }} />
                     </div>
-                    <div className="distribution-count">{count}</div>
+                    <div className="distribution-count-number">{count}</div>
                   </div>
                 );
               })}
@@ -263,28 +233,30 @@ const ReviewsSection = ({
           {/* Reviews List */}
           <div className="reviews-list-container">
             {/* Sort Options */}
-            <div className="reviews-controls">
-              <div className="sort-dropdown-container">
-                <button 
-                  className="sort-dropdown-trigger"
+            <div className="reviews-controls-bar">
+              <div className="sort-dropdown-wrapper">
+                <button
+                  type="button"
+                  className="sort-trigger-btn"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSortDropdownOpen(!sortDropdownOpen);
                   }}
                 >
-                  <span>Sắp xếp: </span>
-                  <span className="sort-value">
+                  <span className="sort-label-text">Sắp xếp: </span>
+                  <span className="sort-selected-value">
                     {sortBy === 'recent' && 'Mới nhất'}
                     {sortBy === 'rating' && 'Đánh giá cao nhất'}
                     {sortBy === 'helpful' && 'Hữu ích nhất'}
                   </span>
-                  <ChevronDownIcon />
+                  <ChevronDown size={15} />
                 </button>
-                
+
                 {sortDropdownOpen && (
-                  <div className="sort-dropdown-menu">
-                    <button 
-                      className={`sort-option ${sortBy === 'recent' ? 'active' : ''}`}
+                  <div className="sort-menu-dropdown">
+                    <button
+                      type="button"
+                      className={`sort-menu-item ${sortBy === 'recent' ? 'active' : ''}`}
                       onClick={() => {
                         setSortBy('recent');
                         setSortDropdownOpen(false);
@@ -292,8 +264,9 @@ const ReviewsSection = ({
                     >
                       Mới nhất
                     </button>
-                    <button 
-                      className={`sort-option ${sortBy === 'rating' ? 'active' : ''}`}
+                    <button
+                      type="button"
+                      className={`sort-menu-item ${sortBy === 'rating' ? 'active' : ''}`}
                       onClick={() => {
                         setSortBy('rating');
                         setSortDropdownOpen(false);
@@ -301,8 +274,9 @@ const ReviewsSection = ({
                     >
                       Đánh giá cao nhất
                     </button>
-                    <button 
-                      className={`sort-option ${sortBy === 'helpful' ? 'active' : ''}`}
+                    <button
+                      type="button"
+                      className={`sort-menu-item ${sortBy === 'helpful' ? 'active' : ''}`}
                       onClick={() => {
                         setSortBy('helpful');
                         setSortDropdownOpen(false);
@@ -316,53 +290,55 @@ const ReviewsSection = ({
             </div>
 
             {/* Reviews List */}
-            <div className="reviews-list">
+            <div className="reviews-items-list">
               {sortedReviews.map((review) => (
-                <div key={review.id} className="review-item">
+                <div key={review.id} className="single-review-card">
                   {/* Review Header */}
-                  <div className="review-header">
-                    <div className="reviewer-info">
-                      <div className="reviewer-avatar">
+                  <div className="single-review-top">
+                    <div className="reviewer-profile-info">
+                      <div className="reviewer-avatar-box">
                         {review.userAvatar ? (
                           <img src={review.userAvatar} alt={review.userName} />
                         ) : (
-                          <span className="avatar-initials">
+                          <span className="avatar-initials-text">
                             {getInitials(review.userName)}
                           </span>
                         )}
                       </div>
-                      <div className="reviewer-details">
-                        <div className="reviewer-name">{review.userName}</div>
-                        <div className="review-date">{formatDate(review.date)}</div>
+                      <div className="reviewer-name-meta">
+                        <div className="reviewer-name-str">{review.userName}</div>
+                        <div className="review-timestamp-str">{formatDate(review.date)}</div>
                       </div>
                     </div>
                     {renderStars(review.rating, 'small')}
                   </div>
 
                   {/* Review Content */}
-                  <div className="review-content">
-                    <p className="review-text">{review.comment}</p>
+                  <div className="review-text-wrapper">
+                    <p className="review-comment-body">{review.comment}</p>
                   </div>
 
                   {/* Review Actions */}
-                  <div className="review-actions">
-                    <button 
-                      className={`action-btn helpful-btn ${helpfulClicks[review.id] ? 'active' : ''}`}
+                  <div className="review-bottom-actions">
+                    <button
+                      type="button"
+                      className={`btn-helpful-feedback ${helpfulClicks[review.id] ? 'active' : ''}`}
                       onClick={() => handleHelpfulClick(review.id)}
                     >
-                      <ThumbsUpIcon />
+                      <ThumbsUp size={14} />
                       <span>Hữu ích</span>
-                      <span className="count">
+                      <span className="helpful-count-badge">
                         ({(review.helpfulCount || 0) + (helpfulClicks[review.id] ? 1 : 0)})
                       </span>
                     </button>
-                    
+
                     {currentUser?.isSeller && (
-                      <button 
-                        className="action-btn reply-btn"
+                      <button
+                        type="button"
+                        className="btn-reply-feedback"
                         onClick={() => setReplyingTo(replyingTo === review.id ? null : review.id)}
                       >
-                        <MessageCircleIcon />
+                        <MessageCircle size={14} />
                         <span>Trả lời</span>
                       </button>
                     )}
@@ -370,17 +346,18 @@ const ReviewsSection = ({
 
                   {/* Reply Form */}
                   {replyingTo === review.id && (
-                    <div className="reply-form">
+                    <div className="seller-reply-form">
                       <textarea
-                        className="reply-textarea"
-                        placeholder="Viết phản hồi của bạn..."
+                        className="reply-textarea-input"
+                        placeholder="Viết phản hồi chính thức từ người bán..."
                         value={replyText}
                         onChange={(e) => setReplyText(e.target.value)}
                         rows="3"
                       />
-                      <div className="reply-actions">
-                        <button 
-                          className="btn-cancel"
+                      <div className="reply-buttons-row">
+                        <button
+                          type="button"
+                          className="btn-cancel-reply"
                           onClick={() => {
                             setReplyingTo(null);
                             setReplyText('');
@@ -388,8 +365,9 @@ const ReviewsSection = ({
                         >
                           Hủy
                         </button>
-                        <button 
-                          className="btn-submit"
+                        <button
+                          type="button"
+                          className="btn-submit-reply"
                           onClick={() => handleReplySubmit(review.id)}
                         >
                           Gửi phản hồi
@@ -398,14 +376,16 @@ const ReviewsSection = ({
                     </div>
                   )}
 
-                  {/* Seller Reply (if exists) */}
+                  {/* Seller Reply */}
                   {review.sellerReply && (
-                    <div className="seller-reply">
-                      <div className="reply-header">
-                        <div className="seller-badge">Phản hồi từ người bán</div>
-                        <div className="reply-date">{formatDate(review.sellerReply.date)}</div>
+                    <div className="seller-official-reply">
+                      <div className="official-reply-header">
+                        <span className="seller-badge-tag">Phản hồi từ tác giả</span>
+                        <span className="reply-date-str">
+                          {formatDate(review.sellerReply.date)}
+                        </span>
                       </div>
-                      <p className="reply-text">{review.sellerReply.comment}</p>
+                      <p className="reply-comment-body">{review.sellerReply.comment}</p>
                     </div>
                   )}
                 </div>
@@ -414,12 +394,13 @@ const ReviewsSection = ({
 
             {/* Load More Button */}
             {hasMoreReviews && (
-              <div className="load-more-container">
-                <button 
-                  className="load-more-btn"
-                  onClick={() => setVisibleReviews(prev => prev + 5)}
+              <div className="load-more-reviews-center">
+                <button
+                  type="button"
+                  className="btn-load-more-reviews"
+                  onClick={() => setVisibleReviews((prev) => prev + 5)}
                 >
-                  Xem thêm đánh giá
+                  Xem thêm đánh giá khác
                 </button>
               </div>
             )}
@@ -427,17 +408,18 @@ const ReviewsSection = ({
         </>
       ) : (
         /* Empty State */
-        <div className="empty-state">
-          <div className="empty-icon">
-            <StarIcon filled={false} />
+        <div className="empty-reviews-state-card">
+          <div className="empty-star-icon-box">
+            <Star size={36} color="#cbd5e1" />
           </div>
-          <h3 className="empty-title">Chưa có đánh giá</h3>
-          <p className="empty-description">
-            Hãy là người đầu tiên đánh giá sản phẩm này và giúp người khác đưa ra quyết định!
+          <h3 className="empty-reviews-heading">Chưa có đánh giá nào</h3>
+          <p className="empty-reviews-subtext">
+            Hãy là người đầu tiên trải nghiệm và chia sẻ nhận xét về mã nguồn này!
           </p>
           {userHasPurchased && (
-            <button 
-              className="empty-action-btn"
+            <button
+              type="button"
+              className="btn-write-first-review"
               onClick={() => setIsModalOpen(true)}
             >
               Viết đánh giá đầu tiên
@@ -448,62 +430,67 @@ const ReviewsSection = ({
 
       {/* Review Modal */}
       {isModalOpen && (
-        <div className="review-modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className="review-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="review-modal-backdrop" onClick={() => setIsModalOpen(false)}>
+          <div className="review-modal-content-box" onClick={(e) => e.stopPropagation()}>
             {/* Modal Header */}
-            <div className="modal-header">
-              <h3 className="modal-title">Viết đánh giá</h3>
-              <button 
-                className="modal-close"
+            <div className="review-modal-header">
+              <h3 className="review-modal-title">Viết đánh giá sản phẩm</h3>
+              <button
+                type="button"
+                className="review-modal-close-btn"
                 onClick={() => setIsModalOpen(false)}
+                aria-label="Đóng"
               >
-                <XIcon />
+                <X size={20} />
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="modal-body">
+            <div className="review-modal-body">
               {/* Rating Selector */}
-              <div className="form-group">
-                <label className="form-label">Đánh giá của bạn *</label>
+              <div className="review-form-group">
+                <label className="review-form-label">Mức độ hài lòng của bạn *</label>
                 {renderStars(reviewForm.rating, 'large', true)}
                 {reviewForm.rating > 0 && (
-                  <div className="rating-text">
-                    {reviewForm.rating === 1 && 'Kém'}
-                    {reviewForm.rating === 2 && 'Trung bình'}
-                    {reviewForm.rating === 3 && 'Tốt'}
-                    {reviewForm.rating === 4 && 'Rất tốt'}
-                    {reviewForm.rating === 5 && 'Xuất sắc'}
+                  <div className="rating-feedback-text">
+                    {reviewForm.rating === 1 && '1 sao - Rất không hài lòng'}
+                    {reviewForm.rating === 2 && '2 sao - Tạm được'}
+                    {reviewForm.rating === 3 && '3 sao - Bình thường'}
+                    {reviewForm.rating === 4 && '4 sao - Hài lòng, code tốt'}
+                    {reviewForm.rating === 5 && '5 sao - Xuất sắc, hỗ trợ nhiệt tình!'}
                   </div>
                 )}
               </div>
 
               {/* Comment Textarea */}
-              <div className="form-group">
-                <label className="form-label">Nhận xét của bạn *</label>
+              <div className="review-form-group">
+                <label className="review-form-label">Nhận xét chi tiết *</label>
                 <textarea
-                  className="form-textarea"
-                  placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."
+                  className="review-form-textarea"
+                  placeholder="Chia sẻ trải nghiệm về cấu trúc code, khả năng cài đặt, độ hoàn thiện của sản phẩm..."
                   value={reviewForm.comment}
                   onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
-                  rows="6"
+                  rows="5"
+                  maxLength={500}
                 />
-                <div className="character-count">
+                <div className="review-character-count">
                   {reviewForm.comment.length} / 500 ký tự
                 </div>
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="modal-footer">
-              <button 
-                className="btn-secondary"
+            <div className="review-modal-footer">
+              <button
+                type="button"
+                className="btn-modal-cancel"
                 onClick={() => setIsModalOpen(false)}
               >
-                Hủy
+                Hủy bỏ
               </button>
-              <button 
-                className="btn-primary"
+              <button
+                type="button"
+                className="btn-modal-submit-review"
                 onClick={handleSubmitReview}
                 disabled={reviewForm.rating === 0 || reviewForm.comment.trim() === ''}
               >

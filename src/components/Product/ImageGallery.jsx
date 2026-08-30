@@ -1,37 +1,6 @@
-// File: src/components/Product/ImageGallery.jsx
-// Premium image gallery with lightbox and zoom for PC
-
 import React, { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react';
 import './ImageGallery.css';
-
-// Icon Components
-const ChevronLeftIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <polyline points="15 18 9 12 15 6"></polyline>
-  </svg>
-);
-
-const ChevronRightIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <polyline points="9 18 15 12 9 6"></polyline>
-  </svg>
-);
-
-const XIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
-  </svg>
-);
-
-const ZoomInIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    <line x1="11" y1="8" x2="11" y2="14"></line>
-    <line x1="8" y1="11" x2="14" y2="11"></line>
-  </svg>
-);
 
 const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -49,13 +18,13 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
 
   // Navigate to previous image
   const handlePrevious = () => {
-    setCurrentIndex(prev => (prev === 0 ? imageList.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? imageList.length - 1 : prev - 1));
     setImageLoaded(false);
   };
 
   // Navigate to next image
   const handleNext = () => {
-    setCurrentIndex(prev => (prev === imageList.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === imageList.length - 1 ? 0 : prev + 1));
     setImageLoaded(false);
   };
 
@@ -87,7 +56,7 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
     const rect = imageRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    
+
     setZoomPosition({ x, y });
   };
 
@@ -113,7 +82,7 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (!isLightboxOpen) return;
-      
+
       if (e.key === 'ArrowLeft') handlePrevious();
       if (e.key === 'ArrowRight') handleNext();
       if (e.key === 'Escape') closeLightbox();
@@ -136,7 +105,7 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
       <div className="image-gallery-modern">
         {/* Main Image Display */}
         <div className="main-image-section">
-          <div 
+          <div
             className="main-image-wrapper"
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsZooming(true)}
@@ -153,22 +122,26 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
               src={imageList[currentIndex]}
               alt={`${productTitle} - screenshot ${currentIndex + 1}`}
               className={`main-image ${imageLoaded ? 'loaded' : ''} ${isZooming ? 'zooming' : ''}`}
-              style={isZooming ? {
-                transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`
-              } : {}}
+              style={
+                isZooming
+                  ? {
+                      transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                    }
+                  : {}
+              }
               onLoad={() => setImageLoaded(true)}
             />
-            
+
             {/* Zoom Indicator */}
             <div className={`zoom-indicator ${isZooming ? 'active' : ''}`}>
-              <ZoomInIcon />
-              <span>Click to view fullscreen</span>
+              <ZoomIn size={16} />
+              <span>Nhấn để xem toàn màn hình</span>
             </div>
 
             {/* Navigation Arrows */}
             {hasMultipleImages && (
               <>
-                <button 
+                <button
                   className="nav-arrow prev"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -176,9 +149,9 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
                   }}
                   aria-label="Previous image"
                 >
-                  <ChevronLeftIcon />
+                  <ChevronLeft size={22} />
                 </button>
-                <button 
+                <button
                   className="nav-arrow next"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -186,7 +159,7 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
                   }}
                   aria-label="Next image"
                 >
-                  <ChevronRightIcon />
+                  <ChevronRight size={22} />
                 </button>
               </>
             )}
@@ -213,11 +186,7 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
                   onClick={() => handleThumbnailClick(index)}
                   aria-label={`View image ${index + 1}`}
                 >
-                  <img
-                    src={image}
-                    alt={`${productTitle} thumbnail ${index + 1}`}
-                    loading="lazy"
-                  />
+                  <img src={image} alt={`${productTitle} thumbnail ${index + 1}`} loading="lazy" />
                   <div className="thumbnail-overlay"></div>
                 </button>
               ))}
@@ -242,22 +211,15 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
 
       {/* Lightbox Modal */}
       {isLightboxOpen && (
-        <div 
-          className="lightbox-overlay"
-          onClick={closeLightbox}
-        >
+        <div className="lightbox-overlay" onClick={closeLightbox}>
           <div className="lightbox-container">
             {/* Close Button */}
-            <button 
-              className="lightbox-close"
-              onClick={closeLightbox}
-              aria-label="Close lightbox"
-            >
-              <XIcon />
+            <button className="lightbox-close" onClick={closeLightbox} aria-label="Close lightbox">
+              <X size={24} />
             </button>
 
             {/* Lightbox Content */}
-            <div 
+            <div
               className="lightbox-content"
               onClick={(e) => e.stopPropagation()}
               onTouchStart={handleTouchStart}
@@ -274,7 +236,7 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
             {/* Lightbox Navigation */}
             {hasMultipleImages && (
               <>
-                <button 
+                <button
                   className="lightbox-arrow prev"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -282,9 +244,9 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
                   }}
                   aria-label="Previous image"
                 >
-                  <ChevronLeftIcon />
+                  <ChevronLeft size={26} />
                 </button>
-                <button 
+                <button
                   className="lightbox-arrow next"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -292,7 +254,7 @@ const ImageGallery = ({ images = [], productTitle = 'Product' }) => {
                   }}
                   aria-label="Next image"
                 >
-                  <ChevronRightIcon />
+                  <ChevronRight size={26} />
                 </button>
               </>
             )}
