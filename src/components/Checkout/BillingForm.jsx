@@ -1,228 +1,198 @@
 import React from 'react';
+import { Mail, Phone, User, Building2, MapPin, FileText, AlertCircle, Info } from 'lucide-react';
 import './BillingForm.css';
 
 const BillingForm = ({ formData, setFormData, errors }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const countries = [
-    'Vietnam',
-    'United States',
-    'United Kingdom',
-    'Singapore',
-    'Thailand',
-    'Malaysia',
-    'Japan',
-    'South Korea',
-    'Australia'
-  ];
-
   return (
-    <div className="billing-form">
-      {/* Contact Information */}
-      <div className="form-section">
-        <div className="section-header">
-          <h2 className="section-title">
-            <span className="icon">📧</span>
-            Contact Information
-          </h2>
-          <p className="section-subtitle">We'll use this to send you order updates</p>
+    <div className="billing-form-modern">
+      {/* Primary Delivery & Contact Information */}
+      <div className="billing-card-section">
+        <div className="section-head-wrap">
+          <div className="section-title-line">
+            <Mail size={18} className="section-icon text-indigo" />
+            <h3 className="section-main-title">Thông tin nhận mã nguồn & License</h3>
+          </div>
+          <p className="section-sub-desc">
+            Vui lòng nhập chính xác email để hệ thống gửi tự động link tải source code và key bản
+            quyền.
+          </p>
         </div>
 
-        <div className="form-grid">
-          <div className="form-group full-width">
-            <label htmlFor="email" className="form-label">
-              Email Address <span className="required">*</span>
+        <div className="form-fields-grid">
+          {/* Email */}
+          <div className="form-field-group full-width highlight-delivery-email">
+            <label htmlFor="email" className="form-field-label">
+              <span>Email nhận source code</span>
+              <span className="field-required-star">*</span>
             </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email || ''}
-              onChange={handleChange}
-              placeholder="your@email.com"
-              className={`form-input ${errors?.email ? 'error' : ''}`}
-              required
-            />
-            {errors?.email && <span className="error-message">{errors.email}</span>}
+            <div className="input-with-icon-wrap">
+              <Mail size={16} className="input-affix-icon" />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email || ''}
+                onChange={handleChange}
+                placeholder="example@gmail.com"
+                className={`modern-text-input ${errors?.email ? 'is-invalid' : ''}`}
+                required
+              />
+            </div>
+            {errors?.email ? (
+              <span className="input-error-text">
+                <AlertCircle size={12} />
+                <span>{errors.email}</span>
+              </span>
+            ) : (
+              <span className="input-helper-text">
+                <Info size={12} />
+                <span>
+                  Link tải Google Drive / GitHub & License key sẽ gửi về email này ngay khi thanh
+                  toán.
+                </span>
+              </span>
+            )}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="phone" className="form-label">
-              Phone Number <span className="required">*</span>
+          {/* Full Name */}
+          <div className="form-field-group">
+            <label htmlFor="fullName" className="form-field-label">
+              <span>Họ và tên</span>
+              <span className="field-required-star">*</span>
             </label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone || ''}
-              onChange={handleChange}
-              placeholder="+84 901 234 567"
-              className={`form-input ${errors?.phone ? 'error' : ''}`}
-              required
-            />
-            {errors?.phone && <span className="error-message">{errors.phone}</span>}
-          </div>
-        </div>
-      </div>
-
-      {/* Billing Information */}
-      <div className="form-section">
-        <div className="section-header">
-          <h2 className="section-title">
-            <span className="icon">📍</span>
-            Billing Address
-          </h2>
-          <p className="section-subtitle">Enter your billing details</p>
-        </div>
-
-        <div className="form-grid">
-          <div className="form-group">
-            <label htmlFor="firstName" className="form-label">
-              First Name <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName || ''}
-              onChange={handleChange}
-              placeholder="John"
-              className={`form-input ${errors?.firstName ? 'error' : ''}`}
-              required
-            />
-            {errors?.firstName && <span className="error-message">{errors.firstName}</span>}
+            <div className="input-with-icon-wrap">
+              <User size={16} className="input-affix-icon" />
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                value={formData.fullName || formData.name || ''}
+                onChange={handleChange}
+                placeholder="Nguyễn Văn A"
+                className={`modern-text-input ${errors?.fullName ? 'is-invalid' : ''}`}
+                required
+              />
+            </div>
+            {errors?.fullName && (
+              <span className="input-error-text">
+                <AlertCircle size={12} />
+                <span>{errors.fullName}</span>
+              </span>
+            )}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="lastName" className="form-label">
-              Last Name <span className="required">*</span>
+          {/* Phone Number */}
+          <div className="form-field-group">
+            <label htmlFor="phone" className="form-field-label">
+              <span>Số điện thoại (Zalo hỗ trợ)</span>
+              <span className="field-required-star">*</span>
             </label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName || ''}
-              onChange={handleChange}
-              placeholder="Doe"
-              className={`form-input ${errors?.lastName ? 'error' : ''}`}
-              required
-            />
-            {errors?.lastName && <span className="error-message">{errors.lastName}</span>}
-          </div>
-
-          <div className="form-group full-width">
-            <label htmlFor="company" className="form-label">
-              Company Name <span className="optional">(Optional)</span>
-            </label>
-            <input
-              type="text"
-              id="company"
-              name="company"
-              value={formData.company || ''}
-              onChange={handleChange}
-              placeholder="Your Company Ltd."
-              className="form-input"
-            />
-          </div>
-
-          <div className="form-group full-width">
-            <label htmlFor="address" className="form-label">
-              Street Address <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              value={formData.address || ''}
-              onChange={handleChange}
-              placeholder="123 Nguyen Hue Street"
-              className={`form-input ${errors?.address ? 'error' : ''}`}
-              required
-            />
-            {errors?.address && <span className="error-message">{errors.address}</span>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="city" className="form-label">
-              City <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="city"
-              name="city"
-              value={formData.city || ''}
-              onChange={handleChange}
-              placeholder="Ho Chi Minh"
-              className={`form-input ${errors?.city ? 'error' : ''}`}
-              required
-            />
-            {errors?.city && <span className="error-message">{errors.city}</span>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="zipCode" className="form-label">
-              Postal Code <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="zipCode"
-              name="zipCode"
-              value={formData.zipCode || ''}
-              onChange={handleChange}
-              placeholder="700000"
-              className={`form-input ${errors?.zipCode ? 'error' : ''}`}
-              required
-            />
-            {errors?.zipCode && <span className="error-message">{errors.zipCode}</span>}
-          </div>
-
-          <div className="form-group full-width">
-            <label htmlFor="country" className="form-label">
-              Country <span className="required">*</span>
-            </label>
-            <select
-              id="country"
-              name="country"
-              value={formData.country || 'Vietnam'}
-              onChange={handleChange}
-              className={`form-select ${errors?.country ? 'error' : ''}`}
-              required
-            >
-              <option value="">Select Country</option>
-              {countries.map(country => (
-                <option key={country} value={country}>{country}</option>
-              ))}
-            </select>
-            {errors?.country && <span className="error-message">{errors.country}</span>}
+            <div className="input-with-icon-wrap">
+              <Phone size={16} className="input-affix-icon" />
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone || ''}
+                onChange={handleChange}
+                placeholder="0912 345 678"
+                className={`modern-text-input ${errors?.phone ? 'is-invalid' : ''}`}
+                required
+              />
+            </div>
+            {errors?.phone && (
+              <span className="input-error-text">
+                <AlertCircle size={12} />
+                <span>{errors.phone}</span>
+              </span>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Additional Notes */}
-      <div className="form-section">
-        <div className="section-header">
-          <h2 className="section-title">
-            <span className="icon">📝</span>
-            Order Notes
-          </h2>
-          <p className="section-subtitle">Any special requirements? (Optional)</p>
+      {/* Business / Invoicing Details (Optional) */}
+      <div className="billing-card-section">
+        <div className="section-head-wrap">
+          <div className="section-title-line">
+            <Building2 size={18} className="section-icon text-blue" />
+            <h3 className="section-main-title">Thông tin doanh nghiệp & Hóa đơn (Tùy chọn)</h3>
+          </div>
+          <p className="section-sub-desc">
+            Điền nếu bạn cần xuất hóa đơn VAT điện tử hoặc đăng ký bản quyền doanh nghiệp.
+          </p>
         </div>
 
-        <div className="form-group full-width">
+        <div className="form-fields-grid">
+          {/* Company Name */}
+          <div className="form-field-group">
+            <label htmlFor="companyName" className="form-field-label">
+              <span>Tên công ty / Doanh nghiệp</span>
+            </label>
+            <div className="input-with-icon-wrap">
+              <Building2 size={16} className="input-affix-icon" />
+              <input
+                type="text"
+                id="companyName"
+                name="companyName"
+                value={formData.companyName || ''}
+                onChange={handleChange}
+                placeholder="Công ty TNHH Công Nghệ ABC"
+                className="modern-text-input"
+              />
+            </div>
+          </div>
+
+          {/* City / Province */}
+          <div className="form-field-group">
+            <label htmlFor="city" className="form-field-label">
+              <span>Tỉnh / Thành phố</span>
+            </label>
+            <div className="input-with-icon-wrap">
+              <MapPin size={16} className="input-affix-icon" />
+              <input
+                type="text"
+                id="city"
+                name="city"
+                value={formData.city || ''}
+                onChange={handleChange}
+                placeholder="Hà Nội / TP. Hồ Chí Minh / Đà Nẵng..."
+                className="modern-text-input"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Order Notes */}
+      <div className="billing-card-section">
+        <div className="section-head-wrap">
+          <div className="section-title-line">
+            <FileText size={18} className="section-icon text-purple" />
+            <h3 className="section-main-title">Ghi chú yêu cầu kỹ thuật</h3>
+          </div>
+          <p className="section-sub-desc">
+            Thêm yêu cầu hỗ trợ cài đặt DB, môi trường Docker, hoặc ghi chú riêng cho tác giả (tùy
+            chọn).
+          </p>
+        </div>
+
+        <div className="form-field-group full-width">
           <textarea
-            id="notes"
-            name="notes"
-            value={formData.notes || ''}
+            id="orderNotes"
+            name="orderNotes"
+            value={formData.orderNotes || ''}
             onChange={handleChange}
-            placeholder="Special instructions for delivery, license details, etc..."
-            className="form-textarea"
-            rows="4"
+            placeholder="Ví dụ: Nhờ tác giả hỗ trợ config Docker Compose và hướng dẫn kết nối MySQL qua UltraView..."
+            rows={3}
+            className="modern-textarea-input"
           />
         </div>
       </div>

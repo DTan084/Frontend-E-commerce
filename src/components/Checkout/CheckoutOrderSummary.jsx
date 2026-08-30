@@ -1,133 +1,133 @@
 import React from 'react';
+import { Package, Tag, ShieldCheck, Lock, Download, ArrowLeft } from 'lucide-react';
+import { getCategoryName } from '../../data/categories';
 import './CheckoutOrderSummary.css';
 
-const CheckoutOrderSummary = ({ items = [], appliedCoupon, onBack }) => {
+const CheckoutOrderSummary = ({ items = [], appliedCoupon, discountAmount, onBack }) => {
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
+    return new Intl.NumberFormat('vi-VN').format(Math.round(price)) + '₫';
   };
 
-  const calculateSubtotal = () => {
-    return items.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
-  };
+  const subtotal = items.reduce((sum, item) => {
+    const p = Number(item.discount_price) || Number(item.price) || 0;
+    return sum + p;
+  }, 0);
 
-  const calculateDiscount = () => {
-    if (!appliedCoupon) return 0;
-    const subtotal = calculateSubtotal();
-    return subtotal * (appliedCoupon.discount / 100);
-  };
+  let discount = discountAmount || 0;
+  if (!discount && appliedCoupon) {
+    if (appliedCoupon.type === 'percentage') {
+      discount = subtotal * (appliedCoupon.discount / 100);
+    } else {
+      discount = appliedCoupon.discount;
+    }
+  }
 
-  const calculateTax = () => {
-    const subtotal = calculateSubtotal();
-    const discount = calculateDiscount();
-    return (subtotal - discount) * 0.1; // 10% tax
-  };
-
-  const calculateTotal = () => {
-    const subtotal = calculateSubtotal();
-    const discount = calculateDiscount();
-    const tax = calculateTax();
-    return subtotal - discount + tax;
-  };
+  const tax = Math.max(0, (subtotal - discount) * 0.1);
+  const total = Math.max(0, subtotal - discount + tax);
 
   return (
-    <div className="checkout-order-summary">
-      <div className="summary-header">
-        <h3 className="summary-title">
-          <span className="icon">📦</span>
-          Order Summary
-        </h3>
-        <span className="items-count">{items.length} {items.length === 1 ? 'item' : 'items'}</span>
+    <div className="checkout-order-summary-modern">
+      {/* Header */}
+      <div className="checkout-summary-head">
+        <div className="head-title-wrap">
+          <Package size={17} className="text-indigo" />
+          <h3 className="summary-title">Đơn hàng của bạn</h3>
+        </div>
+        <span className="summary-count-badge">{items.length} sản phẩm</span>
       </div>
 
-      {/* Items List */}
-      <div className="summary-items">
-        {items.map(item => (
-          <div key={item.id} className="summary-item">
-            <div className="item-image-wrapper">
-              <img src={item.image} alt={item.name || item.title} className="item-image" />
-              {item.quantity > 1 && (
-                <span className="item-quantity-badge">{item.quantity}</span>
-              )}
+      {/* Items Scroll List */}
+      <div className="checkout-summary-items-list">
+        {items.map((item) => {
+          const itemPrice = Number(item.discount_price) || Number(item.price) || 0;
+          const origPrice = Number(item.price) || 0;
+          const hasDiscount = origPrice > itemPrice;
+          const catLabel = getCategoryName(item.category, 'vi') || 'Mã nguồn';
+
+          return (
+            <div key={item.id} className="checkout-mini-item">
+              <div className="mini-item-thumb-box">
+                <img
+                  src={item.image_url || item.image || '/placeholder-product.png'}
+                  alt={item.title || item.name}
+                  className="mini-item-img"
+                  onError={(e) => {
+                    e.target.src =
+                      'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400';
+                  }}
+                />
+              </div>
+
+              <div className="mini-item-info">
+                <h4 className="mini-item-title">{item.title || item.name}</h4>
+                <div className="mini-item-meta-row">
+                  <span className="mini-cat-chip">{catLabel}</span>
+                  <span className="mini-license-chip">Bản quyền chuẩn</span>
+                </div>
+              </div>
+
+              <div className="mini-item-price-col">
+                <span className="mini-final-price">{formatPrice(itemPrice)}</span>
+                {hasDiscount && <span className="mini-orig-price">{formatPrice(origPrice)}</span>}
+              </div>
             </div>
-            <div className="item-details">
-              <h4 className="item-name">{item.name || item.title}</h4>
-              <p className="item-category">{item.categoryName || item.category}</p>
-              {item.quantity > 1 && (
-                <p className="item-qty">Qty: {item.quantity}</p>
-              )}
-            </div>
-            <div className="item-price">
-              {formatPrice(item.price * (item.quantity || 1))}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Price Breakdown */}
-      <div className="price-breakdown">
-        <div className="price-row">
-          <span className="label">Subtotal</span>
-          <span className="value">{formatPrice(calculateSubtotal())}</span>
+      {/* Price Calculations */}
+      <div className="checkout-price-calc-box">
+        <div className="calc-row">
+          <span className="calc-label">Tạm tính:</span>
+          <span className="calc-val">{formatPrice(subtotal)}</span>
         </div>
 
-        {appliedCoupon && (
-          <div className="price-row discount">
-            <span className="label">
-              <span className="icon">🎟️</span>
-              Discount ({appliedCoupon.code})
+        {discount > 0 && (
+          <div className="calc-row discount-row">
+            <span className="calc-label">
+              <Tag size={13} />
+              <span>Mã giảm {appliedCoupon?.code ? `(${appliedCoupon.code})` : ''}:</span>
             </span>
-            <span className="value">-{formatPrice(calculateDiscount())}</span>
+            <span className="calc-val discount-val">-{formatPrice(discount)}</span>
           </div>
         )}
 
-        <div className="price-row">
-          <span className="label">Tax (10%)</span>
-          <span className="value">{formatPrice(calculateTax())}</span>
+        <div className="calc-row">
+          <span className="calc-label">Thuế VAT (10%):</span>
+          <span className="calc-val">{formatPrice(tax)}</span>
         </div>
 
-        <div className="price-divider"></div>
+        <div className="calc-divider"></div>
 
-        <div className="price-row total">
-          <span className="label">Total</span>
-          <span className="value">{formatPrice(calculateTotal())}</span>
+        <div className="calc-row total-row">
+          <span className="total-label-text">Tổng thanh toán:</span>
+          <span className="total-val-text">{formatPrice(total)}</span>
         </div>
       </div>
 
-      {/* Security Badges */}
-      <div className="security-section">
-        <div className="security-badge">
-          <span className="icon">🔒</span>
-          <span className="text">SSL Secure Checkout</span>
+      {/* Digital Delivery Notice */}
+      <div className="checkout-delivery-notice">
+        <Download size={14} className="text-emerald" />
+        <span>Giao dịch hoàn tất = Nhận link tải & License key ngay</span>
+      </div>
+
+      {/* Trust & Guarantee Box */}
+      <div className="checkout-guarantee-box">
+        <div className="guarantee-row">
+          <ShieldCheck size={14} className="text-emerald" />
+          <span>Bảo hành hoàn tiền 100% qua Escrow CodeMart</span>
         </div>
-        <div className="security-badge">
-          <span className="icon">✓</span>
-          <span className="text">Money Back Guarantee</span>
-        </div>
-        <div className="security-badge">
-          <span className="icon">🛡️</span>
-          <span className="text">Buyer Protection</span>
+        <div className="guarantee-row">
+          <Lock size={14} className="text-indigo" />
+          <span>Mã hóa bảo mật thanh toán 256-bit SSL</span>
         </div>
       </div>
 
-      {/* Payment Methods */}
-      <div className="payment-methods-preview">
-        <p className="preview-label">We Accept</p>
-        <div className="payment-icons">
-          <span className="payment-icon">💳</span>
-          <span className="payment-icon">🅿️</span>
-          <span className="payment-icon">📱</span>
-          <span className="payment-icon">🏦</span>
-        </div>
-      </div>
-
-      {/* Back Button */}
+      {/* Back to Cart Link */}
       {onBack && (
-        <button className="back-to-cart-btn" onClick={onBack}>
-          <span className="icon">←</span>
-          Back to Cart
+        <button type="button" className="btn-back-to-cart-action" onClick={onBack}>
+          <ArrowLeft size={15} />
+          <span>Quay lại giỏ hàng</span>
         </button>
       )}
     </div>
