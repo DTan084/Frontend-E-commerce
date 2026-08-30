@@ -1,5 +1,18 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  Users,
+  Package,
+  Clock,
+  ShoppingBag,
+  Layers,
+  Store,
+  Home,
+  LogOut,
+  ShieldCheck,
+  ChevronRight,
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import './AdminSidebar.css';
 
@@ -7,47 +20,69 @@ const AdminSidebar = ({ isOpen = false, onClose }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const pendingCount = 3; // Mock pending code reviews count
+
   const menuItems = [
     {
       id: 'dashboard',
-      label: 'Dashboard',
-      icon: '📊',
+      label: 'Tổng quan Dashboard',
+      icon: LayoutDashboard,
       path: '/admin',
+      badge: null,
     },
     {
       id: 'users',
-      label: 'Khách hàng',
-      icon: '👥',
+      label: 'Quản lý Người dùng',
+      icon: Users,
       path: '/admin/users',
+      badge: null,
     },
     {
       id: 'products',
-      label: 'Sản phẩm',
-      icon: '📦',
+      label: 'Kho Mã nguồn Sàn',
+      icon: Package,
       path: '/admin/products',
+      badge: null,
+    },
+    {
+      id: 'pending-products',
+      label: 'Duyệt Mã nguồn',
+      icon: Clock,
+      path: '/admin/pending-products',
+      badge: pendingCount,
     },
     {
       id: 'orders',
-      label: 'Đơn hàng',
-      icon: '🛒',
+      label: 'Đơn hàng & Escrow',
+      icon: ShoppingBag,
       path: '/admin/orders',
+      badge: null,
     },
     {
       id: 'categories',
-      label: 'Danh mục',
-      icon: '📁',
+      label: 'Danh mục Công nghệ',
+      icon: Layers,
       path: '/admin/categories',
+      badge: null,
     },
     {
-      id: 'settings',
-      label: 'Vé trang chủ',
-      icon: '🏠',
+      id: 'sellers',
+      label: 'Đối tác Tác giả',
+      icon: Store,
+      path: '/admin/sellers',
+      badge: null,
+    },
+    {
+      id: 'home',
+      label: 'Về Trang chủ sàn',
+      icon: Home,
       path: '/',
+      badge: null,
     },
   ];
 
   const getInitials = (name) => {
-    if (!name) return 'A';
+    if (!name) return 'AD';
     return name
       .split(' ')
       .map((word) => word[0])
@@ -63,70 +98,81 @@ const AdminSidebar = ({ isOpen = false, onClose }) => {
   };
 
   return (
-    <aside className={`admin-sidebar ${isOpen ? 'open' : ''}`}>
-      {/* Logo & Brand */}
-      <div className="sidebar-brand">
-        <div className="brand-icon">🛡️</div>
-        <div className="brand-content">
-          <h2 className="brand-title">TMDT Admin</h2>
-          <span className="brand-subtitle">Hệ thống quản trị</span>
+    <aside className={`admin-sidebar-modern ${isOpen ? 'open' : ''}`}>
+      {/* Brand Header */}
+      <div className="admin-brand-header">
+        <div className="admin-brand-logo-wrap">
+          <img src="/logo_tmdt.png" alt="TMDT Logo" className="logo-image" />
+          <div className="brand-text-col">
+            <span className="brand-main-name">CodeMart</span>
+            <span className="brand-admin-tag">
+              <ShieldCheck size={10} />
+              <span>ADMIN PORTAL</span>
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Admin Info Card */}
-      <div className="admin-info-card">
-        <div className="admin-avatar-wrapper">
+      {/* Admin Profile Mini Card */}
+      <div className="admin-sidebar-profile-card">
+        <div className="admin-avatar-box">
           {user?.avatar ? (
-            <img src={user.avatar} alt={user.name} className="admin-avatar" />
+            <img src={user.avatar} alt={user.name} className="admin-avatar-img" />
           ) : (
-            <div className="admin-avatar-placeholder">{getInitials(user?.name)}</div>
+            <div className="admin-avatar-initials">{getInitials(user?.name)}</div>
           )}
-          <div className="avatar-status-online"></div>
+          <span className="admin-status-dot"></span>
         </div>
 
-        <div className="admin-details">
-          <h3 className="admin-name">{user?.name || 'Administrator'}</h3>
-          <span className="admin-role-badge">🛡️ Super Admin</span>
-        </div>
-
-        <div className="admin-stats-mini">
-          <div className="stat-mini-item">
-            <span className="stat-mini-value">5.2K</span>
-            <span className="stat-mini-label">Users</span>
-          </div>
-          <div className="stat-mini-item">
-            <span className="stat-mini-value">1.2K</span>
-            <span className="stat-mini-label">Products</span>
-          </div>
+        <div className="admin-profile-info">
+          <h3 className="admin-profile-name">{user?.name || 'Administrator'}</h3>
+          <span className="admin-role-badge">
+            <ShieldCheck size={11} />
+            <span>Super Admin</span>
+          </span>
         </div>
       </div>
 
       {/* Navigation Menu */}
-      <nav className="admin-nav">
-        <h4 className="nav-title">MENU</h4>
-        <ul className="nav-list">
-          {menuItems.map((item) => (
-            <li key={item.id} className="nav-item">
+      <div className="admin-sidebar-nav-container">
+        <span className="admin-nav-section-title">HỆ THỐNG QUẢN TRỊ</span>
+        <nav className="admin-menu-list">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            return (
               <NavLink
+                key={item.id}
                 to={item.path}
-                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                end={item.id === 'dashboard'}
+                className={({ isActive }) => `admin-nav-item ${isActive ? 'active' : ''}`}
+                end={item.id === 'dashboard' || item.id === 'home'}
                 onClick={onClose}
               >
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-label">{item.label}</span>
-                <span className="nav-arrow">›</span>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
+                <div className="nav-item-left">
+                  <Icon size={16} className="admin-nav-icon" />
+                  <span className="admin-nav-label">{item.label}</span>
+                </div>
 
-      {/* Logout Button */}
-      <div className="sidebar-footer">
-        <button className="logout-btn" onClick={handleLogout}>
-          <span className="icon">🚪</span>
-          <span>Đăng xuất</span>
+                {item.badge ? (
+                  <span className="admin-nav-badge-pill">{item.badge}</span>
+                ) : (
+                  <ChevronRight size={13} className="admin-nav-chevron" />
+                )}
+              </NavLink>
+            );
+          })}
+        </nav>
+      </div>
+
+      {/* Footer System Status & Logout */}
+      <div className="admin-sidebar-footer">
+        <div className="admin-system-health-pill">
+          <span className="health-pulse-dot"></span>
+          <span>Hệ thống: Bình thường (99.9%)</span>
+        </div>
+
+        <button type="button" className="btn-admin-logout" onClick={handleLogout}>
+          <LogOut size={15} />
+          <span>Đăng xuất Quản trị</span>
         </button>
       </div>
     </aside>
