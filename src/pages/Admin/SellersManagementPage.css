@@ -1,362 +1,158 @@
-.sellers-management-page {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-}
+/* ==========================================================================
+   Admin Sellers Management Page - CodeMart Modern Tech Marketplace
+   ========================================================================== */
 
-.page-hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 60px 20px 40px;
-}
-
-.page-hero .container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.breadcrumb {
+.seller-cell-flex {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  margin-bottom: 20px;
-  opacity: 0.9;
+  gap: 12px;
 }
 
-.breadcrumb a {
-  color: white;
-  text-decoration: none;
-}
-
-.breadcrumb span {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.page-hero h1 {
-  font-size: 36px;
-  margin: 0 0 10px 0;
-}
-
-.page-hero p {
-  font-size: 16px;
-  margin: 0;
-  opacity: 0.9;
-}
-
-.stats-section {
-  padding: 40px 20px;
-}
-
-.stats-section .container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
-}
-
-.stat-card {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.12);
-}
-
-.stat-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 15px;
+.seller-avatar-initials {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
-  color: white;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
 }
 
-.stat-info {
-  flex: 1;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 8px;
-}
-
-.stat-value {
-  font-size: 32px;
-  font-weight: 700;
-  color: #333;
-}
-
-.filters-section {
-  padding: 0 20px 30px;
-}
-
-.filters-section .container {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.search-box {
-  flex: 1;
-  min-width: 300px;
-  position: relative;
-}
-
-.search-box input {
-  width: 100%;
-  padding: 12px 45px 12px 20px;
-  border: 2px solid #e0e0e0;
-  border-radius: 30px;
-  font-size: 15px;
-  background: white;
-}
-
-.search-box input:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-.search-icon {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0.5;
-}
-
-.status-filters {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  padding: 10px 20px;
-  border: 2px solid #e0e0e0;
-  background: white;
-  border-radius: 25px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.filter-btn:hover {
-  border-color: #667eea;
-}
-
-.filter-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-color: transparent;
-}
-
-.table-section {
-  padding: 0 20px 80px;
-}
-
-.table-section .container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.table-card {
-  background: white;
-  border-radius: 15px;
-  padding: 30px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-}
-
-.table-responsive {
-  overflow-x: auto;
-}
-
-.sellers-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 1000px;
-}
-
-.sellers-table th {
-  text-align: left;
-  padding: 15px;
-  background: #f8f9fa;
-  font-weight: 600;
-  color: #333;
-  border-bottom: 2px solid #e0e0e0;
-  white-space: nowrap;
-}
-
-.sellers-table td {
-  padding: 15px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.sellers-table tr:hover {
-  background: #f8f9ff;
-}
-
-.seller-info {
+.seller-names-col {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
-.seller-email {
-  font-size: 13px;
-  color: #666;
+.seller-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.text-center {
-  text-align: center;
+.seller-name-txt {
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
 }
 
-.amount {
-  color: #667eea;
+.verified-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border-radius: 10px;
+  font-size: 10px;
   font-weight: 700;
 }
 
-.rating {
-  color: #f39c12;
-  font-weight: 600;
+.seller-studio-name {
+  font-size: 11.5px;
+  color: var(--text-muted, #94a3b8);
 }
 
-.no-rating {
-  color: #95a5a6;
-  font-size: 13px;
-}
-
-.status-badge {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.status-badge.active {
-  background: #d4edda;
-  color: #155724;
-}
-
-.status-badge.pending {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.status-badge.suspended {
-  background: #f8d7da;
-  color: #721c24;
-}
-
-.action-buttons {
+.td-contact-cell {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 1px;
 }
 
-.btn-action {
-  padding: 8px 15px;
-  border: none;
+.contact-email {
+  font-size: 12.5px;
+  color: var(--text-primary, #1e293b);
+}
+
+.contact-phone {
+  font-size: 11px;
+  color: var(--text-muted, #94a3b8);
+}
+
+.rating-pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
   border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  font-size: 11.5px;
+}
+
+.commission-rate-tag {
+  padding: 3px 8px;
+  background: var(--gray-50, #f8fafc);
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-secondary, #475569);
   white-space: nowrap;
 }
 
-.btn-action.approve {
-  background: #27ae60;
-  color: white;
+/* Modal */
+.modal-seller-box {
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 16px);
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
 }
 
-.btn-action.approve:hover {
-  background: #229954;
+.modal-seller-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.btn-action.suspend {
-  background: #e74c3c;
-  color: white;
+.modal-seller-avatar-large {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
 }
 
-.btn-action.suspend:hover {
-  background: #c0392b;
+.modal-verify-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--gray-50, #f8fafc);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  font-size: 12px;
+  color: var(--text-secondary, #475569);
+  font-weight: 600;
 }
 
-.btn-action.activate {
-  background: #3498db;
-  color: white;
+.btn-verify-badge-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #cbd5e1);
+  background: #ffffff;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-secondary, #64748b);
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.btn-action.activate:hover {
-  background: #2980b9;
-}
-
-.btn-action.view {
-  background: #667eea;
-  color: white;
-}
-
-.btn-action.view:hover {
-  background: #5568d3;
-}
-
-@media (max-width: 1200px) {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .sellers-table {
-    min-width: 900px;
-  }
-}
-
-@media (max-width: 992px) {
-  .sellers-table {
-    min-width: 820px;
-  }
-}
-
-@media (max-width: 768px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .filters-section .container {
-    flex-direction: column;
-  }
-
-  .search-box {
-    min-width: 100%;
-  }
-
-  .action-buttons {
-    flex-direction: column;
-  }
-
-  .btn-action {
-    width: 100%;
-  }
-
-  .sellers-table {
-    min-width: 760px;
-  }
+.btn-verify-badge-toggle.verified {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #059669;
 }

@@ -1,296 +1,362 @@
 import React, { useState } from 'react';
+import {
+  Layers,
+  Search,
+  PlusCircle,
+  Edit3,
+  Trash2,
+  CheckCircle2,
+  X,
+  Globe,
+  LayoutDashboard,
+  Sparkles,
+  Smartphone,
+  Cpu,
+  Bot,
+  Package,
+} from 'lucide-react';
 import './AdminCategories.css';
 
+const initialCategories = [
+  {
+    id: 1,
+    name: 'Website TMĐT & Bán Hàng',
+    slug: 'ecommerce',
+    description: 'Mã nguồn website bán hàng, sàn TMĐT, cổng thanh toán trực tuyến',
+    iconName: 'Globe',
+    icon: Globe,
+    productsCount: 45,
+    status: 'active',
+    createdAt: '15/01/2025',
+  },
+  {
+    id: 2,
+    name: 'Giao Diện Admin Dashboard & CMS',
+    slug: 'admin-template',
+    description: 'Theme và mẫu dashboard quản trị React, Vue, Tailwind CSS chuyên nghiệp',
+    iconName: 'LayoutDashboard',
+    icon: LayoutDashboard,
+    productsCount: 38,
+    status: 'active',
+    createdAt: '20/01/2025',
+  },
+  {
+    id: 3,
+    name: 'Fullstack SaaS & Web App',
+    slug: 'fullstack-saas',
+    description: 'Hệ thống SaaS hoàn chỉnh tích hợp Auth, Stripe, VNPay và database',
+    iconName: 'Sparkles',
+    icon: Sparkles,
+    productsCount: 52,
+    status: 'active',
+    createdAt: '05/02/2025',
+  },
+  {
+    id: 4,
+    name: 'Ứng Dụng Di Động (Mobile App)',
+    slug: 'mobile-app',
+    description: 'Source code app iOS & Android viết bằng Flutter và React Native',
+    iconName: 'Smartphone',
+    icon: Smartphone,
+    productsCount: 29,
+    status: 'active',
+    createdAt: '15/02/2025',
+  },
+  {
+    id: 5,
+    name: 'Backend API & Microservices',
+    slug: 'backend-api',
+    description: 'RESTful API, GraphQL microservices xây dựng bằng Spring Boot, Node.js, Laravel',
+    iconName: 'Cpu',
+    icon: Cpu,
+    productsCount: 34,
+    status: 'active',
+    createdAt: '01/03/2025',
+  },
+  {
+    id: 6,
+    name: 'AI, Chatbot & Automation',
+    slug: 'ai-automation',
+    description: 'Scripts tự động hóa, tích hợp OpenAI / Gemini API và mô hình AI',
+    iconName: 'Bot',
+    icon: Bot,
+    productsCount: 18,
+    status: 'active',
+    createdAt: '10/03/2025',
+  },
+];
+
 const AdminCategories = () => {
+  const [categoriesList, setCategoriesList] = useState(initialCategories);
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
+
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
     description: '',
-    icon: '📦',
+    iconName: 'Package',
   });
 
-  // Mock categories data
-  const categories = [
-    {
-      id: 1,
-      name: 'Electronics',
-      slug: 'electronics',
-      description: 'Gadgets, devices, and electronic accessories',
-      icon: '💻',
-      products: 156,
-      status: 'active',
-      createdAt: '2025-01-15',
-    },
-    {
-      id: 2,
-      name: 'Fashion',
-      slug: 'fashion',
-      description: 'Clothing, shoes, and fashion accessories',
-      icon: '👗',
-      products: 234,
-      status: 'active',
-      createdAt: '2025-01-20',
-    },
-    {
-      id: 3,
-      name: 'Home & Garden',
-      slug: 'home-garden',
-      description: 'Furniture, decor, and garden supplies',
-      icon: '🏡',
-      products: 89,
-      status: 'active',
-      createdAt: '2025-02-05',
-    },
-    {
-      id: 4,
-      name: 'Sports & Fitness',
-      slug: 'sports-fitness',
-      description: 'Sports equipment and fitness accessories',
-      icon: '⚽',
-      products: 67,
-      status: 'active',
-      createdAt: '2025-02-15',
-    },
-    {
-      id: 5,
-      name: 'Books & Media',
-      slug: 'books-media',
-      description: 'Books, ebooks, music, and movies',
-      icon: '📚',
-      products: 145,
-      status: 'active',
-      createdAt: '2025-03-01',
-    },
-    {
-      id: 6,
-      name: 'Beauty & Health',
-      slug: 'beauty-health',
-      description: 'Cosmetics, skincare, and health products',
-      icon: '💄',
-      products: 98,
-      status: 'inactive',
-      createdAt: '2025-03-10',
-    },
-  ];
-
-  const filteredCategories = categories.filter(cat =>
-    cat.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cat.slug.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const iconOptions = ['📦', '💻', '👗', '🏡', '⚽', '📚', '💄', '🎮', '🎨', '🚗', '🍔', '✈️'];
-
-  const handleAddCategory = () => {
-    setShowAddModal(true);
+  const handleOpenAdd = () => {
     setEditingCategory(null);
-    setFormData({ name: '', slug: '', description: '', icon: '📦' });
+    setFormData({ name: '', slug: '', description: '', iconName: 'Package' });
+    setShowAddModal(true);
   };
 
-  const handleEditCategory = (category) => {
+  const handleOpenEdit = (category) => {
     setEditingCategory(category);
     setFormData({
       name: category.name,
       slug: category.slug,
       description: category.description,
-      icon: category.icon,
+      iconName: category.iconName || 'Package',
     });
     setShowAddModal(true);
   };
 
-  const handleSaveCategory = () => {
-    console.log('Save category:', formData);
-    setShowAddModal(false);
-    setFormData({ name: '', slug: '', description: '', icon: '📦' });
+  const handleNameChange = (e) => {
+    const val = e.target.value;
+    const autoSlug = val
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[đĐ]/g, 'd')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    setFormData((prev) => ({
+      ...prev,
+      name: val,
+      slug: !editingCategory ? autoSlug : prev.slug,
+    }));
   };
 
-  const handleDeleteCategory = (categoryId) => {
-    if (window.confirm('Are you sure you want to delete this category?')) {
-      console.log('Delete category:', categoryId);
+  const handleSaveCategory = (e) => {
+    e.preventDefault();
+    if (!formData.name.trim()) return;
+
+    if (editingCategory) {
+      setCategoriesList((prev) =>
+        prev.map((c) =>
+          c.id === editingCategory.id
+            ? { ...c, name: formData.name, slug: formData.slug, description: formData.description }
+            : c
+        )
+      );
+      alert('Đã cập nhật danh mục thành công!');
+    } else {
+      const newCat = {
+        id: Date.now(),
+        name: formData.name,
+        slug: formData.slug,
+        description: formData.description,
+        iconName: formData.iconName,
+        icon: Package,
+        productsCount: 0,
+        status: 'active',
+        createdAt: new Date().toLocaleDateString('vi-VN'),
+      };
+      setCategoriesList([...categoriesList, newCat]);
+      alert('Đã thêm danh mục mới thành công!');
+    }
+
+    setShowAddModal(false);
+  };
+
+  const handleDeleteCategory = (catId) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
+      setCategoriesList((prev) => prev.filter((c) => c.id !== catId));
     }
   };
 
-  const handleToggleStatus = (categoryId, currentStatus) => {
-    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-    console.log(`Toggle category ${categoryId} status to ${newStatus}`);
-  };
+  const filteredCategories = categoriesList.filter(
+    (cat) =>
+      cat.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      cat.slug.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="admin-categories-page">
-      {/* Header */}
-      <div className="page-header">
-        <div className="header-content">
-          <h1 className="page-title">
-            <span className="title-icon">📁</span>
-            Categories Management
-          </h1>
-          <p className="page-subtitle">Organize and manage product categories</p>
+    <div className="admin-page-container admin-categories-page-modern">
+      {/* Header Banner */}
+      <div className="admin-page-header-banner">
+        <div className="header-banner-copy">
+          <div className="header-tag-pill">
+            <Layers size={13} />
+            <span>Phân Loại & Điều Hướng Sản Phẩm</span>
+          </div>
+          <h1 className="admin-page-main-title">Quản lý Danh mục Công nghệ</h1>
+          <p className="admin-page-main-desc">
+            Cấu hình các nhóm mã nguồn công nghệ, quản lý slug thân thiện SEO và liên kết sản phẩm
+          </p>
         </div>
-        <button className="add-category-btn" onClick={handleAddCategory}>
-          <span className="btn-icon">➕</span>
-          Add Category
+
+        <button type="button" className="btn-add-category-cta" onClick={handleOpenAdd}>
+          <PlusCircle size={15} />
+          <span>Thêm danh mục mới</span>
         </button>
       </div>
 
-      {/* Stats */}
-      <div className="categories-stats">
-        <div className="stat-card">
-          <span className="stat-icon">📁</span>
-          <div className="stat-content">
-            <span className="stat-value">{categories.length}</span>
-            <span className="stat-label">Total Categories</span>
-          </div>
-        </div>
-        <div className="stat-card">
-          <span className="stat-icon">✅</span>
-          <div className="stat-content">
-            <span className="stat-value">{categories.filter(c => c.status === 'active').length}</span>
-            <span className="stat-label">Active</span>
-          </div>
-        </div>
-        <div className="stat-card">
-          <span className="stat-icon">📦</span>
-          <div className="stat-content">
-            <span className="stat-value">{categories.reduce((sum, c) => sum + c.products, 0)}</span>
-            <span className="stat-label">Total Products</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Search */}
-      <div className="search-section">
-        <div className="search-box">
-          <span className="search-icon">🔍</span>
+      {/* Toolbar */}
+      <div className="admin-table-toolbar-box">
+        <div className="toolbar-search-wrap">
+          <Search size={15} className="toolbar-search-icon" />
           <input
             type="text"
-            placeholder="Search categories..."
+            className="toolbar-search-input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Tìm theo tên danh mục, mã slug..."
           />
         </div>
+
+        <span className="categories-counter-txt">
+          {categoriesList.length} danh mục đang kích hoạt
+        </span>
       </div>
 
-      {/* Categories Grid */}
-      <div className="categories-grid">
-        {filteredCategories.map((category, index) => (
-          <div 
-            key={category.id} 
-            className="category-card"
-            style={{ animationDelay: `${index * 0.05}s` }}
-          >
-            <div className="category-header">
-              <div className="category-icon">{category.icon}</div>
-              <span className={`status-badge ${category.status}`}>
-                {category.status}
-              </span>
-            </div>
-            <h3 className="category-name">{category.name}</h3>
-            <p className="category-slug">/{category.slug}</p>
-            <p className="category-description">{category.description}</p>
-            <div className="category-meta">
-              <div className="meta-item">
-                <span className="meta-icon">📦</span>
-                <span className="meta-text">{category.products} products</span>
-              </div>
-              <div className="meta-item">
-                <span className="meta-icon">📅</span>
-                <span className="meta-text">{category.createdAt}</span>
-              </div>
-            </div>
-            <div className="category-actions">
-              <button
-                className="action-btn edit"
-                onClick={() => handleEditCategory(category)}
-              >
-                ✏️ Edit
-              </button>
-              <button
-                className="action-btn toggle"
-                onClick={() => handleToggleStatus(category.id, category.status)}
-              >
-                {category.status === 'active' ? '🔒' : '🔓'}
-              </button>
-              <button
-                className="action-btn delete"
-                onClick={() => handleDeleteCategory(category.id)}
-              >
-                🗑️
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* Categories Table */}
+      <div className="admin-data-table-card">
+        <div className="table-responsive-wrapper">
+          <table className="admin-data-table">
+            <thead>
+              <tr>
+                <th>Tên danh mục</th>
+                <th>Mã Slug</th>
+                <th>Mô tả chuyên mục</th>
+                <th>Số mã nguồn</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCategories.map((cat) => {
+                const Icon = cat.icon || Package;
+                return (
+                  <tr key={cat.id} className="admin-table-row">
+                    <td className="td-cat-name-cell">
+                      <div className="cat-cell-flex">
+                        <div className="cat-icon-avatar">
+                          <Icon size={16} />
+                        </div>
+                        <strong className="cat-title-txt">{cat.name}</strong>
+                      </div>
+                    </td>
 
-      {filteredCategories.length === 0 && (
-        <div className="no-results">
-          <span className="no-results-icon">🔍</span>
-          <p>No categories found</p>
+                    <td className="td-cat-slug">
+                      <code>/{cat.slug}</code>
+                    </td>
+
+                    <td className="td-cat-desc">
+                      <span className="cat-desc-txt">{cat.description}</span>
+                    </td>
+
+                    <td className="td-cat-count">
+                      <span className="count-tag-pill">{cat.productsCount} sản phẩm</span>
+                    </td>
+
+                    <td className="td-cat-status">
+                      <span className="status-badge-pill emerald">
+                        <CheckCircle2 size={11} />
+                        <span>Kích hoạt</span>
+                      </span>
+                    </td>
+
+                    <td className="td-actions-cell">
+                      <div className="actions-btn-strip">
+                        <button
+                          type="button"
+                          className="btn-tbl-action"
+                          onClick={() => handleOpenEdit(cat)}
+                          title="Chỉnh sửa"
+                        >
+                          <Edit3 size={13} />
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-tbl-action delete"
+                          onClick={() => handleDeleteCategory(cat.id)}
+                          title="Xóa danh mục"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
 
-      {/* Add/Edit Modal */}
+      {/* Add / Edit Category Modal */}
       {showAddModal && (
-        <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>{editingCategory ? 'Edit Category' : 'Add New Category'}</h2>
-              <button className="close-btn" onClick={() => setShowAddModal(false)}>
-                ×
+        <div className="modal-backdrop-overlay" onClick={() => setShowAddModal(false)}>
+          <div className="modal-cat-box" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-user-head">
+              <h3>{editingCategory ? 'Chỉnh sửa Danh mục' : 'Thêm Danh mục Mới'}</h3>
+              <button
+                type="button"
+                className="btn-modal-close"
+                onClick={() => setShowAddModal(false)}
+              >
+                <X size={18} />
               </button>
             </div>
-            <div className="modal-body">
-              <div className="form-group">
-                <label>Category Name *</label>
+
+            <form onSubmit={handleSaveCategory} className="modal-cat-form">
+              <div className="form-field-group">
+                <label className="form-field-label">
+                  Tên danh mục <span className="required-star">*</span>
+                </label>
                 <input
                   type="text"
-                  placeholder="Enter category name"
+                  className="form-input-text"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={handleNameChange}
+                  placeholder="Ví dụ: Fullstack SaaS & Web App"
+                  required
                 />
               </div>
-              <div className="form-group">
-                <label>Slug *</label>
+
+              <div className="form-field-group">
+                <label className="form-field-label">Đường dẫn Slug (SEO)</label>
                 <input
                   type="text"
-                  placeholder="category-slug"
+                  className="form-input-text"
                   value={formData.slug}
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                  placeholder="fullstack-saas"
+                  required
                 />
               </div>
-              <div className="form-group">
-                <label>Description</label>
+
+              <div className="form-field-group">
+                <label className="form-field-label">Mô tả ngắn</label>
                 <textarea
-                  placeholder="Enter category description"
+                  className="form-textarea-box"
+                  rows={3}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows="3"
+                  placeholder="Mô tả nhóm mã nguồn công nghệ này..."
                 />
               </div>
-              <div className="form-group">
-                <label>Icon</label>
-                <div className="icon-selector">
-                  {iconOptions.map(icon => (
-                    <button
-                      key={icon}
-                      className={`icon-option ${formData.icon === icon ? 'selected' : ''}`}
-                      onClick={() => setFormData({ ...formData, icon })}
-                    >
-                      {icon}
-                    </button>
-                  ))}
-                </div>
+
+              <div className="modal-user-footer">
+                <button
+                  type="button"
+                  className="btn-modal-close-action"
+                  onClick={() => setShowAddModal(false)}
+                >
+                  Hủy
+                </button>
+                <button type="submit" className="btn-modal-confirm">
+                  {editingCategory ? 'Lưu thay đổi' : 'Thêm danh mục'}
+                </button>
               </div>
-            </div>
-            <div className="modal-footer">
-              <button className="cancel-btn" onClick={() => setShowAddModal(false)}>
-                Cancel
-              </button>
-              <button className="save-btn" onClick={handleSaveCategory}>
-                {editingCategory ? 'Update Category' : 'Create Category'}
-              </button>
-            </div>
+            </form>
           </div>
         </div>
       )}

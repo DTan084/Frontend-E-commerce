@@ -27,6 +27,7 @@ const AdminRoutes = () => (
     <Route path={ROUTE_PATHS.ADMIN.USERS} element={<AdminUsers />} />
     <Route path={ROUTE_PATHS.ADMIN.PRODUCTS} element={<AdminProducts />} />
     <Route path={ROUTE_PATHS.ADMIN.PENDING_PRODUCTS} element={<PendingProductsPage />} />
+    <Route path="pending-products" element={<PendingProductsPage />} />
     <Route path={ROUTE_PATHS.ADMIN.ORDERS} element={<AdminOrders />} />
     <Route path={ROUTE_PATHS.ADMIN.CATEGORIES} element={<AdminCategories />} />
     <Route path={ROUTE_PATHS.ADMIN.SELLERS} element={<SellersManagementPage />} />
