@@ -1,18 +1,426 @@
-.profile-page {
-  padding: 60px 20px;
-  min-height: 80vh;
+/* ==========================================================================
+   User Profile & Settings Page - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
+.profile-page-modern {
+  min-height: calc(100vh - var(--header-height, 76px));
+  background: var(--bg-secondary, #f8fafc);
+  padding: 24px 0 60px;
 }
 
-.profile-page h1 {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.profile-form {
-  max-width: 600px;
+.profile-container-inner {
+  max-width: var(--max-width-main, 1280px);
   margin: 0 auto;
-  background: white;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 0 20px;
+}
+
+.profile-layout-row {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  margin-top: 16px;
+}
+
+.profile-main-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header & Tabs */
+.profile-hero-header-card {
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 16px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  padding: 24px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-avatar-large-wrap {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(79, 70, 229, 0.08);
+  flex-shrink: 0;
+}
+
+.profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.btn-change-avatar-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--primary-color, #4f46e5);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease;
+}
+
+.btn-change-avatar-badge:hover {
+  transform: scale(1.1);
+}
+
+.profile-text-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-user-display-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary, #0f172a);
+  margin: 0;
+}
+
+.profile-user-email-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary, #64748b);
+  margin: 0;
+}
+
+.verified-chip-sm {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--success-color, #059669);
+  background: rgba(16, 185, 129, 0.08);
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
+/* Setting Tabs */
+.profile-setting-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--border-light, #f1f5f9);
+  padding-top: 16px;
+  overflow-x: auto;
+}
+
+.prof-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: var(--gray-100, #f1f5f9);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary, #475569);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.prof-tab-btn:hover {
+  background: #e2e8f0;
+  color: var(--text-primary, #0f172a);
+}
+
+.prof-tab-btn.is-active {
+  background: var(--primary-color, #4f46e5);
+  color: #ffffff;
+}
+
+/* Success Banner */
+.profile-success-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--border-radius-md, 10px);
+  color: var(--success-color, #059669);
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* Tab Card Body */
+.profile-tab-card-body {
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 16px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-block-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary, #0f172a);
+  margin: 0 0 4px;
+}
+
+.section-block-desc {
+  font-size: 13px;
+  color: var(--text-secondary, #64748b);
+  margin: 0 0 20px;
+}
+
+/* Form Styles */
+.profile-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-field-dual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label-txt {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+}
+
+.field-input-box {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  border: 1.5px solid var(--border-color, #e2e8f0);
+  border-radius: var(--border-radius-md, 10px);
+  font-size: 13.5px;
+  color: var(--text-primary, #0f172a);
+  background: #ffffff;
+  transition: all 0.15s ease;
+}
+
+.field-input-box:focus {
+  outline: none;
+  border-color: var(--primary-color, #4f46e5);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.field-input-box.disabled-field {
+  background: var(--gray-100, #f1f5f9);
+  cursor: not-allowed;
+  color: var(--text-muted, #94a3b8);
+}
+
+.field-textarea {
+  height: auto;
+  padding: 10px 14px;
+  resize: vertical;
+}
+
+.field-helper-note {
+  font-size: 11.5px;
+  color: var(--text-muted, #94a3b8);
+}
+
+.pass-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.btn-toggle-eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #94a3b8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-form-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.btn-save-profile-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: var(--primary-color, #4f46e5);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--border-radius-md, 8px);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-save-profile-action:hover {
+  background: var(--primary-hover, #4338ca);
+}
+
+.security-divider-line {
+  height: 1px;
+  background: var(--border-light, #f1f5f9);
+  margin: 24px 0;
+}
+
+/* 2FA Card */
+.two-factor-auth-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--gray-50, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: var(--border-radius-lg, 12px);
+  padding: 18px 20px;
+  gap: 16px;
+}
+
+.two-factor-left-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.two-factor-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(79, 70, 229, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.two-factor-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-primary, #0f172a);
+  margin: 0 0 2px;
+}
+
+.two-factor-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary, #64748b);
+  margin: 0;
+  max-width: 500px;
+}
+
+.btn-enable-2fa-pill {
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid var(--primary-color, #4f46e5);
+  color: var(--primary-color, #4f46e5);
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btn-enable-2fa-pill:hover {
+  background: var(--primary-color, #4f46e5);
+  color: #ffffff;
+}
+
+/* Notifications Preference */
+.notif-preferences-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notif-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--gray-50, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: var(--border-radius-md, 10px);
+  gap: 16px;
+  cursor: pointer;
+}
+
+.notif-info-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.notif-item-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+}
+
+.notif-item-sub {
+  font-size: 12px;
+  color: var(--text-secondary, #64748b);
+}
+
+.modern-switch-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--primary-color, #4f46e5);
+}
+
+@media (max-width: 1024px) {
+  .profile-layout-row {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-field-dual {
+    grid-template-columns: 1fr;
+  }
+  .two-factor-auth-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .btn-enable-2fa-pill {
+    width: 100%;
+    text-align: center;
+  }
 }
