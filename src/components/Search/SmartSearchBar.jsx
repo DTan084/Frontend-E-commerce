@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Search,
   X,
   Clock,
-  TrendingUp,
   Hash,
   Command,
   Star,
   FolderTree,
-  Sparkles,
+  Package,
   SearchX,
+  ArrowRight,
 } from 'lucide-react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { getSearchSuggestions } from '../../data/mockSearch';
@@ -25,11 +25,11 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
   const [suggestions, setSuggestions] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [searchHistory, setSearchHistory] = useState([]);
-  const [activeFilter] = useState('all');
+  const activeFilter = 'all';
 
   const searchRef = useRef(null);
   const inputRef = useRef(null);
-  const debouncedQuery = useDebounce(query, 300);
+  const debouncedQuery = useDebounce(query, 250);
 
   // Load search history from localStorage
   useEffect(() => {
@@ -49,6 +49,22 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const fetchSuggestions = useCallback(
+    async (searchQuery) => {
+      setIsLoading(true);
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        const results = getSearchSuggestions(searchQuery, activeFilter);
+        setSuggestions(results);
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [activeFilter]
+  );
+
   // Fetch suggestions when query changes
   useEffect(() => {
     if (debouncedQuery.length >= 2) {
@@ -56,7 +72,7 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
     } else {
       setSuggestions(null);
     }
-  }, [debouncedQuery, activeFilter]);
+  }, [debouncedQuery, fetchSuggestions]);
 
   // Click outside to close
   useEffect(() => {
@@ -68,19 +84,6 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const fetchSuggestions = async (searchQuery) => {
-    setIsLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      const results = getSearchSuggestions(searchQuery, activeFilter);
-      setSuggestions(results);
-    } catch (error) {
-      console.error('Error fetching suggestions:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
@@ -105,7 +108,7 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
     if (onSearch) {
       onSearch(searchQuery);
     } else {
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}&filter=${activeFilter}`);
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
     setIsFocused(false);
   };
@@ -155,6 +158,16 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
     searchDataService.clearHistory();
   };
 
+  const getAllSuggestionItems = () => {
+    if (!suggestions) return [];
+    return [
+      ...(suggestions.popular || []),
+      ...(suggestions.products || []),
+      ...(suggestions.categories || []),
+      ...(suggestions.tags || []),
+    ];
+  };
+
   const handleKeyDown = (e) => {
     if (!suggestions) return;
 
@@ -179,36 +192,18 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
     }
   };
 
-  const getAllSuggestionItems = () => {
-    if (!suggestions) return [];
-    return [
-      ...(suggestions.popular || []),
-      ...(suggestions.products || []),
-      ...(suggestions.categories || []),
-      ...(suggestions.tags || []),
-      ...(suggestions.features || []),
-    ];
-  };
-
-  const highlightMatch = (text, query) => {
-    if (!query) return text;
-    const regex = new RegExp(`(${query})`, 'gi');
+  const highlightMatch = (text, matchQuery) => {
+    if (!matchQuery) return text;
+    const regex = new RegExp(`(${matchQuery})`, 'gi');
     const parts = text.split(regex);
-    return parts.map((part, i) => (regex.test(part) ? <strong key={i}>{part}</strong> : part));
-  };
-
-  const renderStars = (rating) => {
-    return (
-      <div className="search-rating">
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            size={12}
-            className={`search-star ${i < Math.floor(rating || 5) ? 'filled' : ''}`}
-            fill={i < Math.floor(rating || 5) ? '#fbbf24' : 'none'}
-          />
-        ))}
-      </div>
+    return parts.map((part, i) =>
+      regex.test(part) ? (
+        <strong key={i} className="highlight-match">
+          {part}
+        </strong>
+      ) : (
+        part
+      )
     );
   };
 
@@ -217,7 +212,7 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
   return (
     <div className={`smart-search-bar ${variant}`} ref={searchRef}>
       <div className={`search-input-wrapper ${isFocused ? 'focused' : ''}`}>
-        <Search size={18} className="search-icon" />
+        <Search size={17} className="search-icon" />
 
         <input
           ref={inputRef}
@@ -248,165 +243,172 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
         </div>
       </div>
 
-      {/* Dropdown */}
+      {/* Modern Floating Dropdown */}
       {showDropdown && (
-        <div className="search-dropdown">
+        <div className="search-dropdown-spotlight">
           {isLoading ? (
-            <div className="search-loading">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="search-skeleton" />
+            <div className="search-loading-box">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="search-skeleton-item" />
               ))}
             </div>
           ) : query.length < 2 && searchHistory.length > 0 ? (
             // Search History
-            <div className="search-section">
-              <div className="search-section-header">
-                <div className="section-title">
-                  <Clock size={14} />
+            <div className="search-group-section">
+              <div className="search-group-header">
+                <div className="group-title-label">
+                  <Clock size={13} />
                   <span>Tìm kiếm gần đây</span>
                 </div>
-                <button type="button" className="clear-history-btn" onClick={clearHistory}>
+                <button type="button" className="btn-clear-history" onClick={clearHistory}>
                   Xóa tất cả
                 </button>
               </div>
-              {searchHistory.map((item, index) => (
-                <div
-                  key={index}
-                  className={`search-item ${selectedIndex === index ? 'selected' : ''}`}
-                  onClick={() => handleHistoryClick(item)}
-                >
-                  <Clock size={14} className="item-icon" />
-                  <span className="item-text">{item}</span>
-                </div>
-              ))}
+              <div className="search-items-list">
+                {searchHistory.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`search-history-row ${selectedIndex === index ? 'selected' : ''}`}
+                    onClick={() => handleHistoryClick(item)}
+                  >
+                    <Clock size={14} className="history-icon" />
+                    <span className="history-text">{item}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : suggestions &&
             Object.keys(suggestions).some((key) => suggestions[key]?.length > 0) ? (
-            // Suggestions
-            <>
-              {suggestions.popular?.length > 0 && (
-                <div className="search-section">
-                  <div className="search-section-header">
-                    <div className="section-title">
-                      <TrendingUp size={14} />
-                      <span>Phổ biến nhất</span>
-                    </div>
-                  </div>
-                  {suggestions.popular.map((item, index) => (
-                    <div
-                      key={item.id || index}
-                      className={`search-item ${selectedIndex === index ? 'selected' : ''}`}
-                      onClick={() => handleSuggestionClick(item)}
-                    >
-                      <TrendingUp size={14} className="item-icon" />
-                      <span className="item-text">{highlightMatch(item.text, query)}</span>
-                      {item.count && (
-                        <span className="item-count">{item.count.toLocaleString()}</span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-
+            // Suggestions Sections
+            <div className="search-results-scrollable">
+              {/* Products Section */}
               {suggestions.products?.length > 0 && (
-                <div className="search-section">
-                  <div className="search-section-header">
-                    <div className="section-title">
-                      <Sparkles size={14} />
-                      <span>Sản phẩm gợi ý</span>
+                <div className="search-group-section">
+                  <div className="search-group-header">
+                    <div className="group-title-label">
+                      <Package size={13} />
+                      <span>Mã nguồn phù hợp</span>
                     </div>
+                    <span className="group-count-badge">{suggestions.products.length} gợi ý</span>
                   </div>
-                  {suggestions.products.map((item, index) => {
-                    const itemIndex = (suggestions.popular?.length || 0) + index;
-                    return (
-                      <div
-                        key={item.id}
-                        className={`search-item product-item ${selectedIndex === itemIndex ? 'selected' : ''}`}
-                        onClick={() => handleSuggestionClick(item)}
-                      >
-                        <img src={item.thumbnail} alt={item.title} className="product-thumbnail" />
-                        <div className="product-info">
-                          <div className="product-title">{highlightMatch(item.title, query)}</div>
-                          <div className="product-meta">
-                            <span className="product-price">
-                              {item.price.toLocaleString('vi-VN')}₫
-                            </span>
-                            {renderStars(item.rating)}
-                            <span className="product-category">{item.category}</span>
+                  <div className="search-items-list">
+                    {suggestions.products.map((item, index) => {
+                      const itemIndex = (suggestions.popular?.length || 0) + index;
+                      return (
+                        <div
+                          key={item.id}
+                          className={`search-product-card-row ${selectedIndex === itemIndex ? 'selected' : ''}`}
+                          onClick={() => handleSuggestionClick(item)}
+                        >
+                          <img
+                            src={item.thumbnail}
+                            alt={item.title}
+                            className="search-prod-thumb"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                            }}
+                          />
+                          <div className="search-prod-info">
+                            <div className="search-prod-title">
+                              {highlightMatch(item.title, query)}
+                            </div>
+                            <div className="search-prod-meta">
+                              <span className="search-prod-price">
+                                {item.price.toLocaleString('vi-VN')}₫
+                              </span>
+                              <div className="search-prod-rating">
+                                <Star
+                                  size={11}
+                                  className="star-filled"
+                                  fill="#f59e0b"
+                                  color="#f59e0b"
+                                />
+                                <span>{(item.rating || 5.0).toFixed(1)}</span>
+                              </div>
+                              {item.category && (
+                                <span className="search-prod-category">{item.category}</span>
+                              )}
+                            </div>
                           </div>
+                          <ArrowRight size={14} className="search-prod-arrow" />
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               )}
 
+              {/* Technologies / Tags Section */}
+              {suggestions.tags?.length > 0 && (
+                <div className="search-group-section">
+                  <div className="search-group-header">
+                    <div className="group-title-label">
+                      <Hash size={13} />
+                      <span>Công nghệ & Framework</span>
+                    </div>
+                  </div>
+                  <div className="search-tags-wrap">
+                    {suggestions.tags.map((item, index) => {
+                      const itemIndex =
+                        (suggestions.popular?.length || 0) +
+                        (suggestions.products?.length || 0) +
+                        index;
+                      return (
+                        <button
+                          key={item.id || index}
+                          type="button"
+                          className={`search-tech-chip ${selectedIndex === itemIndex ? 'selected' : ''}`}
+                          onClick={() => handleSuggestionClick(item)}
+                        >
+                          <Hash size={11} />
+                          <span>{highlightMatch(item.name, query)}</span>
+                          <span className="tech-count">({item.count})</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Categories Section */}
               {suggestions.categories?.length > 0 && (
-                <div className="search-section">
-                  <div className="search-section-header">
-                    <div className="section-title">
-                      <FolderTree size={14} />
+                <div className="search-group-section">
+                  <div className="search-group-header">
+                    <div className="group-title-label">
+                      <FolderTree size={13} />
                       <span>Danh mục liên quan</span>
                     </div>
                   </div>
-                  {suggestions.categories.map((item, index) => {
-                    const itemIndex =
-                      (suggestions.popular?.length || 0) +
-                      (suggestions.products?.length || 0) +
-                      index;
-                    return (
-                      <div
-                        key={item.id}
-                        className={`search-item ${selectedIndex === itemIndex ? 'selected' : ''}`}
-                        onClick={() => handleSuggestionClick(item)}
-                      >
-                        <FolderTree size={14} className="item-icon" />
-                        <span className="item-text">{highlightMatch(item.name, query)}</span>
-                        <span className="item-count">{item.productCount} mã nguồn</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {suggestions.tags?.length > 0 && (
-                <div className="search-section">
-                  <div className="search-section-header">
-                    <div className="section-title">
-                      <Hash size={14} />
-                      <span>Công nghệ</span>
-                    </div>
+                  <div className="search-items-list">
+                    {suggestions.categories.map((item, index) => {
+                      const itemIndex =
+                        (suggestions.popular?.length || 0) +
+                        (suggestions.products?.length || 0) +
+                        (suggestions.tags?.length || 0) +
+                        index;
+                      return (
+                        <div
+                          key={item.id}
+                          className={`search-category-row ${selectedIndex === itemIndex ? 'selected' : ''}`}
+                          onClick={() => handleSuggestionClick(item)}
+                        >
+                          <FolderTree size={13} className="cat-icon" />
+                          <span className="cat-text">{highlightMatch(item.name, query)}</span>
+                          <span className="cat-badge">{item.productCount} mã nguồn</span>
+                        </div>
+                      );
+                    })}
                   </div>
-                  {suggestions.tags.map((item, index) => {
-                    const itemIndex =
-                      (suggestions.popular?.length || 0) +
-                      (suggestions.products?.length || 0) +
-                      (suggestions.categories?.length || 0) +
-                      index;
-                    return (
-                      <div
-                        key={item.id || index}
-                        className={`search-item ${selectedIndex === itemIndex ? 'selected' : ''}`}
-                        onClick={() => handleSuggestionClick(item)}
-                      >
-                        <Hash size={14} className="item-icon" />
-                        <span className="item-text">{highlightMatch(item.name, query)}</span>
-                        <span className="item-count">{item.count}</span>
-                      </div>
-                    );
-                  })}
                 </div>
               )}
-            </>
+            </div>
           ) : query.length >= 2 ? (
             // No Results
-            <div className="search-no-results">
-              <div className="no-results-icon-wrapper">
-                <SearchX size={36} />
-              </div>
-              <h4>Không tìm thấy kết quả cho "{query}"</h4>
-              <p>Thử tìm kiếm với các từ khóa phổ biến:</p>
-              <div className="suggested-chips">
+            <div className="search-empty-state-box">
+              <SearchX size={32} className="text-muted" />
+              <h4>Không tìm thấy mã nguồn nào cho "{query}"</h4>
+              <p>Thử tìm kiếm với các từ khóa phổ biến bên dưới:</p>
+              <div className="search-popular-keywords">
                 {[
                   'React',
                   'Spring Boot',
@@ -419,7 +421,7 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
                   <button
                     key={tag}
                     type="button"
-                    className="suggested-chip"
+                    className="popular-kw-chip"
                     onClick={() => {
                       setQuery(tag);
                       handleSearch(tag);
@@ -431,6 +433,23 @@ const SmartSearchBar = ({ variant = 'default', onSearch }) => {
               </div>
             </div>
           ) : null}
+
+          {/* Spotlight Footer */}
+          <div className="search-dropdown-footer">
+            <div className="footer-shortcut-item">
+              <kbd>↑</kbd>
+              <kbd>↓</kbd>
+              <span>Điều hướng</span>
+            </div>
+            <div className="footer-shortcut-item">
+              <kbd>↵</kbd>
+              <span>Chọn / Xem kết quả</span>
+            </div>
+            <div className="footer-shortcut-item">
+              <kbd>ESC</kbd>
+              <span>Đóng</span>
+            </div>
+          </div>
         </div>
       )}
     </div>
