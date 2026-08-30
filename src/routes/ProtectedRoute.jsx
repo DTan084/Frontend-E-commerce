@@ -49,7 +49,7 @@ const ProtectedRoute = ({ children, adminOnly = false, sellerOnly = false }) => 
     return <Navigate to={ROUTE_PATHS.ROOT} replace />;
   }
 
-  if (sellerOnly && user?.role !== 'seller') {
+  if (sellerOnly && user?.role !== 'seller' && user?.role !== 'admin') {
     return <Navigate to={ROUTE_PATHS.ROOT} replace />;
   }
 
