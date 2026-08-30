@@ -1,228 +1,94 @@
-.stats-cards-container {
+/* ==========================================================================
+   Stats Cards - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
+.stats-cards-grid-modern {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-bottom: 32px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.stat-card {
-  background: white;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  animation: fadeInUp 0.6s ease-out backwards;
-  cursor: pointer;
-}
-
-.stat-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
-
-/* Header */
-.stat-card-header {
+.stat-card-modern {
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 16px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  padding: 20px;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.2s ease;
 }
 
-.stat-icon-wrapper {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
+.stat-card-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border-color: #cbd5e1;
+}
+
+.stat-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-icon-halo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  position: relative;
-  z-index: 2;
-  transition: all 0.3s;
+  flex-shrink: 0;
 }
 
-.stat-card:hover .stat-icon-wrapper {
-  transform: rotate(10deg) scale(1.1);
-}
-
-.stat-icon {
-  font-size: 28px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
-
-.stat-trend {
-  display: flex;
+.stat-trend-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: 13px;
+  gap: 2px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.08);
+  color: #059669;
+  font-size: 11.5px;
   font-weight: 700;
-  backdrop-filter: blur(10px);
 }
 
-.stat-trend.trend-up {
-  background: rgba(72, 187, 120, 0.15);
-  color: #38a169;
+.stat-content-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.stat-trend.trend-down {
-  background: rgba(245, 101, 101, 0.15);
-  color: #e53e3e;
-}
-
-.trend-icon {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-/* Body */
-.stat-card-body {
-  position: relative;
-  z-index: 2;
-  margin-bottom: 16px;
-}
-
-.stat-title {
-  font-size: 13px;
+.stat-title-label {
+  font-size: 12.5px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #718096;
-  margin: 0 0 8px 0;
+  color: var(--text-muted, #64748b);
 }
 
-.stat-card .stat-value {
-  font-size: 36px;
-  font-weight: 800;
-  color: #2d3748;
-  margin-bottom: 4px;
-  line-height: 1;
-  background: linear-gradient(135deg, var(--card-color, #4f46e5) 0%, #2d3748 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  transition: all 0.3s;
-}
-
-.stat-card:hover .stat-value {
-  transform: scale(1.05);
-}
-
-.stat-subtitle {
-  font-size: 13px;
-  color: #a0aec0;
+.stat-main-number {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text-primary, #0f172a);
   margin: 0;
-  font-weight: 500;
+  letter-spacing: -0.5px;
 }
 
-/* Footer */
-.stat-card-footer {
-  position: relative;
-  z-index: 2;
+.stat-sub-caption {
+  font-size: 11.5px;
+  color: var(--text-muted, #94a3b8);
+  margin: 0;
 }
 
-.stat-progress-bar {
-  width: 100%;
-  height: 6px;
-  background: #f7fafc;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.stat-progress-fill {
-  height: 100%;
-  border-radius: 10px;
-  background: var(--card-color);
-  transition: width 1s ease-out;
-  box-shadow: 0 0 10px var(--card-color);
-  animation: progressAnimation 2s ease-out;
-}
-
-/* Background Decoration */
-.stat-card-bg {
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 150%;
-  height: 150%;
-  border-radius: 50%;
-  opacity: 0.05;
-  z-index: 1;
-  transition: all 0.5s;
-}
-
-.stat-card:hover .stat-card-bg {
-  opacity: 0.1;
-  transform: scale(1.2) rotate(30deg);
-}
-
-/* Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes progressAnimation {
-  from {
-    width: 0;
-  }
-}
-
-/* Responsive */
-@media (max-width: 1400px) {
-  .stats-cards-container {
+@media (max-width: 1200px) {
+  .stats-cards-grid-modern {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 768px) {
-  .stats-cards-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  .stat-card {
-    padding: 20px;
-  }
-
-  .stat-icon-wrapper {
-    width: 48px;
-    height: 48px;
-  }
-
-  .stat-icon {
-    font-size: 24px;
-  }
-
-  .stat-value {
-    font-size: 28px;
-  }
-
-  .stat-title {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .stats-cards-container {
+@media (max-width: 640px) {
+  .stats-cards-grid-modern {
     grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .stat-card {
-    padding: 16px;
-  }
-
-  .stat-value {
-    font-size: 24px;
   }
 }
