@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  MessageSquare,
+  Send,
+  CheckCircle2,
+  ShieldCheck,
+  Headphones,
+} from 'lucide-react';
 import './ContactPage.css';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
+    phone: '',
+    subject: 'tech_support',
+    orderId: '',
     message: '',
   });
-  const [submitStatus, setSubmitStatus] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -18,176 +31,241 @@ const ContactPage = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate async mock submit
     setTimeout(() => {
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', subject: '', message: '' });
       setIsSubmitting(false);
-
-      setTimeout(() => setSubmitStatus(''), 5000);
-    }, 1500);
+      setIsSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: 'tech_support',
+        orderId: '',
+        message: '',
+      });
+    }, 1000);
   };
 
   return (
-    <div className="contact-page">
-      <section className="contact-hero">
+    <div className="contact-page-modern">
+      {/* Hero Banner */}
+      <section className="contact-hero-banner">
         <div className="container">
-          <h1 className="page-title">📧 Contact Us</h1>
-          <p className="page-subtitle">
-            Have a question? We'd love to hear from you. Send us a message and we'll respond as soon
-            as possible.
-          </p>
+          <div className="contact-hero-content">
+            <div className="contact-tag-pill">
+              <Headphones size={13} />
+              <span>Trung Tâm Hỗ Trợ Khách Hàng 24/7</span>
+            </div>
+            <h1 className="contact-hero-title">Liên hệ & Gửi Yêu cầu Hỗ trợ</h1>
+            <p className="contact-hero-subtitle">
+              Đội ngũ chuyên gia kỹ thuật và chăm sóc khách hàng CodeMart luôn sẵn sàng hỗ trợ giải
+              đáp mọi thắc mắc về mã nguồn, thanh toán Escrow và bản quyền.
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="contact-content">
+      {/* Main Content Split */}
+      <section className="contact-main-section">
         <div className="container">
-          <div className="contact-grid">
-            {/* Contact Form */}
-            <div className="contact-form-section">
-              <h2>Send us a Message</h2>
-              <form onSubmit={handleSubmit} className="contact-form">
-                <div className="form-group">
-                  <label htmlFor="name">Full Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="John Doe"
-                    required
-                  />
-                </div>
+          <div className="contact-split-grid">
+            {/* Left Channels Column */}
+            <div className="contact-channels-col">
+              <div className="channels-card-box">
+                <h2 className="channels-title">Kênh Liên hệ Trực tiếp</h2>
+                <p className="channels-sub">
+                  Phản hồi nhanh chóng trong vòng 15 - 30 phút làm việc
+                </p>
 
-                <div className="form-group">
-                  <label htmlFor="email">Email Address</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="john@example.com"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="subject">Subject</label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select a subject</option>
-                    <option value="general">General Inquiry</option>
-                    <option value="support">Technical Support</option>
-                    <option value="billing">Billing Question</option>
-                    <option value="partnership">Partnership Opportunity</option>
-                    <option value="feedback">Feedback</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="message">Message</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="Tell us how we can help..."
-                    rows="6"
-                    required
-                  ></textarea>
-                </div>
-
-                <button type="submit" className="submit-btn" disabled={isSubmitting}>
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </button>
-
-                {submitStatus === 'success' && (
-                  <div className="submit-message success">
-                    ✓ Message sent successfully! We'll get back to you soon.
+                <div className="channels-list">
+                  <div className="channel-item-row">
+                    <div className="channel-icon-avatar indigo">
+                      <Phone size={18} />
+                    </div>
+                    <div className="channel-info-text">
+                      <span className="channel-lbl">Tổng đài Hỗ trợ Kỹ thuật</span>
+                      <strong className="channel-val">1900 6868 (Phím 1)</strong>
+                      <small className="channel-note">Hoạt động từ 08:00 - 22:00 hàng ngày</small>
+                    </div>
                   </div>
-                )}
-              </form>
+
+                  <div className="channel-item-row">
+                    <div className="channel-icon-avatar emerald">
+                      <Mail size={18} />
+                    </div>
+                    <div className="channel-info-text">
+                      <span className="channel-lbl">Email Tiếp nhận Ticket</span>
+                      <strong className="channel-val">support@codemart.vn</strong>
+                      <small className="channel-note">Hỗ trợ 24/7 bao gồm cuối tuần và lễ</small>
+                    </div>
+                  </div>
+
+                  <div className="channel-item-row">
+                    <div className="channel-icon-avatar blue">
+                      <MessageSquare size={18} />
+                    </div>
+                    <div className="channel-info-text">
+                      <span className="channel-lbl">Live Chat Trực tuyến</span>
+                      <strong className="channel-val">Chat với Chuyên viên</strong>
+                      <small className="channel-note">
+                        Nhấn vào biểu tượng chat ở góc phải màn hình
+                      </small>
+                    </div>
+                  </div>
+
+                  <div className="channel-item-row">
+                    <div className="channel-icon-avatar purple">
+                      <MapPin size={18} />
+                    </div>
+                    <div className="channel-info-text">
+                      <span className="channel-lbl">Văn phòng Công nghệ CodeMart</span>
+                      <strong className="channel-val">
+                        Tòa nhà Innovation Hub, Q. Cầu Giấy, Hà Nội
+                      </strong>
+                      <small className="channel-note">
+                        Chi nhánh TP.HCM: Q. 1, TP. Hồ Chí Minh
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="escrow-assurance-box">
+                  <ShieldCheck size={20} className="text-emerald" />
+                  <div>
+                    <strong>Bảo vệ Quyền lợi Escrow 3 Ngày</strong>
+                    <p>
+                      Mọi giao dịch mã nguồn đều được bảo lưu thanh toán cho đến khi bạn xác nhận
+                      file hoạt động tốt.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Contact Info */}
-            <div className="contact-info-section">
-              <h2>Get in Touch</h2>
-
-              <div className="contact-card">
-                <div className="contact-icon">📧</div>
-                <h3>Email</h3>
-                <p>support@codemarket.com</p>
-                <a href="mailto:support@codemarket.com">Send Email</a>
-              </div>
-
-              <div className="contact-card">
-                <div className="contact-icon">💬</div>
-                <h3>Live Chat</h3>
-                <p>Available 24/7</p>
-                <button className="chat-btn">Start Chat</button>
-              </div>
-
-              <div className="contact-card">
-                <div className="contact-icon">📞</div>
-                <h3>Phone</h3>
-                <p>+84 (028) 1234 5678</p>
-                <p className="text-muted">Mon-Fri, 9AM-6PM (GMT+7)</p>
-              </div>
-
-              <div className="contact-card">
-                <div className="contact-icon">📍</div>
-                <h3>Office</h3>
-                <p>123 Tech Street, District 1</p>
-                <p>Ho Chi Minh City, Vietnam</p>
-              </div>
-
-              <div className="social-connect">
-                <h3>Follow Us</h3>
-                <div className="social-icons">
-                  <a
-                    href="https://facebook.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="social-icon facebook"
-                  >
-                    f
-                  </a>
-                  <a
-                    href="https://twitter.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="social-icon twitter"
-                  >
-                    𝕏
-                  </a>
-                  <a
-                    href="https://linkedin.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="social-icon linkedin"
-                  >
-                    in
-                  </a>
-                  <a
-                    href="https://github.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="social-icon github"
-                  >
-                    GitHub
-                  </a>
+            {/* Right Ticket Form */}
+            <div className="contact-form-col">
+              <div className="ticket-form-card">
+                <div className="form-card-header">
+                  <h2>Gửi Phiếu Hỗ trợ (Ticket)</h2>
+                  <p>Điền đầy đủ thông tin để kỹ thuật viên hỗ trợ bạn chính xác nhất</p>
                 </div>
+
+                {isSuccess ? (
+                  <div className="ticket-success-alert">
+                    <CheckCircle2 size={36} className="text-emerald" />
+                    <h3>Gửi Phiếu Hỗ Trợ Thành Công!</h3>
+                    <p>
+                      Mã ticket <strong>#TK-{Math.floor(100000 + Math.random() * 900000)}</strong>{' '}
+                      đã được ghi nhận. Kỹ thuật viên CodeMart sẽ liên hệ lại qua email trong thời
+                      gian sớm nhất.
+                    </p>
+                    <button
+                      type="button"
+                      className="btn-send-another-ticket"
+                      onClick={() => setIsSuccess(false)}
+                    >
+                      Gửi yêu cầu khác
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="ticket-submit-form">
+                    <div className="form-fields-row">
+                      <div className="form-field-group">
+                        <label className="form-field-label">
+                          Họ và tên <span className="required-star">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="name"
+                          className="form-input-text"
+                          value={formData.name}
+                          onChange={handleChange}
+                          placeholder="Ví dụ: Nguyễn Văn An"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-field-group">
+                        <label className="form-field-label">
+                          Địa chỉ Email <span className="required-star">*</span>
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          className="form-input-text"
+                          value={formData.email}
+                          onChange={handleChange}
+                          placeholder="an.nguyen@example.com"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-fields-row">
+                      <div className="form-field-group">
+                        <label className="form-field-label">
+                          Chủ đề cần hỗ trợ <span className="required-star">*</span>
+                        </label>
+                        <select
+                          name="subject"
+                          className="form-select-dropdown"
+                          value={formData.subject}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="tech_support">Hỗ trợ cài đặt & Lỗi mã nguồn</option>
+                          <option value="escrow_billing">
+                            Tra soát thanh toán & Ký quỹ Escrow
+                          </option>
+                          <option value="seller_inquiry">Đăng ký trở thành Tác giả bán code</option>
+                          <option value="license_dmca">Báo cáo bản quyền tác giả / DMCA</option>
+                          <option value="enterprise">Hợp tác doanh nghiệp & B2B</option>
+                        </select>
+                      </div>
+
+                      <div className="form-field-group">
+                        <label className="form-field-label">Mã đơn hàng / License (nếu có)</label>
+                        <input
+                          type="text"
+                          name="orderId"
+                          className="form-input-text"
+                          value={formData.orderId}
+                          onChange={handleChange}
+                          placeholder="Ví dụ: ORD-8821 hoặc CM-ECOM-9842"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-field-group">
+                      <label className="form-field-label">
+                        Nội dung chi tiết yêu cầu <span className="required-star">*</span>
+                      </label>
+                      <textarea
+                        name="message"
+                        rows={5}
+                        className="form-textarea-box"
+                        value={formData.message}
+                        onChange={handleChange}
+                        placeholder="Mô tả chi tiết vấn đề bạn gặp phải, thông báo lỗi hoặc yêu cầu cụ thể..."
+                        required
+                      />
+                    </div>
+
+                    <button type="submit" className="btn-submit-ticket-cta" disabled={isSubmitting}>
+                      {isSubmitting ? (
+                        <span>Đang gửi phiếu...</span>
+                      ) : (
+                        <>
+                          <Send size={15} />
+                          <span>Gửi Phiếu Hỗ Trợ Ngay</span>
+                        </>
+                      )}
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           </div>

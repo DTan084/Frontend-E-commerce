@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { Loader2, PackageX, ArrowLeft } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { getProductById } from '../../data/mockProducts';
@@ -35,7 +36,6 @@ const ProductDetailPage = () => {
   // Determine current user type for reviews
   const getCurrentUserForReviews = () => {
     if (!user) return null;
-    // Check if user is seller (you can customize this logic)
     if (user.role === 'seller' || user.isSeller) {
       return mockSellerUser;
     }
@@ -45,7 +45,6 @@ const ProductDetailPage = () => {
   // Handle review submission
   const handleSubmitReview = (reviewData) => {
     console.log('New review submitted:', reviewData);
-    // TODO: Persist review into mock store/localStorage
     setToast({
       show: true,
       message: 'Cảm ơn bạn đã đánh giá sản phẩm!',
@@ -57,7 +56,6 @@ const ProductDetailPage = () => {
   const handleAddToCart = (productWithQuantity) => {
     addToCart(productWithQuantity, productWithQuantity.quantity || 1);
 
-    // Show success toast
     setToast({
       show: true,
       message: `Đã thêm "${productWithQuantity.name}" vào giỏ hàng!`,
@@ -66,34 +64,30 @@ const ProductDetailPage = () => {
   };
 
   useEffect(() => {
-    // Simulate async fetch from mock data source
     const fetchProduct = async () => {
       setLoading(true);
 
-      // Get product from mockProducts
       const productData = getProductById(productId);
 
       if (productData) {
-        // Add default seller if not present
         if (!productData.seller) {
           productData.seller = {
             id: 1,
-            name: 'WebSource Marketplace',
+            name: 'CodeMart Verified Author',
             avatar:
-              'https://ui-avatars.com/api/?name=WebSource&background=667eea&color=fff&size=120',
-            memberSince: 'January 2020',
+              'https://ui-avatars.com/api/?name=CodeMart&background=4f46e5&color=fff&size=120',
+            memberSince: '01/2023',
             rating: 4.9,
-            totalSales: 1234,
-            positiveRatings: 98,
+            totalSales: 1240,
+            positiveRatings: 99,
           };
         }
       }
 
-      // Simulate network delay
       setTimeout(() => {
         setProduct(productData || null);
         setLoading(false);
-      }, 300);
+      }, 250);
     };
 
     fetchProduct();
@@ -101,10 +95,10 @@ const ProductDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="product-detail-page">
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Loading product details...</p>
+      <div className="product-detail-page-modern">
+        <div className="product-loading-box">
+          <Loader2 size={36} className="spinner-rotate" />
+          <p>Đang tải thông tin mã nguồn chi tiết...</p>
         </div>
       </div>
     );
@@ -112,17 +106,24 @@ const ProductDetailPage = () => {
 
   if (!product) {
     return (
-      <div className="product-detail-page">
-        <div className="error-container">
-          <h2>Product Not Found</h2>
-          <p>The product you're looking for doesn't exist or has been removed.</p>
+      <div className="product-detail-page-modern">
+        <div className="product-notfound-card">
+          <div className="notfound-icon-wrap">
+            <PackageX size={44} />
+          </div>
+          <h2>Không tìm thấy mã nguồn</h2>
+          <p>Sản phẩm này hiện không tồn tại hoặc đã được gỡ khỏi hệ thống.</p>
+          <Link to="/products" className="btn-back-to-products">
+            <ArrowLeft size={16} />
+            <span>Quay lại danh sách sản phẩm</span>
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="product-detail-page">
+    <div className="product-detail-page-modern">
       {/* Toast Notification */}
       <Toast
         show={toast.show}

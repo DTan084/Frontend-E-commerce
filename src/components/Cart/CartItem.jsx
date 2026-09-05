@@ -1,181 +1,161 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Trash2, Check, Zap, Download, AlertTriangle, Code2, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { createProductSlug } from '../../utils/slugHelper';
 import { getCategoryName } from '../../data/categories';
 import './CartItem.css';
-
-// Custom SVG Icons
-const TrashIcon = () => (
-  <svg className="cart-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-  </svg>
-);
-
-const CheckIcon = () => (
-  <svg className="cart-item-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-  </svg>
-);
 
 const CartItem = ({ item, isSelected, onToggleSelect }) => {
   const { removeFromCart } = useCart();
   const [isRemoving, setIsRemoving] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  // Calculate prices (no quantity for digital products)
-  const hasDiscount = item.discount_price && item.discount_price < item.price;
-  const displayPrice = hasDiscount ? item.discount_price : item.price;
-  const savedAmount = hasDiscount ? (item.price - item.discount_price) : 0;
+  // Price calculations
+  const originalPrice = Number(item.price) || 0;
+  const discountPrice = Number(item.discount_price) || 0;
+  const hasDiscount = discountPrice > 0 && discountPrice < originalPrice;
+  const finalPrice = hasDiscount ? discountPrice : originalPrice;
+  const savedAmount = hasDiscount ? originalPrice - discountPrice : 0;
+  const discountPercent = hasDiscount
+    ? Math.round(((originalPrice - discountPrice) / originalPrice) * 100)
+    : 0;
 
-  // Handle remove with confirmation
-  const handleRemoveClick = () => {
-    setShowConfirm(true);
-  };
+  const productTitle = item.title || item.name || 'Mã nguồn không tên';
+  const productImage = item.image_url || item.image || '/placeholder-product.png';
+  const authorName = item.seller?.name || item.seller || 'CodeMart Author';
+
+  // Category mapping
+  const categoryRaw = item.category || '';
+  let categoryLabel = getCategoryName(categoryRaw, 'vi');
+  if (categoryLabel === 'source-code') categoryLabel = 'Mã nguồn';
+  if (categoryLabel === 'theme-template') categoryLabel = 'Giao diện & UI';
+
+  const techStack = item.technology || item.language || '';
 
   const confirmRemove = () => {
     setIsRemoving(true);
     setTimeout(() => {
       removeFromCart(item.product_id || item.id);
-    }, 300);
+    }, 200);
   };
 
-  const cancelRemove = () => {
-    setShowConfirm(false);
-  };
+  const productSlug = createProductSlug(item);
 
   return (
     <>
-      <div className={`cart-item ${isRemoving ? 'removing' : ''}`}>
-        {/* Checkbox for selection */}
-        <div className="cart-item-checkbox-wrapper">
-          <label className="cart-item-checkbox-container">
-            <input
-              type="checkbox"
-              checked={isSelected}
-              onChange={onToggleSelect}
-              className="cart-item-checkbox-input"
-            />
-            <span className="cart-item-checkbox-custom">
-              {isSelected && <CheckIcon />}
+      <div
+        className={`cart-item-modern ${isRemoving ? 'is-removing' : ''} ${isSelected ? 'is-selected' : ''}`}
+      >
+        {/* Checkbox */}
+        <div className="cart-item-checkbox-col">
+          <label className="custom-cart-checkbox">
+            <input type="checkbox" checked={isSelected} onChange={onToggleSelect} />
+            <span className="checkbox-visual">
+              {isSelected && <Check size={13} strokeWidth={3} />}
             </span>
           </label>
         </div>
 
-        {/* Product Image */}
-        <Link 
-          to={`/product/${createProductSlug(item)}`}
-          className="cart-item-image-link"
-        >
-          <div className="cart-item-image-wrapper">
+        {/* Product Thumbnail */}
+        <Link to={`/product/${productSlug}`} className="cart-item-thumb-link">
+          <div className="cart-item-thumb-wrap">
             <img
-              src={item.image_url || item.image || '/placeholder-product.png'}
-              alt={item.title || item.name}
-              className="cart-item-image"
+              src={productImage}
+              alt={productTitle}
+              className="cart-item-thumb-img"
               loading="lazy"
+              onError={(e) => {
+                e.target.src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400';
+              }}
             />
-            {hasDiscount && (
-              <div className="cart-item-discount-badge">
-                -{Math.round(((item.price - item.discount_price) / item.price) * 100)}%
-              </div>
-            )}
+            {hasDiscount && <span className="cart-item-discount-tag">-{discountPercent}%</span>}
           </div>
         </Link>
 
-        {/* Product Info */}
-        <div className="cart-item-info">
-          <Link 
-            to={`/product/${createProductSlug(item)}`}
-            className="cart-item-title"
-          >
-            {item.title || item.name}
+        {/* Product Meta & Details */}
+        <div className="cart-item-main-details">
+          <div className="cart-item-category-row">
+            <span className="cart-item-cat-pill">
+              <ShoppingBag size={11} />
+              <span>{categoryLabel}</span>
+            </span>
+            {techStack && (
+              <span className="cart-item-tech-pill">
+                <Code2 size={11} />
+                <span>{techStack}</span>
+              </span>
+            )}
+          </div>
+
+          <Link to={`/product/${productSlug}`} className="cart-item-title-link">
+            <h3 className="cart-item-title-text">{productTitle}</h3>
           </Link>
 
-          <div className="cart-item-meta">
-            {item.category && (
-              <span className="cart-item-category-badge">
-                {getCategoryName(item.category, 'vi')}
-              </span>
-            )}
-            {item.language && (
-              <span className="cart-item-language-tag">
-                <span className="cart-item-language-dot"></span>
-                {item.language}
-              </span>
-            )}
+          <div className="cart-item-author-row">
+            <span className="author-label">Tác giả:</span>
+            <span className="author-name">{authorName}</span>
           </div>
 
-          {item.seller && (
-            <div className="cart-item-seller">
-              Bởi: <span className="cart-item-seller-name">{item.seller.name}</span>
-            </div>
-          )}
-
-          {/* Mobile Price Info */}
-          <div className="cart-item-mobile-price">
-            <div className="cart-item-price-wrapper">
-              <span className="cart-item-current-price">
-                {displayPrice.toLocaleString('vi-VN')}₫
-              </span>
-              {hasDiscount && (
-                <span className="cart-item-original-price">
-                  {item.price.toLocaleString('vi-VN')}₫
-                </span>
-              )}
-            </div>
+          {/* Delivery Note */}
+          <div className="cart-item-delivery-chip">
+            <Download size={12} className="delivery-icon" />
+            <span>Bàn giao tức thì qua Email & Link tải trực tiếp</span>
           </div>
         </div>
 
-        {/* Price Section */}
-        <div className="cart-item-price-section">
-          <div className="cart-item-price-wrapper">
-            <span className="cart-item-current-price">
-              {displayPrice.toLocaleString('vi-VN')}₫
-            </span>
+        {/* Price & Actions Column */}
+        <div className="cart-item-price-actions-col">
+          <div className="cart-item-price-block">
+            <div className="cart-item-current-price">{finalPrice.toLocaleString('vi-VN')}₫</div>
             {hasDiscount && (
-              <span className="cart-item-original-price">
-                {item.price.toLocaleString('vi-VN')}₫
-              </span>
+              <div className="cart-item-original-price">
+                {originalPrice.toLocaleString('vi-VN')}₫
+              </div>
+            )}
+            {savedAmount > 0 && (
+              <div className="cart-item-saved-badge">
+                <Zap size={10} />
+                <span>Tiết kiệm {savedAmount.toLocaleString('vi-VN')}₫</span>
+              </div>
             )}
           </div>
-          {savedAmount > 0 && (
-            <div className="cart-item-saved">
-              Tiết kiệm {savedAmount.toLocaleString('vi-VN')}₫
-            </div>
-          )}
-          <div className="cart-item-digital-badge">
-            📥 Tải xuống ngay sau khi thanh toán
-          </div>
-        </div>
 
-        {/* Remove Button */}
-        <button
-          onClick={handleRemoveClick}
-          className="cart-item-remove-btn"
-          aria-label="Xóa sản phẩm"
-        >
-          <TrashIcon />
-          <span className="cart-item-remove-text">Xóa</span>
-        </button>
+          <button
+            type="button"
+            className="btn-cart-item-remove"
+            onClick={() => setShowConfirm(true)}
+            title="Xóa khỏi giỏ hàng"
+            aria-label="Xóa sản phẩm"
+          >
+            <Trash2 size={16} />
+            <span className="remove-label">Xóa</span>
+          </button>
+        </div>
       </div>
 
       {/* Confirmation Modal */}
       {showConfirm && (
-        <div className="cart-item-confirm-overlay" onClick={cancelRemove}>
-          <div className="cart-item-confirm-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="cart-item-confirm-icon">
-              <TrashIcon />
+        <div className="cart-confirm-backdrop" onClick={() => setShowConfirm(false)}>
+          <div className="cart-confirm-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="confirm-icon-bubble">
+              <AlertTriangle size={24} />
             </div>
-            <h3 className="cart-item-confirm-title">Xác nhận xóa sản phẩm</h3>
-            <p className="cart-item-confirm-message">
-              Bạn có chắc chắn muốn xóa <strong>"{item.title || item.name}"</strong> khỏi giỏ hàng?
+            <h4 className="confirm-title">Xóa khỏi giỏ hàng?</h4>
+            <p className="confirm-desc">
+              Bạn có chắc chắn muốn bỏ mã nguồn <strong>"{productTitle}"</strong> khỏi giỏ hàng
+              không?
             </p>
-            <div className="cart-item-confirm-actions">
-              <button onClick={cancelRemove} className="cart-item-confirm-cancel">
-                Hủy
+            <div className="confirm-actions-row">
+              <button
+                type="button"
+                className="btn-confirm-cancel"
+                onClick={() => setShowConfirm(false)}
+              >
+                Giữ lại
               </button>
-              <button onClick={confirmRemove} className="cart-item-confirm-delete">
-                Xóa sản phẩm
+              <button type="button" className="btn-confirm-delete" onClick={confirmRemove}>
+                Xác nhận xóa
               </button>
             </div>
           </div>

@@ -1,25 +1,39 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import ProductCard from '../../components/Product/ProductCard';
+import { useNavigate } from 'react-router-dom';
+import { Heart, ShoppingCart, Trash2, Share2, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+import Breadcrumb from '../../components/Product/Breadcrumb';
+import DashboardSidebar from '../../components/Dashboard/DashboardSidebar';
 import mockWishlistItems from '../../data/mockWishlist';
 import './WishlistPage.css';
 
 const WishlistPage = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { addToCart } = useCart();
   const [wishlistItems, setWishlistItems] = useState(mockWishlistItems);
+  const [toastMessage, setToastMessage] = useState('');
 
-  const handleRemoveItem = (id) => {
-    setWishlistItems(prev => prev.filter(item => item.id !== id));
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 2500);
   };
 
-  const handleMoveToCart = (id) => {
-    // Logic to add to cart
-    alert('Added to cart!');
-    handleRemoveItem(id);
+  const handleRemoveItem = (id, title) => {
+    setWishlistItems((prev) => prev.filter((item) => item.id !== id));
+    showToast(`Đã xóa "${title || 'Sản phẩm'}" khỏi danh sách yêu thích.`);
+  };
+
+  const handleMoveToCart = (item) => {
+    addToCart(item);
+    showToast(`Đã thêm "${item.name || item.title}" vào giỏ hàng thành công!`);
   };
 
   const handleClearAll = () => {
-    if (window.confirm('Are you sure you want to clear all wishlist items?')) {
+    if (window.confirm('Bạn có chắc chắn muốn xóa toàn bộ sản phẩm yêu thích?')) {
       setWishlistItems([]);
+      showToast('Đã làm trống danh sách yêu thích.');
     }
   };
 
@@ -27,109 +41,166 @@ const WishlistPage = () => {
     const shareUrl = window.location.href;
     if (navigator.share) {
       navigator.share({
-        title: 'My Wishlist - CodeMarket',
-        url: shareUrl
+        title: 'Mã nguồn yêu thích - CodeMart',
+        url: shareUrl,
       });
     } else {
       navigator.clipboard.writeText(shareUrl);
-      alert('Wishlist link copied to clipboard!');
+      showToast('Đã sao chép liên kết danh sách yêu thích vào bộ nhớ tạm!');
     }
   };
 
-  if (wishlistItems.length === 0) {
-    return (
-      <div className="wishlist-page">
-        <section className="wishlist-hero">
-          <div className="container">
-            <h1>💝 Yêu thích của tôi</h1>
-            <p>Lưu các sản phẩm yêu thích của bạn tại đây</p>
-          </div>
-        </section>
-
-        <section className="wishlist-content">
-          <div className="container">
-            <div className="empty-wishlist">
-              <div className="empty-icon">💝</div>
-              <h2>Danh sách yêu thích trống</h2>
-              <p>Bắt đầu thêm các sản phẩm bạn thích vào danh sách yêu thích</p>
-              <Link to="/products" className="browse-btn">
-                Xem sản phẩm
-              </Link>
-            </div>
-          </div>
-        </section>
-      </div>
-    );
-  }
+  const formatPrice = (price) => {
+    if (!price && price !== 0) return '0 ₫';
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price);
+  };
 
   return (
-    <div className="wishlist-page">
-      <section className="wishlist-hero">
-        <div className="container">
-          <div className="hero-content">
-            <div className="hero-left">
-              <h1>💝 My Wishlist</h1>
-              <p>{wishlistItems.length} items saved</p>
-            </div>
-            <div className="hero-actions">
-              <button onClick={handleShareWishlist} className="share-btn">
-                🔗 Share Wishlist
-              </button>
-              <button onClick={handleClearAll} className="clear-btn">
-                🗑️ Clear All
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="wishlist-page-modern">
+      <div className="wishlist-container-inner">
+        {/* Breadcrumb */}
+        <Breadcrumb
+          items={[
+            { label: 'Bàn làm việc', path: '/user/dashboard' },
+            { label: 'Mã nguồn đã lưu', path: null },
+          ]}
+        />
 
-      <section className="wishlist-content">
-        <div className="container">
-          <div className="wishlist-grid">
-            {wishlistItems.map(item => (
-              <div key={item.id} className="wishlist-item">
-                <div className="item-badge">
-                  <span className="added-date">
-                    Added {new Date(item.addedDate).toLocaleDateString()}
-                  </span>
+        <div className="wishlist-layout-row">
+          {/* User Sidebar */}
+          <DashboardSidebar user={user} />
+
+          {/* Main Content */}
+          <main className="wishlist-main-content">
+            {/* Header Card */}
+            <div className="wishlist-hero-header-card">
+              <div className="wishlist-title-group">
+                <div className="wishlist-icon-wrap">
+                  <Heart size={22} className="text-rose" />
                 </div>
-                
-                <ProductCard 
-                  product={item}
-                  viewMode="grid"
-                />
-
-                <div className="item-actions">
-                  <button 
-                    onClick={() => handleMoveToCart(item.id)}
-                    className="action-btn primary"
-                  >
-                    🛒 Thêm vào giỏ
-                  </button>
-                  <button 
-                    onClick={() => handleRemoveItem(item.id)}
-                    className="action-btn secondary"
-                  >
-                    ❌ Xóa
-                  </button>
+                <div>
+                  <h1 className="wishlist-main-title">Mã nguồn đã lưu ({wishlistItems.length})</h1>
+                  <p className="wishlist-sub-desc">
+                    Danh sách các source code bạn quan tâm để dễ dàng so sánh và mua sau này.
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
 
-          {/* Recommendations */}
-          <div className="recommendations-section">
-            <h2>You Might Also Like</h2>
-            <p>Based on your wishlist items</p>
-            <div className="recommendations-grid">
-              {/* Placeholder - sẽ load recommendations sau */}
-              <div className="recommendation-placeholder">
-                <p>Loading recommendations...</p>
-              </div>
+              {wishlistItems.length > 0 && (
+                <div className="wishlist-header-actions">
+                  <button
+                    type="button"
+                    onClick={handleShareWishlist}
+                    className="btn-wishlist-action"
+                    title="Chia sẻ danh sách"
+                  >
+                    <Share2 size={14} />
+                    <span>Chia sẻ</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleClearAll}
+                    className="btn-wishlist-action danger"
+                    title="Xóa tất cả"
+                  >
+                    <Trash2 size={14} />
+                    <span>Xóa tất cả</span>
+                  </button>
+                </div>
+              )}
             </div>
-          </div>
+
+            {/* Toast Notification */}
+            {toastMessage && (
+              <div className="wishlist-toast-banner">
+                <CheckCircle2 size={15} className="text-emerald" />
+                <span>{toastMessage}</span>
+              </div>
+            )}
+
+            {/* Items Grid or Empty State */}
+            {wishlistItems.length > 0 ? (
+              <div className="wishlist-items-grid">
+                {wishlistItems.map((item) => (
+                  <div key={item.id} className="wishlist-modern-card">
+                    <div className="wishlist-card-media">
+                      <img
+                        src={item.image || '/placeholder-product.png'}
+                        alt={item.name || item.title}
+                        className="wishlist-card-img"
+                        onError={(e) => {
+                          e.target.src =
+                            'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400';
+                        }}
+                      />
+                      <span className="category-pill-overlay">{item.category || 'Mã nguồn'}</span>
+                    </div>
+
+                    <div className="wishlist-card-body">
+                      <h3
+                        className="wishlist-card-title"
+                        onClick={() => navigate(`/product/${item.id}`)}
+                      >
+                        {item.name || item.title}
+                      </h3>
+
+                      <div className="wishlist-card-price-row">
+                        <span className="wishlist-card-price">{formatPrice(item.price)}</span>
+                        {item.originalPrice && (
+                          <span className="wishlist-card-old-price">
+                            {formatPrice(item.originalPrice)}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="wishlist-card-actions-strip">
+                        <button
+                          type="button"
+                          className="btn-wishlist-add-cart"
+                          onClick={() => handleMoveToCart(item)}
+                        >
+                          <ShoppingCart size={14} />
+                          <span>Thêm vào giỏ</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-wishlist-remove"
+                          onClick={() => handleRemoveItem(item.id, item.name || item.title)}
+                          title="Xóa khỏi danh sách lưu"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-wishlist-view-modern">
+                <div className="empty-icon-halo">
+                  <Heart size={38} className="text-muted" />
+                </div>
+                <h3>Danh sách lưu hiện đang trống</h3>
+                <p>
+                  Bạn chưa lưu mã nguồn nào. Hãy duyệt qua kho source code phong phú của CodeMart và
+                  nhấn biểu tượng trái tim để lưu lại!
+                </p>
+                <button
+                  type="button"
+                  className="btn-explore-wishlist-cta"
+                  onClick={() => navigate('/products')}
+                >
+                  <span>Khám phá mã nguồn ngay</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+            )}
+          </main>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

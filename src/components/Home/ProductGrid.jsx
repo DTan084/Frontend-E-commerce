@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Inbox } from 'lucide-react';
 import ProductCard from '../Product/ProductCard';
 import './ProductGrid.css';
 
@@ -19,10 +21,10 @@ const ProductGrid = ({
             {subtitle && <p className="section-subtitle">{subtitle}</p>}
           </div>
           {showViewAll && (
-            <a href={viewAllLink} className="view-all-link">
-              Xem tất cả
-              <span className="arrow">→</span>
-            </a>
+            <Link to={viewAllLink} className="view-all-link">
+              <span>Xem tất cả</span>
+              <ArrowRight size={16} />
+            </Link>
           )}
         </div>
 
@@ -31,18 +33,18 @@ const ProductGrid = ({
             products.map((product) => <ProductCard key={product.id} product={product} />)
           ) : (
             <div className="no-products">
-              <span className="no-products-icon">📦</span>
+              <Inbox size={48} className="no-products-icon" />
               <p>Không có sản phẩm</p>
             </div>
           )}
         </div>
 
         {showViewAll && products && products.length > 0 && (
-          <div className="view-all-bottom">
-            <a href={viewAllLink} className="btn-view-all">
+          <div className="view-all-bottom mobile-only">
+            <Link to={viewAllLink} className="btn-view-all">
               <span>Xem tất cả sản phẩm</span>
-              <span className="btn-arrow">→</span>
-            </a>
+              <ArrowRight size={16} />
+            </Link>
           </div>
         )}
       </div>

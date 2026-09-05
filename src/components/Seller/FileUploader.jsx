@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
+import { FileArchive, UploadCloud, Trash2, ShieldCheck, FileCode2 } from 'lucide-react';
 import './FileUploader.css';
 
-const FileUploader = ({ file, setFile, maxSize = 100 * 1024 * 1024 }) => {
+const FileUploader = ({ file, setFile, maxSize = 200 * 1024 * 1024 }) => {
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -35,39 +36,30 @@ const FileUploader = ({ file, setFile, maxSize = 100 * 1024 * 1024 }) => {
   };
 
   const handleFile = (selectedFile) => {
-    // Validate file type
-    if (!selectedFile.name.endsWith('.zip')) {
-      alert('Please upload a ZIP file');
+    if (!selectedFile.name.endsWith('.zip') && !selectedFile.name.endsWith('.rar')) {
+      alert('Vui lòng tải lên tệp nén định dạng .ZIP hoặc .RAR');
       return;
     }
 
-    // Validate file size
     if (selectedFile.size > maxSize) {
-      alert(`File size must be less than ${formatFileSize(maxSize)}`);
+      alert(`Kích thước file không được vượt quá ${formatFileSize(maxSize)}`);
       return;
     }
 
-    // Simulate upload with progress
     setUploading(true);
     setProgress(0);
 
     const interval = setInterval(() => {
-      setProgress(prev => {
+      setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setUploading(false);
+          setFile(selectedFile);
           return 100;
         }
-        return prev + 10;
+        return prev + 25;
       });
-    }, 200);
-
-    setFile({
-      file: selectedFile,
-      name: selectedFile.name,
-      size: selectedFile.size,
-      uploadedAt: new Date().toISOString(),
-    });
+    }, 150);
   };
 
   const removeFile = () => {
@@ -79,69 +71,28 @@ const FileUploader = ({ file, setFile, maxSize = 100 * 1024 * 1024 }) => {
   };
 
   const formatFileSize = (bytes) => {
-    if (bytes === 0) return '0 Bytes';
+    if (!bytes || bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
   return (
-    <div className="file-uploader-container">
-      <div className="uploader-header">
-        <h4 className="uploader-title">
-          📦 Source Code File
-          <span className="required">*</span>
-        </h4>
-        <span className="file-hint">Max {formatFileSize(maxSize)}</span>
+    <div className="file-uploader-container-modern">
+      <div className="file-uploader-header">
+        <div className="file-title-pair">
+          <FileArchive size={16} className="text-primary" />
+          <span className="file-title-text">
+            Tệp mã nguồn nén (.ZIP) <span className="required-star">*</span>
+          </span>
+        </div>
+        <span className="file-limit-pill">Tối đa 200MB</span>
       </div>
 
-      {file ? (
-        /* File Preview */
-        <div className="file-preview-card">
-          <div className="file-preview-icon">
-            <div className="zip-icon">📦</div>
-          </div>
-
-          <div className="file-preview-details">
-            <div className="file-info">
-              <h4 className="file-name">{file.name}</h4>
-              <p className="file-size">{formatFileSize(file.size)}</p>
-            </div>
-
-            {uploading ? (
-              <div className="upload-progress">
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${progress}%` }}
-                  ></div>
-                </div>
-                <span className="progress-text">{progress}%</span>
-              </div>
-            ) : (
-              <div className="file-status">
-                <span className="status-badge success">
-                  <span className="status-icon">✓</span>
-                  Uploaded
-                </span>
-              </div>
-            )}
-          </div>
-
-          <button
-            type="button"
-            className="file-remove-btn"
-            onClick={removeFile}
-            disabled={uploading}
-          >
-            🗑️
-          </button>
-        </div>
-      ) : (
-        /* Upload Area */
+      {!file && !uploading && (
         <div
-          className={`file-upload-area ${dragActive ? 'drag-active' : ''}`}
+          className={`file-dropzone-box ${dragActive ? 'drag-active' : ''}`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
@@ -151,70 +102,70 @@ const FileUploader = ({ file, setFile, maxSize = 100 * 1024 * 1024 }) => {
           <input
             ref={fileInputRef}
             type="file"
-            accept=".zip"
+            accept=".zip,.rar"
             onChange={handleChange}
             style={{ display: 'none' }}
           />
 
-          <div className="upload-icon-wrapper">
-            <div className="upload-icon-bg"></div>
-            <div className="upload-icon">📦</div>
+          <div className="file-dropzone-icon">
+            <UploadCloud size={24} className="text-primary" />
           </div>
 
-          <h4 className="upload-title">Upload ZIP File</h4>
-          <p className="upload-subtitle">
-            Drag & drop your source code file here
-          </p>
-          <p className="upload-hint">
-            or click to browse from your computer
-          </p>
-
-          <div className="upload-specs">
-            <div className="spec-item">
-              <span className="spec-icon">📄</span>
-              <span className="spec-text">ZIP format only</span>
-            </div>
-            <div className="spec-item">
-              <span className="spec-icon">⚖️</span>
-              <span className="spec-text">Max {formatFileSize(maxSize)}</span>
-            </div>
+          <div className="file-dropzone-copy">
+            <p className="file-drop-main">
+              <strong>Nhấn để tải lên file .ZIP</strong> hoặc kéo thả vào khung này
+            </p>
+            <p className="file-drop-sub">
+              Bao gồm toàn bộ source code sạch, file cấu hình và tài liệu hướng dẫn (README.md).
+            </p>
           </div>
         </div>
       )}
 
-      {/* Additional Options */}
-      <div className="file-options">
-        <label className="option-checkbox">
-          <input type="checkbox" defaultChecked />
-          <span className="checkbox-mark"></span>
-          <span className="checkbox-label">
-            <strong>Include documentation in ZIP</strong>
-            <small>Add README, API docs, or guides</small>
-          </span>
-        </label>
-
-        <label className="option-checkbox">
-          <input type="checkbox" defaultChecked />
-          <span className="checkbox-mark"></span>
-          <span className="checkbox-label">
-            <strong>Free updates for buyers</strong>
-            <small>Buyers will receive future updates</small>
-          </span>
-        </label>
-      </div>
-
-      {/* Security Tips */}
-      <div className="file-security-tips">
-        <div className="security-header">
-          <span className="security-icon">🔒</span>
-          <strong>Security Tips</strong>
+      {uploading && (
+        <div className="file-uploading-progress-box">
+          <div className="progress-info-row">
+            <div className="progress-file-name">
+              <FileCode2 size={16} className="text-primary" />
+              <span>Đang tải lên và quét bảo mật...</span>
+            </div>
+            <span className="progress-percent-val">{progress}%</span>
+          </div>
+          <div className="progress-track-bar">
+            <div className="progress-fill-bar" style={{ width: `${progress}%` }}></div>
+          </div>
         </div>
-        <ul className="security-list">
-          <li>Remove all sensitive data (API keys, passwords, database credentials)</li>
-          <li>Clean up development dependencies and cache files</li>
-          <li>Include a clear README with installation instructions</li>
-        </ul>
-      </div>
+      )}
+
+      {file && !uploading && (
+        <div className="file-uploaded-success-card">
+          <div className="uploaded-file-details">
+            <div className="uploaded-icon-wrap">
+              <FileArchive size={20} className="text-primary" />
+            </div>
+            <div className="uploaded-text-meta">
+              <span className="uploaded-file-name">{file.name}</span>
+              <span className="uploaded-file-size">{formatFileSize(file.size)}</span>
+            </div>
+          </div>
+
+          <div className="uploaded-actions-right">
+            <span className="scan-clean-badge">
+              <ShieldCheck size={13} className="text-emerald" />
+              <span>Đã quét mã độc</span>
+            </span>
+
+            <button
+              type="button"
+              className="btn-remove-zip"
+              onClick={removeFile}
+              title="Xóa và chọn file khác"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

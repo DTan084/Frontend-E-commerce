@@ -1,158 +1,144 @@
 import React, { useState } from 'react';
+import {
+  Download,
+  Key,
+  Copy,
+  Check,
+  BookOpen,
+  MessageSquare,
+  Code2,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+} from 'lucide-react';
 import './PurchasedProductCard.css';
 
 const PurchasedProductCard = ({ product }) => {
   const [showLicense, setShowLicense] = useState(false);
+  const [copiedKey, setCopiedKey] = useState(false);
   const [downloadCount, setDownloadCount] = useState(product.downloadCount || 0);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = async () => {
     setIsDownloading(true);
-    // Simulate download
     setTimeout(() => {
-      setDownloadCount(downloadCount + 1);
+      setDownloadCount((prev) => prev + 1);
       setIsDownloading(false);
-      alert(`✅ Downloading ${product.title}...`);
-    }, 1500);
+      alert(`Đang bắt đầu tải xuống mã nguồn: ${product.title || product.name}`);
+    }, 1000);
   };
 
   const copyLicenseKey = () => {
-    navigator.clipboard.writeText(product.licenseKey);
-    alert('📋 License key copied to clipboard!');
-  };
-
-  const getTimeSince = (date) => {
-    const now = new Date();
-    const purchased = new Date(date);
-    const days = Math.floor((now - purchased) / (1000 * 60 * 60 * 24));
-    
-    if (days === 0) return 'Today';
-    if (days === 1) return 'Yesterday';
-    if (days < 7) return `${days} days ago`;
-    if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
-    return `${Math.floor(days / 30)} months ago`;
+    navigator.clipboard.writeText(product.licenseKey || 'CM-897-82193045-1');
+    setCopiedKey(true);
+    setTimeout(() => setCopiedKey(false), 2000);
   };
 
   return (
-    <div className="purchased-product-card">
-      {/* Product Image */}
-      <div className="product-image-section">
-        <div className="product-image-wrapper">
-          <img 
-            src={product.image} 
-            alt={product.title}
-            className="product-image"
-          />
-          <div className="image-badge">
-            <span className="badge-icon">✓</span>
-            <span className="badge-text">Owned</span>
-          </div>
+    <div className="purchased-product-card-modern">
+      {/* Product Image Section */}
+      <div className="purchased-card-media">
+        <img
+          src={product.image || '/placeholder-product.png'}
+          alt={product.title || product.name}
+          className="purchased-product-thumb"
+          onError={(e) => {
+            e.target.src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400';
+          }}
+        />
+        <div className="owned-status-badge">
+          <CheckCircle2 size={12} />
+          <span>Bản quyền sở hữu</span>
         </div>
       </div>
 
-      {/* Product Info */}
-      <div className="product-info-section">
-        <div className="product-header">
-          <h3 className="product-title">{product.title}</h3>
-          <div className="product-meta">
-            <span className="meta-item category">
-              <span className="meta-icon">📁</span>
-              {product.category}
-            </span>
-            <span className="meta-divider">•</span>
-            <span className="meta-item language">
-              <span className="meta-icon">🌐</span>
-              {product.language || 'Multiple'}
-            </span>
-          </div>
-        </div>
-
-        <div className="product-details">
-          <div className="detail-row">
-            <span className="detail-label">📅 Purchased:</span>
-            <span className="detail-value">{new Date(product.purchasedDate).toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'short', 
-              day: 'numeric' 
-            })}</span>
-          </div>
-          <div className="detail-row">
-            <span className="detail-label">📦 Order:</span>
-            <span className="detail-value order-id">#{product.orderId}</span>
-          </div>
-          <div className="detail-row">
-            <span className="detail-label">🔑 License:</span>
-            <div className="license-section">
-              <code className="license-key" onClick={copyLicenseKey}>
-                {showLicense ? product.licenseKey : '••••-••••-••••-••••'}
-              </code>
-              <button 
-                className="toggle-license-btn"
-                onClick={() => setShowLicense(!showLicense)}
-                title={showLicense ? 'Hide' : 'Show'}
-              >
-                {showLicense ? '👁️' : '👁️‍🗨️'}
-              </button>
-              <button 
-                className="copy-license-btn"
-                onClick={copyLicenseKey}
-                title="Copy"
-              >
-                📋
-              </button>
+      {/* Main Details Section */}
+      <div className="purchased-card-info-col">
+        <div className="purchased-header-row">
+          <div>
+            <h3 className="purchased-item-title">{product.title || product.name}</h3>
+            <div className="purchased-tags-strip">
+              <span className="tech-badge-pill">{product.category || 'Mã nguồn'}</span>
+              <span className="tech-badge-pill light">
+                <Code2 size={11} />
+                <span>{product.language || 'React • Node.js'}</span>
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="product-actions">
-          <button 
-            className={`action-btn download-btn ${isDownloading ? 'downloading' : ''}`}
-            onClick={handleDownload}
-            disabled={isDownloading}
-          >
-            {isDownloading ? (
-              <>
-                <span className="spinner"></span>
-                <span>Downloading...</span>
-              </>
-            ) : (
-              <>
-                <span className="btn-icon">⬇</span>
-                <span>Download</span>
-              </>
-            )}
-          </button>
-          <button className="action-btn docs-btn">
-            <span className="btn-icon">📄</span>
-            <span>Documentation</span>
-          </button>
-          <button className="action-btn support-btn">
-            <span className="btn-icon">💬</span>
-            <span>Support</span>
-          </button>
+        {/* License Box */}
+        <div className="purchased-license-bar">
+          <div className="license-col-left">
+            <Key size={13} className="text-indigo" />
+            <span className="license-label-text">License Key:</span>
+            <code className="license-value-box">
+              {showLicense ? product.licenseKey || 'CM-897-82193045-1' : '••••-••••-••••-••••'}
+            </code>
+          </div>
+
+          <div className="license-col-actions">
+            <button
+              type="button"
+              className="btn-license-ctrl"
+              onClick={() => setShowLicense(!showLicense)}
+              title={showLicense ? 'Ẩn key' : 'Hiện key'}
+            >
+              {showLicense ? <EyeOff size={13} /> : <Eye size={13} />}
+            </button>
+            <button
+              type="button"
+              className="btn-license-ctrl copy-action"
+              onClick={copyLicenseKey}
+              title="Sao chép License Key"
+            >
+              {copiedKey ? <Check size={13} className="text-emerald" /> : <Copy size={13} />}
+              <span>{copiedKey ? 'Đã sao chép' : 'Sao chép'}</span>
+            </button>
+          </div>
         </div>
 
-        {/* Download Stats */}
-        <div className="download-stats">
-          <div className="stat-item">
-            <span className="stat-icon">⬇</span>
-            <span className="stat-text">
-              Downloads: <strong>{downloadCount}/{product.downloadLimit || '∞'}</strong>
-            </span>
+        {/* Action Buttons & Downloads */}
+        <div className="purchased-footer-actions-row">
+          <div className="action-buttons-group">
+            <button
+              type="button"
+              className={`btn-primary-zip-dl ${isDownloading ? 'is-loading' : ''}`}
+              onClick={handleDownload}
+              disabled={isDownloading}
+            >
+              <Download size={14} />
+              <span>{isDownloading ? 'Đang nén...' : 'Tải mã nguồn (.ZIP)'}</span>
+            </button>
+            <button
+              type="button"
+              className="btn-secondary-action-pill"
+              onClick={() =>
+                alert(
+                  'Tài liệu và hướng dẫn cài đặt được đính kèm trong thư mục README.md bên trong file ZIP.'
+                )
+              }
+            >
+              <BookOpen size={13} />
+              <span>Tài liệu cài đặt</span>
+            </button>
+            <button
+              type="button"
+              className="btn-secondary-action-pill"
+              onClick={() => alert('Đang kết nối với người bán mã nguồn để hỗ trợ kỹ thuật...')}
+            >
+              <MessageSquare size={13} />
+              <span>Hỗ trợ kỹ thuật</span>
+            </button>
           </div>
-          <span className="stat-divider">|</span>
-          <div className="stat-item">
-            <span className="stat-icon">🕒</span>
-            <span className="stat-text">
-              Last: <strong>{getTimeSince(product.lastDownload || product.purchasedDate)}</strong>
+
+          <div className="purchased-download-metric">
+            <span>
+              Đã tải: <strong>{downloadCount}</strong>/∞ lần
             </span>
           </div>
         </div>
       </div>
-
-      {/* Hover Effect */}
-      <div className="card-glow"></div>
     </div>
   );
 };

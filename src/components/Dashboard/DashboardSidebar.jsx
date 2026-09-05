@@ -1,38 +1,53 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  Package,
+  FileCode2,
+  Heart,
+  User,
+  Shield,
+  LogOut,
+  Sparkles,
+  CheckCircle2,
+} from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import './DashboardSidebar.css';
 
 const DashboardSidebar = ({ user }) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
   const menuItems = [
     {
       id: 'dashboard',
-      label: 'Dashboard',
-      icon: '📊',
+      label: 'Tổng quan Dashboard',
+      icon: LayoutDashboard,
       path: '/user/dashboard',
     },
     {
       id: 'orders',
-      label: 'Đơn hàng của tôi',
-      icon: '📦',
+      label: 'Đơn hàng đã mua',
+      icon: Package,
       path: '/user/orders',
     },
     {
-      id: 'downloads',
-      label: 'Tải xuống',
-      icon: '📥',
-      path: '/user/downloads',
+      id: 'purchases',
+      label: 'Kho mã nguồn & License',
+      icon: FileCode2,
+      path: '/user/purchases',
+    },
+    {
+      id: 'wishlist',
+      label: 'Danh sách yêu thích',
+      icon: Heart,
+      path: '/wishlist',
     },
     {
       id: 'profile',
-      label: 'Hồ sơ',
-      icon: '👤',
+      label: 'Hồ sơ & Bảo mật',
+      icon: User,
       path: '/profile',
-    },
-    {
-      id: 'settings',
-      label: 'Settings',
-      icon: '⚙️',
-      path: '/user/settings',
     },
   ];
 
@@ -40,100 +55,89 @@ const DashboardSidebar = ({ user }) => {
     if (!name) return 'U';
     return name
       .split(' ')
-      .map(word => word[0])
+      .map((word) => word[0])
       .join('')
       .toUpperCase()
       .slice(0, 2);
   };
 
-  const getRoleBadge = (role) => {
-    const badges = {
-      admin: { text: 'Admin', color: '#e53e3e' },
-      seller: { text: 'Seller', color: '#667eea' },
-      buyer: { text: 'Buyer', color: '#48bb78' },
-    };
-    return badges[role] || badges.buyer;
+  const getRoleLabel = (role) => {
+    if (role === 'admin') return { text: 'Quản trị viên', className: 'role-admin' };
+    if (role === 'seller') return { text: 'Tác giả Seller', className: 'role-seller' };
+    return { text: 'Thành viên VIP', className: 'role-buyer' };
   };
 
-  const roleBadge = getRoleBadge(user?.role);
+  const roleInfo = getRoleLabel(user?.role);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/auth/login');
+  };
 
   return (
-    <aside className="dashboard-sidebar">
-      {/* User Info Card */}
-      <div className="user-info-card">
-        <div className="user-avatar-wrapper">
+    <aside className="dashboard-sidebar-modern">
+      {/* User Info Profile Card */}
+      <div className="user-profile-mini-card">
+        <div className="avatar-wrap">
           {user?.avatar ? (
-            <img src={user.avatar} alt={user.name} className="user-avatar" />
+            <img src={user.avatar} alt={user.name} className="avatar-img" />
           ) : (
-            <div className="user-avatar-placeholder">
-              {getInitials(user?.name)}
-            </div>
+            <div className="avatar-placeholder">{getInitials(user?.name)}</div>
           )}
-          <div className="avatar-status"></div>
-        </div>
-        
-        <div className="user-details">
-          <h3 className="user-name">{user?.name || 'Guest User'}</h3>
-          <span 
-            className="user-role-badge"
-            style={{ background: roleBadge.color }}
-          >
-            {roleBadge.text}
-          </span>
+          <span className="online-indicator" title="Đang trực tuyến"></span>
         </div>
 
-        <div className="user-stats-mini">
-          <div className="stat-mini">
-            <span className="stat-mini-value">{user?.totalOrders || 0}</span>
-            <span className="stat-mini-label">Orders</span>
+        <div className="user-meta-wrap">
+          <div className="user-name-row">
+            <h3 className="user-display-name">{user?.name || 'Khách hàng'}</h3>
+            <CheckCircle2 size={15} className="verified-badge-icon" title="Đã xác thực email" />
           </div>
-          <div className="stat-mini">
-            <span className="stat-mini-value">{user?.totalPurchases || 0}</span>
-            <span className="stat-mini-label">Purchases</span>
-          </div>
+          <span className={`user-role-pill ${roleInfo.className}`}>
+            <Sparkles size={11} />
+            <span>{roleInfo.text}</span>
+          </span>
+          <span className="user-email-text">{user?.email || 'user@codemart.vn'}</span>
         </div>
       </div>
 
       {/* Navigation Menu */}
-      <nav className="sidebar-nav">
-        <h4 className="nav-title">MENU</h4>
-        <ul className="nav-list">
-          {menuItems.map((item) => (
-            <li key={item.id} className="nav-item">
-              <NavLink
-                to={item.path}
-                className={({ isActive }) =>
-                  `nav-link ${isActive ? 'active' : ''}`
-                }
-                end
-              >
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-label">{item.label}</span>
-                <span className="nav-arrow">›</span>
-              </NavLink>
-            </li>
-          ))}
+      <nav className="sidebar-nav-section">
+        <div className="nav-group-title">QUẢN LÝ TÀI KHOẢN</div>
+        <ul className="nav-menu-list">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <li key={item.id} className="nav-menu-item">
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) => `nav-menu-link ${isActive ? 'is-active' : ''}`}
+                  end={item.path === '/user/dashboard'}
+                >
+                  <Icon size={18} className="nav-link-icon" />
+                  <span className="nav-link-label">{item.label}</span>
+                </NavLink>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
-      {/* Logout Button */}
-      <div className="sidebar-footer">
-        <button className="logout-btn">
-          <span className="icon">🚪</span>
-          <span>Logout</span>
-        </button>
+      {/* Buyer Protection Seal */}
+      <div className="sidebar-escrow-card">
+        <Shield size={18} className="text-emerald" />
+        <div className="escrow-text">
+          <strong>Bảo hành Escrow</strong>
+          <p>Mọi mã nguồn mua đều được giữ tiền an toàn 3 ngày.</p>
+        </div>
       </div>
 
-      {/* Premium Badge */}
-      {user?.isPremium && (
-        <div className="premium-badge">
-          <span className="premium-icon">👑</span>
-          <div className="premium-text">
-            <strong>Premium Member</strong>
-            <small>Enjoy exclusive benefits</small>
-          </div>
-        </div>
-      )}
+      {/* Logout Action */}
+      <div className="sidebar-footer-action">
+        <button type="button" className="btn-sidebar-logout" onClick={handleLogout}>
+          <LogOut size={16} />
+          <span>Đăng xuất</span>
+        </button>
+      </div>
     </aside>
   );
 };

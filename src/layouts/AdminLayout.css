@@ -1,116 +1,57 @@
-.admin-layout {
+/* ==========================================================================
+   Admin Layout - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
+.admin-layout-modern {
   display: flex;
   min-height: 100vh;
-  background: #f7fafc;
+  background: var(--bg-secondary, #f8fafc);
   overflow-x: hidden;
   position: relative;
 }
 
-.admin-main {
+.admin-main-viewport {
   flex: 1;
-  margin-left: 280px; /* Match sidebar width */
+  margin-left: 260px; /* Match sidebar width */
   display: flex;
   flex-direction: column;
   min-width: 0;
-  transition: margin-left 0.3s ease;
+  min-height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.admin-content {
+.admin-content-area {
   flex: 1;
-  padding: 32px;
+  padding: 28px 32px 60px;
   overflow-y: auto;
   overflow-x: hidden;
+  max-width: 1440px;
+  width: 100%;
 }
 
-/* ============================================
-   📱 RESPONSIVE DESIGN - ADMIN LAYOUT
-   ============================================ */
-
-/* Tablet and below (less than 992px) */
-@media (max-width: 992px) {
-  .admin-main {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  /* If sidebar is collapsible, adjust here */
-  .admin-layout.sidebar-open .admin-main {
-  }
-
-  .admin-content {
-    padding-top: 72px;
-  }
-}
-
-/* Mobile devices (less than 768px) */
-@media (max-width: 768px) {
-  .admin-layout {
-    flex-direction: column;
-  }
-
-  .admin-main {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .admin-content {
-    padding: 72px 16px 16px;
-  }
-}
-
-/* Extra small devices (less than 576px) */
-@media (max-width: 576px) {
-  .admin-layout {
-    overflow-x: hidden;
-  }
-
-  .admin-main {
-    margin-left: 0 !important;
-  }
-}
-
-/* Landscape mobile (height constraint) */
-@media (max-height: 500px) and (orientation: landscape) {
-  .admin-content {
-    height: calc(100vh - 60px);
-  }
-}
-
-.mobile-menu-toggle {
-  display: none;
-}
-
-.sidebar-overlay {
+.admin-sidebar-overlay {
   display: none;
 }
 
 @media (max-width: 992px) {
-  .mobile-menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 12px;
-    left: 12px;
-    z-index: 1101;
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-size: 22px;
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
+  .admin-main-viewport {
+    margin-left: 0;
+    width: 100%;
   }
 
-  .sidebar-overlay {
+  .admin-content-area {
+    padding: 20px 16px 40px;
+  }
+
+  .admin-sidebar-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.45);
-    z-index: 1090;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 999;
   }
 
-  .sidebar-overlay.active {
+  .admin-sidebar-overlay.active {
     display: block;
   }
 }

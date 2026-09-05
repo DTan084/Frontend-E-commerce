@@ -1,123 +1,124 @@
+/* ==========================================================================
+   Testimonial Slider Styles - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
 .testimonial-slider-section {
-  padding: 100px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 80px 0 90px;
+  background: linear-gradient(180deg, #090d16 0%, #0f172a 100%);
   position: relative;
   overflow: hidden;
+  color: #ffffff;
 }
 
-.testimonial-slider-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-.testimonial-slider-section .section-title,
-.testimonial-slider-section .section-subtitle {
-  color: white;
+.testimonial-slider-section .section-header {
   text-align: center;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.testimonial-slider-section .section-title::after {
-  background: white;
-  left: 50%;
-  transform: translateX(-50%);
+.testimonial-slider-section .section-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.5px;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+.testimonial-slider-section .section-subtitle {
+  font-size: 14px;
+  color: #94a3b8;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .testimonial-slider {
   position: relative;
-  max-width: 900px;
+  max-width: 760px;
   margin: 0 auto;
   overflow: hidden;
-  padding: 40px 60px;
+  padding: 10px 48px;
 }
 
 .testimonial-track {
   display: flex;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .testimonial-slide {
   min-width: 100%;
-  padding: 0 10px;
+  max-width: 100%;
+  width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  padding: 0 6px;
 }
 
 .testimonial-card {
-  background: white;
-  padding: 50px 40px;
-  border-radius: 30px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 36px 32px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
   position: relative;
-  transform-style: preserve-3d;
+  text-align: center;
 }
 
-.quote-icon {
-  position: absolute;
-  top: 30px;
-  left: 30px;
-  font-size: 80px;
-  color: rgba(102, 126, 234, 0.1);
-  font-family: Georgia, serif;
-  line-height: 1;
-  z-index: 0;
+.quote-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(79, 70, 229, 0.15);
+  color: #818cf8;
+  margin-bottom: 16px;
 }
 
 .testimonial-rating {
   display: flex;
-  gap: 5px;
-  margin-bottom: 25px;
+  gap: 4px;
+  margin-bottom: 20px;
   justify-content: center;
 }
 
-.star {
-  font-size: 24px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-  animation: starPulse 2s ease-in-out infinite;
-}
-
-.star:nth-child(1) { animation-delay: 0s; }
-.star:nth-child(2) { animation-delay: 0.2s; }
-.star:nth-child(3) { animation-delay: 0.4s; }
-.star:nth-child(4) { animation-delay: 0.6s; }
-.star:nth-child(5) { animation-delay: 0.8s; }
-
-@keyframes starPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-}
-
 .testimonial-text {
-  font-size: 20px;
-  line-height: 1.8;
-  color: #333;
-  margin-bottom: 35px;
-  text-align: center;
-  font-style: italic;
-  position: relative;
-  z-index: 1;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #e2e8f0;
+  margin-bottom: 24px;
+  font-style: normal;
+  font-weight: 500;
 }
 
 .testimonial-author {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding-top: 30px;
-  border-top: 2px solid #f0f0f0;
+  gap: 14px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   justify-content: center;
 }
 
-.author-avatar {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  border: 4px solid #667eea;
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+.author-avatar-fallback {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .author-info {
@@ -125,50 +126,35 @@
 }
 
 .author-name {
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 700;
-  color: #333;
-  margin-bottom: 5px;
+  color: #ffffff;
+  margin: 0 0 2px 0;
 }
 
 .author-role {
-  font-size: 15px;
-  color: #667eea;
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.author-role .company {
+  color: #818cf8;
   font-weight: 600;
-  margin-bottom: 3px;
-}
-
-.author-company {
-  font-size: 14px;
-  color: #999;
-}
-
-.testimonial-decoration {
-  position: absolute;
-  bottom: -10px;
-  right: -10px;
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-  border-radius: 30px;
-  transform: rotate(45deg);
-  z-index: 0;
 }
 
 .slider-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: white;
-  border: none;
-  font-size: 32px;
-  color: #667eea;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -176,10 +162,9 @@
 }
 
 .slider-button:hover {
-  background: #667eea;
-  color: white;
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  background: var(--primary-color, #4f46e5);
+  border-color: var(--primary-color, #4f46e5);
+  transform: translateY(-50%) scale(1.05);
 }
 
 .slider-button.prev {
@@ -193,101 +178,41 @@
 .slider-dots {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin-top: 40px;
+  gap: 8px;
+  margin-top: 24px;
 }
 
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
+.slider-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   padding: 0;
 }
 
-.dot:hover {
-  background: rgba(255, 255, 255, 0.6);
-  transform: scale(1.2);
-}
-
-.dot.active {
-  width: 40px;
-  border-radius: 6px;
-  background: white;
+.slider-dots .dot.active {
+  width: 24px;
+  background: var(--primary-color, #818cf8);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .testimonial-slider-section {
-    padding: 60px 20px;
+    padding: 60px 0;
   }
 
   .testimonial-slider {
-    padding: 20px 50px;
+    padding: 10px 36px;
   }
 
   .testimonial-card {
-    padding: 40px 30px;
-  }
-
-  .quote-icon {
-    font-size: 60px;
-    top: 20px;
-    left: 20px;
+    padding: 28px 20px;
   }
 
   .testimonial-text {
-    font-size: 17px;
-  }
-
-  .testimonial-author {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .author-info {
-    text-align: center;
-  }
-
-  .author-avatar {
-    width: 60px;
-    height: 60px;
-  }
-
-  .slider-button {
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .testimonial-slider {
-    padding: 20px 40px;
-  }
-
-  .testimonial-card {
-    padding: 30px 20px;
-  }
-
-  .testimonial-text {
-    font-size: 16px;
-  }
-
-  .slider-button {
-    width: 35px;
-    height: 35px;
-    font-size: 20px;
-  }
-
-  .slider-button.prev {
-    left: -5px;
-  }
-
-  .slider-button.next {
-    right: -5px;
+    font-size: 14px;
   }
 }

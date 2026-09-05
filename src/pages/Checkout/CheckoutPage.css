@@ -1,225 +1,157 @@
-.checkout-page {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+﻿/* ==========================================================================
+   Checkout Page - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
+.checkout-page-modern {
+  min-height: calc(100vh - var(--header-height, 76px));
+  background: var(--bg-secondary, #f8fafc);
+  padding: 24px 0 60px;
 }
 
-.checkout-container {
-  max-width: 1400px;
+.checkout-container-inner {
+  max-width: var(--max-width-main, 1280px);
   margin: 0 auto;
-  padding: 0 20px 60px;
+  padding: 0 20px;
 }
 
-.checkout-form-container {
+/* Form Layout 2 Column */
+.checkout-main-form {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, var(--checkout-summary-width, 380px));
-  gap: 32px;
+  grid-template-columns: 1fr 380px;
+  gap: 28px;
   align-items: start;
 }
 
-.checkout-left {
+.checkout-forms-col {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
-/* Terms Section */
-.terms-section {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+.checkout-sidebar-col {
+  position: relative;
 }
 
-.terms-checkbox {
+/* Terms Acceptance Card */
+.checkout-terms-card {
+  background: #ffffff;
+  border-radius: var(--border-radius-md, 12px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+}
+
+.custom-terms-checkbox {
+  position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
 }
 
-.terms-checkbox input[type='checkbox'] {
-  width: 20px;
-  height: 20px;
-  margin-top: 2px;
-  cursor: pointer;
-  accent-color: #667eea;
-  flex-shrink: 0;
+.custom-terms-checkbox input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-.checkbox-text {
-  font-size: 14px;
-  color: #4a5568;
-  line-height: 1.6;
-}
-
-.checkbox-text a {
-  color: #667eea;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s;
-}
-
-.checkbox-text a:hover {
-  color: #764ba2;
-  text-decoration: underline;
-}
-
-/* Submit Button */
-.checkout-submit-btn {
-  width: 100%;
-  padding: 18px 32px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s;
+.custom-terms-checkbox .checkbox-visual {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid var(--border-color, #cbd5e1);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+  color: #ffffff;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.checkout-submit-btn:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+.custom-terms-checkbox input:checked + .checkbox-visual {
+  background: var(--primary-color, #4f46e5);
+  border-color: var(--primary-color, #4f46e5);
 }
 
-.checkout-submit-btn:active:not(:disabled) {
+.terms-label-text {
+  font-size: 13px;
+  color: var(--text-secondary, #475569);
+  line-height: 1.5;
+}
+
+.terms-label-text a {
+  color: var(--primary-color, #4f46e5);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Submit Action Button */
+.checkout-submit-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-confirm-checkout-action {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 24px;
+  background: var(--primary-color, #4f46e5);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--border-radius-md, 12px);
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.35);
+  transition: all 0.15s ease;
+}
+
+.btn-confirm-checkout-action:hover:not(:disabled) {
+  background: var(--primary-hover, #4338ca);
   transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
 }
 
-.checkout-submit-btn:disabled {
-  opacity: 0.7;
+.btn-confirm-checkout-action:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
-.checkout-submit-btn .icon {
-  font-size: 22px;
-}
-
-.checkout-submit-btn.processing {
-  background: #a0aec0;
-}
-
-/* Spinner */
-.spinner {
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+.spin-icon {
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
   to {
     transform: rotate(360deg);
   }
 }
 
-/* Security Note */
-.security-note {
+.checkout-footer-guarantee {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 16px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.security-note .icon {
-  font-size: 20px;
-  color: #48bb78;
-}
-
-.security-note p {
-  margin: 0;
-  font-size: 13px;
-  color: #718096;
-  font-weight: 500;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.checkout-left > * {
-  animation: fadeInUp 0.5s ease-out backwards;
-}
-
-.checkout-left > *:nth-child(1) {
-  animation-delay: 0.1s;
-}
-
-.checkout-left > *:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.checkout-left > *:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-.checkout-left > *:nth-child(4) {
-  animation-delay: 0.4s;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+  text-align: center;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .checkout-form-container {
+  .checkout-main-form {
     grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
-  .checkout-right {
-    order: -1; /* Move summary to top on mobile */
-  }
-}
-
-@media (max-width: 768px) {
-  .checkout-container {
-    padding: 0 16px 40px;
-  }
-
-  .checkout-submit-btn {
-    padding: 16px 28px;
-    font-size: 16px;
-  }
-
-  .security-note {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .checkout-container {
-    padding: 0 12px 30px;
-  }
-
-  .terms-checkbox {
-    gap: 10px;
-  }
-
-  .checkbox-text {
-    font-size: 13px;
-  }
-
-  .checkout-submit-btn {
-    padding: 14px 24px;
-    font-size: 15px;
   }
 }

@@ -62,30 +62,20 @@ const cartReducer = (state, action) => {
   }
 };
 
-const initialState = {
-  items: [],
+const getInitialState = () => {
+  try {
+    const savedCart = cartDataService.getCart();
+    if (savedCart !== null && Array.isArray(savedCart)) {
+      return { items: savedCart };
+    }
+  } catch (error) {
+    console.error('Error loading cart from localStorage:', error);
+  }
+  return { items: mockCartItems || [] };
 };
 
 export const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
-
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    const savedCart = cartDataService.getCart();
-    if (savedCart) {
-      try {
-        dispatch({ type: 'LOAD_CART', payload: savedCart });
-      } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
-      }
-    } else {
-      // Load mock cart items if no saved cart exists (for testing)
-      const useMockData = process.env.REACT_APP_USE_MOCK_CART === 'true' || !savedCart;
-      if (useMockData) {
-        dispatch({ type: 'LOAD_CART', payload: mockCartItems });
-      }
-    }
-  }, []);
+  const [state, dispatch] = useReducer(cartReducer, null, getInitialState);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {

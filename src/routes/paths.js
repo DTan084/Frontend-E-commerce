@@ -7,6 +7,7 @@ export const ROUTE_PATHS = {
     ROOT: '/auth',
     LOGIN: 'login',
     REGISTER: 'register',
+    FORGOT_PASSWORD: 'forgot-password',
   },
   PUBLIC: {
     PRODUCTS: 'products',
@@ -32,6 +33,7 @@ export const ROUTE_PATHS = {
   USER: {
     DASHBOARD: 'user/dashboard',
     ORDERS: 'user/orders',
+    PURCHASES: 'user/purchases',
     CHECKOUT: 'checkout',
     CHECKOUT_SUCCESS: 'checkout/success',
     PROFILE: 'profile',

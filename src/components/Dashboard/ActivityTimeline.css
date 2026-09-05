@@ -1,380 +1,142 @@
-.activity-timeline-container {
-  background: white;
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
-  animation: fadeInUp 0.6s ease-out 0.4s backwards;
+/* ==========================================================================
+   Activity Timeline - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
+.activity-timeline-card-modern {
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 16px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  padding: 20px;
 }
 
-/* Section Header */
-.section-header {
+.timeline-card-head {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #f7fafc;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-light, #f1f5f9);
+  margin-bottom: 18px;
+  gap: 8px;
 }
 
-.section-title {
-  font-size: 24px;
+.timeline-head-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.timeline-section-title {
+  font-size: 15px;
   font-weight: 800;
-  color: #2d3748;
+  color: var(--text-primary, #0f172a);
   margin: 0;
+  white-space: nowrap;
 }
 
-.activity-count {
-  padding: 6px 14px;
-  background: #f7fafc;
-  color: #718096;
-  border-radius: 20px;
-  font-size: 12px;
+.timeline-count-chip {
+  font-size: 11px;
   font-weight: 700;
-}
-
-/* Timeline */
-.timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  position: relative;
-}
-
-.timeline-item {
-  display: flex;
-  gap: 20px;
-  position: relative;
-  animation: fadeInLeft 0.5s ease-out backwards;
-}
-
-/* Timeline Marker */
-.timeline-marker {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-
-.marker-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  z-index: 2;
-  transition: all 0.3s;
+  background: rgba(147, 51, 234, 0.08);
+  color: #9333ea;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
   flex-shrink: 0;
 }
 
-.timeline-item:hover .marker-icon {
-  transform: scale(1.15) rotate(10deg);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
-}
-
-.timeline-line {
-  width: 3px;
-  flex: 1;
-  background: linear-gradient(180deg, #e2e8f0 0%, transparent 100%);
-  margin-top: 8px;
-  border-radius: 10px;
-  position: relative;
-}
-
-.timeline-line::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 0;
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-  border-radius: 10px;
-  animation: lineGrow 1s ease-out forwards;
-}
-
-/* Timeline Content */
-.timeline-content {
-  flex: 1;
-  padding-bottom: 8px;
-}
-
-.activity-card {
-  background: #f7fafc;
-  border-radius: 16px;
-  padding: 20px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  overflow: hidden;
-  border: 2px solid transparent;
-}
-
-.activity-card:hover {
-  background: white;
-  transform: translateX(8px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  border-color: #667eea;
-}
-
-/* Activity Gradient Background */
-.activity-gradient {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 200px;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-}
-
-.activity-card:hover .activity-gradient {
-  opacity: 1;
-}
-
-/* Activity Header */
-.activity-header {
+/* Timeline Flow */
+.timeline-flow-list {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+}
+
+.timeline-flow-item {
+  display: flex;
   gap: 16px;
-  margin-bottom: 8px;
 }
 
-.activity-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #2d3748;
-  margin: 0;
-  flex: 1;
-  line-height: 1.4;
-}
-
-.activity-time {
-  font-size: 12px;
-  color: #a0aec0;
-  font-weight: 600;
-  white-space: nowrap;
-  background: white;
-  padding: 4px 10px;
-  border-radius: 8px;
-}
-
-/* Activity Description */
-.activity-description {
-  font-size: 14px;
-  color: #718096;
-  margin: 0 0 12px 0;
-  line-height: 1.6;
-}
-
-/* Activity Metadata */
-.activity-metadata {
+.timeline-marker-column {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  width: 32px;
+}
+
+.timeline-node-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.timeline-connector-line {
+  width: 2px;
+  flex: 1;
+  background: var(--border-color, #e2e8f0);
+  margin: 4px 0;
+}
+
+.timeline-bubble-content {
+  flex: 1;
+  padding-bottom: 20px;
+}
+
+.bubble-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  margin-top: 12px;
+  margin-bottom: 4px;
 }
 
-.metadata-badge {
-  padding: 4px 10px;
-  background: white;
-  color: #667eea;
-  border-radius: 6px;
-  font-size: 11px;
+.bubble-event-title {
+  font-size: 13.5px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--text-primary, #0f172a);
+  margin: 0;
 }
 
-/* Activity Action Button */
-.activity-action-btn {
+.bubble-time-text {
+  font-size: 11.5px;
+  color: var(--text-muted, #94a3b8);
+  white-space: nowrap;
+}
+
+.bubble-desc-text {
+  font-size: 12.5px;
+  color: var(--text-secondary, #64748b);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.bubble-action-wrap {
+  margin-top: 8px;
+}
+
+.btn-bubble-quick-action {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
+  gap: 4px;
+  padding: 4px 10px;
+  background: var(--gray-100, #f1f5f9);
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary, #475569);
   cursor: pointer;
-  transition: all 0.3s;
-  margin-top: 12px;
-  opacity: 0;
-  transform: translateY(-5px);
+  transition: all 0.15s ease;
 }
 
-.activity-card:hover .activity-action-btn {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.activity-action-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
-}
-
-.activity-action-btn .btn-icon {
-  font-size: 14px;
-}
-
-/* Timeline Footer */
-.timeline-footer {
-  display: flex;
-  justify-content: center;
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 2px solid #f7fafc;
-}
-
-.load-more-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 32px;
-  background: white;
-  color: #667eea;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.load-more-btn:hover {
-  background: #667eea;
-  color: white;
-  border-color: #667eea;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 24px rgba(102, 126, 234, 0.3);
-}
-
-.load-more-btn .icon {
-  font-size: 18px;
-}
-
-/* Empty State */
-.empty-timeline {
-  text-align: center;
-  padding: 60px 20px;
-}
-
-.empty-icon {
-  font-size: 80px;
-  margin-bottom: 20px;
-  opacity: 0.5;
-  animation: float 3s ease-in-out infinite;
-}
-
-.empty-timeline h3 {
-  font-size: 24px;
-  font-weight: 700;
-  color: #2d3748;
-  margin: 0 0 8px 0;
-}
-
-.empty-timeline p {
-  font-size: 16px;
-  color: #718096;
-  margin: 0;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes lineGrow {
-  from {
-    height: 0;
-  }
-  to {
-    height: 100%;
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .activity-timeline-container {
-    padding: 20px;
-  }
-
-  .timeline-item {
-    gap: 16px;
-  }
-
-  .marker-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
-
-  .activity-header {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .activity-time {
-    align-self: flex-start;
-  }
-
-  .activity-action-btn {
-    opacity: 1;
-    transform: translateY(0);
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .timeline-item {
-    gap: 12px;
-  }
-
-  .marker-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-  }
-
-  .activity-card {
-    padding: 16px;
-  }
+.btn-bubble-quick-action:hover {
+  background: rgba(79, 70, 229, 0.08);
+  border-color: var(--primary-color, #4f46e5);
+  color: var(--primary-color, #4f46e5);
 }

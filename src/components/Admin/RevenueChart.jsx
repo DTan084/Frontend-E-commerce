@@ -1,132 +1,146 @@
 import React, { useState } from 'react';
+import { BarChart3, TrendingUp, CreditCard, Sparkles } from 'lucide-react';
 import './RevenueChart.css';
 
 const RevenueChart = () => {
   const [period, setPeriod] = useState('12months');
 
-  // Mock data for 12 months
-  const monthlyData = [
-    { month: 'Jan', revenue: 4200 },
-    { month: 'Feb', revenue: 3800 },
-    { month: 'Mar', revenue: 5100 },
-    { month: 'Apr', revenue: 4600 },
-    { month: 'May', revenue: 6200 },
-    { month: 'Jun', revenue: 5800 },
-    { month: 'Jul', revenue: 7100 },
-    { month: 'Aug', revenue: 6800 },
-    { month: 'Sep', revenue: 8200 },
-    { month: 'Oct', revenue: 9100 },
-    { month: 'Nov', revenue: 8800 },
-    { month: 'Dec', revenue: 10200 },
+  // Mock data for 12 months in VND
+  const monthlyData12 = [
+    { month: 'T1', revenue: 140000000 },
+    { month: 'T2', revenue: 165000000 },
+    { month: 'T3', revenue: 190000000 },
+    { month: 'T4', revenue: 175000000 },
+    { month: 'T5', revenue: 210000000 },
+    { month: 'T6', revenue: 245000000 },
+    { month: 'T7', revenue: 230000000 },
+    { month: 'T8', revenue: 270000000 },
+    { month: 'T9', revenue: 290000000 },
+    { month: 'T10', revenue: 310000000 },
+    { month: 'T11', revenue: 340000000 },
+    { month: 'T12', revenue: 380000000 },
   ];
 
-  const maxRevenue = Math.max(...monthlyData.map(d => d.revenue));
-  const totalRevenue = monthlyData.reduce((sum, d) => sum + d.revenue, 0);
-  const avgRevenue = (totalRevenue / monthlyData.length).toFixed(0);
+  const monthlyData6 = monthlyData12.slice(6);
+  const currentData = period === '6months' ? monthlyData6 : monthlyData12;
+
+  const maxRevenue = Math.max(...currentData.map((d) => d.revenue));
+  const totalRevenue = currentData.reduce((sum, d) => sum + d.revenue, 0);
+  const avgRevenue = Math.round(totalRevenue / currentData.length);
+
+  const formatVND = (price) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price);
+  };
+
+  const formatMillions = (price) => {
+    return `${(price / 1000000).toFixed(0)} tr`;
+  };
 
   return (
-    <div className="revenue-chart-container">
+    <div className="admin-revenue-chart-card">
       {/* Header */}
-      <div className="chart-header">
-        <div className="header-left">
-          <h2 className="chart-title">📊 Revenue Overview</h2>
-          <p className="chart-subtitle">Last 12 months performance</p>
+      <div className="revenue-chart-head">
+        <div className="revenue-chart-head-left">
+          <div className="chart-title-icon-wrap">
+            <BarChart3 size={18} className="text-primary" />
+          </div>
+          <div>
+            <h2 className="revenue-chart-title">Biểu đồ Tăng trưởng Doanh thu & GMV</h2>
+            <p className="revenue-chart-subtitle">Tổng giá trị giao dịch mã nguồn toàn nền tảng</p>
+          </div>
         </div>
-        
-        <div className="chart-controls">
-          <button 
-            className={`period-btn ${period === '6months' ? 'active' : ''}`}
+
+        <div className="revenue-chart-period-tabs">
+          <button
+            type="button"
+            className={`period-tab-btn ${period === '6months' ? 'active' : ''}`}
             onClick={() => setPeriod('6months')}
           >
-            6 Months
+            6 Tháng gần nhất
           </button>
-          <button 
-            className={`period-btn ${period === '12months' ? 'active' : ''}`}
+          <button
+            type="button"
+            className={`period-tab-btn ${period === '12months' ? 'active' : ''}`}
             onClick={() => setPeriod('12months')}
           >
-            12 Months
+            12 Tháng qua
           </button>
         </div>
       </div>
 
-      {/* Summary Stats */}
-      <div className="chart-summary">
-        <div className="summary-item">
-          <span className="summary-icon">💵</span>
-          <div className="summary-content">
-            <strong className="summary-value">${totalRevenue.toLocaleString()}</strong>
-            <span className="summary-label">Total Revenue</span>
+      {/* Summary Stats Row */}
+      <div className="revenue-chart-summary-bar">
+        <div className="summary-pill-item">
+          <CreditCard size={16} className="text-primary" />
+          <div className="summary-pill-text">
+            <span className="summary-pill-lbl">Tổng GMV kỳ này:</span>
+            <strong className="summary-pill-val text-primary">{formatVND(totalRevenue)}</strong>
           </div>
         </div>
-        
-        <div className="summary-divider"></div>
-        
-        <div className="summary-item">
-          <span className="summary-icon">📈</span>
-          <div className="summary-content">
-            <strong className="summary-value">${avgRevenue}</strong>
-            <span className="summary-label">Avg / Month</span>
+
+        <div className="summary-pill-divider"></div>
+
+        <div className="summary-pill-item">
+          <TrendingUp size={16} className="text-emerald" />
+          <div className="summary-pill-text">
+            <span className="summary-pill-lbl">Trung bình / tháng:</span>
+            <strong className="summary-pill-val">{formatVND(avgRevenue)}</strong>
           </div>
         </div>
-        
-        <div className="summary-divider"></div>
-        
-        <div className="summary-item">
-          <span className="summary-icon">🎯</span>
-          <div className="summary-content">
-            <strong className="summary-value">${maxRevenue.toLocaleString()}</strong>
-            <span className="summary-label">Highest</span>
+
+        <div className="summary-pill-divider"></div>
+
+        <div className="summary-pill-item">
+          <Sparkles size={16} className="text-amber" />
+          <div className="summary-pill-text">
+            <span className="summary-pill-lbl">Tháng đỉnh điểm:</span>
+            <strong className="summary-pill-val">{formatVND(maxRevenue)}</strong>
           </div>
         </div>
       </div>
 
-      {/* Chart */}
-      <div className="chart-area">
-        {/* Y-axis labels */}
-        <div className="y-axis">
-          {[5, 4, 3, 2, 1, 0].map((tick) => (
-            <div key={tick} className="y-axis-label">
-              ${(maxRevenue * tick / 5 / 1000).toFixed(0)}k
-            </div>
-          ))}
+      {/* Chart Canvas */}
+      <div className="chart-canvas-wrapper">
+        <div className="chart-y-axis-labels">
+          {[4, 3, 2, 1, 0].map((step) => {
+            const val = (maxRevenue * step) / 4;
+            return (
+              <span key={step} className="y-axis-label-item">
+                {formatMillions(val)}
+              </span>
+            );
+          })}
         </div>
 
-        {/* Bars */}
-        <div className="chart-bars">
-          {monthlyData.map((data, index) => {
-            const height = (data.revenue / maxRevenue) * 100;
+        <div className="chart-bars-track">
+          {currentData.map((item, idx) => {
+            const heightPercent = Math.max(10, Math.round((item.revenue / maxRevenue) * 100));
             return (
-              <div 
-                key={data.month} 
-                className="bar-wrapper"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <div className="bar-container">
-                  <div 
-                    className="bar"
-                    style={{ height: `${height}%` }}
-                    data-tooltip={`$${data.revenue.toLocaleString()}`}
-                  >
-                    <div className="bar-fill"></div>
-                  </div>
+              <div key={idx} className="admin-bar-col">
+                <div className="admin-bar-container">
+                  <div
+                    className="admin-bar-fill"
+                    style={{ height: `${heightPercent}%` }}
+                    data-tooltip={`${item.month}: ${formatVND(item.revenue)}`}
+                  ></div>
                 </div>
-                <span className="x-axis-label">{data.month}</span>
+                <span className="admin-x-axis-lbl">{item.month}</span>
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* Legend */}
-      <div className="chart-legend">
-        <div className="legend-item">
-          <span className="legend-color revenue"></span>
-          <span className="legend-label">Revenue</span>
+      {/* Legend & Note */}
+      <div className="chart-footer-legend">
+        <div className="legend-indicator">
+          <span className="legend-box indigo"></span>
+          <span>Doanh thu toàn sàn (VND)</span>
         </div>
-        <div className="legend-item">
-          <span className="legend-icon">📊</span>
-          <span className="legend-text">Hover over bars to see exact values</span>
-        </div>
+        <span className="chart-hover-hint">Di chuột vào từng cột để xem giá trị chi tiết</span>
       </div>
     </div>
   );

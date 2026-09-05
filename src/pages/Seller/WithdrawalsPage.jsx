@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Wallet, Clock, CheckCircle2, PlusCircle, X, CreditCard, ShieldCheck } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import Breadcrumb from '../../components/Product/Breadcrumb';
+import SellerSidebar from '../../components/Seller/SellerSidebar';
 import './WithdrawalsPage.css';
 
 const mockWithdrawals = [
@@ -10,17 +13,19 @@ const mockWithdrawals = [
     method: 'Ngân hàng',
     bankName: 'Vietcombank',
     accountNumber: '1234567890',
+    accountName: 'NGUYEN VAN LONG',
     status: 'completed',
-    processedDate: '2025-11-16'
+    processedDate: '2025-11-16',
   },
   {
     id: 'WD-002',
     date: '2025-11-10',
     amount: 8500000,
-    method: 'MoMo',
+    method: 'Ví MoMo',
     accountNumber: '0901234567',
+    accountName: 'NGUYEN VAN LONG',
     status: 'processing',
-    estimatedDate: '2025-11-20'
+    estimatedDate: '2025-11-20',
   },
   {
     id: 'WD-003',
@@ -29,18 +34,34 @@ const mockWithdrawals = [
     method: 'Ngân hàng',
     bankName: 'Techcombank',
     accountNumber: '9876543210',
-    status: 'pending'
-  }
+    accountName: 'NGUYEN VAN LONG',
+    status: 'completed',
+    processedDate: '2025-11-06',
+  },
+];
+
+const VIETNAM_BANKS = [
+  'Vietcombank - Ngân hàng Ngoại thương Việt Nam',
+  'MB Bank - Ngân hàng Quân Đội',
+  'Techcombank - Ngân hàng Kỹ Thương',
+  'ACB - Ngân hàng Á Châu',
+  'VPBank - Ngân hàng Việt Nam Thịnh Vượng',
+  'TPBank - Ngân hàng Tiên Phong',
+  'BIDV - Ngân hàng Đầu tư và Phát triển',
+  'VietinBank - Ngân hàng Công Thương',
+  'Ví MoMo (SĐT đăng ký)',
 ];
 
 const WithdrawalsPage = () => {
+  const { user } = useAuth();
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [withdrawList, setWithdrawList] = useState(mockWithdrawals);
+
   const [withdrawForm, setWithdrawForm] = useState({
     amount: '',
-    method: 'bank',
-    bankName: '',
+    bankName: VIETNAM_BANKS[0],
     accountNumber: '',
-    accountName: ''
+    accountName: '',
   });
 
   const availableBalance = 23500000;
@@ -49,7 +70,7 @@ const WithdrawalsPage = () => {
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'VND'
+      currency: 'VND',
     }).format(price);
   };
 
@@ -59,226 +80,288 @@ const WithdrawalsPage = () => {
 
   const handleWithdrawSubmit = (e) => {
     e.preventDefault();
-    alert('Yêu cầu rút tiền đã được gửi!');
+    const numAmount = parseFloat(withdrawForm.amount);
+    if (!numAmount || numAmount < minimumWithdraw) {
+      alert(`Số tiền rút tối thiểu là ${formatPrice(minimumWithdraw)}!`);
+      return;
+    }
+    if (numAmount > availableBalance) {
+      alert('Số dư khả dụng không đủ để thực hiện giao dịch này!');
+      return;
+    }
+
+    const newWithdrawal = {
+      id: `WD-00${withdrawList.length + 1}`,
+      date: new Date().toISOString().split('T')[0],
+      amount: numAmount,
+      method: withdrawForm.bankName.includes('MoMo') ? 'Ví MoMo' : 'Ngân hàng',
+      bankName: withdrawForm.bankName,
+      accountNumber: withdrawForm.accountNumber,
+      accountName: withdrawForm.accountName.toUpperCase(),
+      status: 'processing',
+      estimatedDate: 'Trong vòng 24 giờ',
+    };
+
+    setWithdrawList([newWithdrawal, ...withdrawList]);
     setShowWithdrawModal(false);
     setWithdrawForm({
       amount: '',
-      method: 'bank',
-      bankName: '',
+      bankName: VIETNAM_BANKS[0],
       accountNumber: '',
-      accountName: ''
+      accountName: '',
     });
+    alert('Yêu cầu rút tiền đã được ghi nhận và đang được xử lý giải ngân!');
   };
 
-  const totalWithdrawn = mockWithdrawals
-    .filter(w => w.status === 'completed')
+  const totalWithdrawn = withdrawList
+    .filter((w) => w.status === 'completed')
     .reduce((sum, w) => sum + w.amount, 0);
 
-  const pendingAmount = mockWithdrawals
-    .filter(w => w.status !== 'completed')
+  const pendingAmount = withdrawList
+    .filter((w) => w.status !== 'completed')
     .reduce((sum, w) => sum + w.amount, 0);
 
   return (
-    <div className="withdrawals-page">
-      {/* Header */}
-      <section className="withdrawals-hero">
-        <div className="container">
-          <div className="breadcrumb">
-            <Link to="/">Trang chủ</Link>
-            <span>/</span>
-            <Link to="/seller/dashboard">Seller Dashboard</Link>
-            <span>/</span>
-            <span>Rút tiền</span>
-          </div>
+    <div className="seller-dashboard-page-modern withdrawals-page-modern">
+      <div className="seller-container-inner">
+        {/* Breadcrumb */}
+        <Breadcrumb
+          items={[
+            { label: 'Kênh người bán', path: '/seller/dashboard' },
+            { label: 'Rút tiền & Ngân hàng', path: null },
+          ]}
+        />
 
-          <h1>💳 Quản lý rút tiền</h1>
-          <p>Rút tiền về tài khoản ngân hàng hoặc ví điện tử</p>
-        </div>
-      </section>
+        <div className="seller-layout-split-row">
+          {/* Sidebar */}
+          <SellerSidebar seller={user} />
 
-      {/* Balance Overview */}
-      <section className="balance-section">
-        <div className="container">
-          <div className="balance-grid">
-            <div className="balance-card main">
-              <div className="card-header">
-                <h3>💰 Số dư khả dụng</h3>
-                <button 
-                  className="btn-withdraw"
-                  onClick={() => setShowWithdrawModal(true)}
-                >
-                  Rút tiền
-                </button>
+          {/* Main Content */}
+          <main className="seller-main-workspace">
+            {/* Header */}
+            <div className="withdrawals-head-banner">
+              <div>
+                <h1 className="withdrawals-main-title">Quản lý số dư & Rút tiền</h1>
+                <p className="withdrawals-main-subtitle">
+                  Rút doanh thu bán mã nguồn về tài khoản ngân hàng nội địa Việt Nam hoặc ví điện tử
+                </p>
               </div>
-              <div className="balance-amount">{formatPrice(availableBalance)}</div>
-              <div className="balance-note">
-                Số tiền tối thiểu: {formatPrice(minimumWithdraw)}
-              </div>
-            </div>
 
-            <div className="balance-card">
-              <div className="card-icon">✅</div>
-              <div className="card-info">
-                <div className="card-label">Đã rút</div>
-                <div className="card-value">{formatPrice(totalWithdrawn)}</div>
-              </div>
-            </div>
-
-            <div className="balance-card">
-              <div className="card-icon">⏳</div>
-              <div className="card-info">
-                <div className="card-label">Đang xử lý</div>
-                <div className="card-value">{formatPrice(pendingAmount)}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Withdrawal History */}
-      <section className="history-section">
-        <div className="container">
-          <div className="history-card">
-            <h2>📋 Lịch sử rút tiền</h2>
-            
-            <div className="table-responsive">
-              <table className="withdrawals-table">
-                <thead>
-                  <tr>
-                    <th>Mã GD</th>
-                    <th>Ngày yêu cầu</th>
-                    <th>Số tiền</th>
-                    <th>Phương thức</th>
-                    <th>Thông tin TK</th>
-                    <th>Trạng thái</th>
-                    <th>Ghi chú</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mockWithdrawals.map(withdrawal => (
-                    <tr key={withdrawal.id}>
-                      <td><strong>{withdrawal.id}</strong></td>
-                      <td>{formatDate(withdrawal.date)}</td>
-                      <td className="amount">{formatPrice(withdrawal.amount)}</td>
-                      <td>
-                        {withdrawal.method === 'Ngân hàng' ? '🏦' : '📱'} {withdrawal.method}
-                      </td>
-                      <td>
-                        {withdrawal.bankName && <div><strong>{withdrawal.bankName}</strong></div>}
-                        <div>{withdrawal.accountNumber}</div>
-                      </td>
-                      <td>
-                        <span className={`status-badge ${withdrawal.status}`}>
-                          {withdrawal.status === 'completed' && '✅ Hoàn thành'}
-                          {withdrawal.status === 'processing' && '⚙️ Đang xử lý'}
-                          {withdrawal.status === 'pending' && '⏳ Chờ duyệt'}
-                        </span>
-                      </td>
-                      <td>
-                        {withdrawal.processedDate && (
-                          <span className="note-success">
-                            Đã chuyển: {formatDate(withdrawal.processedDate)}
-                          </span>
-                        )}
-                        {withdrawal.estimatedDate && (
-                          <span className="note-info">
-                            Dự kiến: {formatDate(withdrawal.estimatedDate)}
-                          </span>
-                        )}
-                        {!withdrawal.processedDate && !withdrawal.estimatedDate && (
-                          <span className="note-pending">Đang chờ xử lý</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Withdraw Modal */}
-      {showWithdrawModal && (
-        <div className="modal-overlay" onClick={() => setShowWithdrawModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>💳 Yêu cầu rút tiền</h2>
-              <button className="modal-close" onClick={() => setShowWithdrawModal(false)}>
-                ✕
+              <button
+                type="button"
+                className="btn-create-payout"
+                onClick={() => setShowWithdrawModal(true)}
+              >
+                <PlusCircle size={15} />
+                <span>Tạo lệnh rút tiền</span>
               </button>
             </div>
 
-            <form onSubmit={handleWithdrawSubmit} className="withdraw-form">
-              <div className="form-group">
-                <label>Số tiền muốn rút *</label>
+            {/* Balances Overview Grid */}
+            <div className="withdrawals-overview-grid">
+              <div className="payout-card-main">
+                <div className="payout-card-header">
+                  <div className="payout-head-title">
+                    <Wallet size={18} className="text-primary" />
+                    <span>Số dư khả dụng</span>
+                  </div>
+                  <span className="payout-escrow-tag">
+                    <ShieldCheck size={12} className="text-emerald" />
+                    <span>Bảo vệ Escrow</span>
+                  </span>
+                </div>
+
+                <div className="payout-balance-amount">{formatPrice(availableBalance)}</div>
+
+                <div className="payout-card-footer">
+                  <span>
+                    Hạn mức rút tối thiểu: <strong>{formatPrice(minimumWithdraw)}</strong>
+                  </span>
+                </div>
+              </div>
+
+              <div className="payout-metric-box emerald">
+                <div className="metric-box-head">
+                  <span className="metric-box-lbl">Đã rút thành công</span>
+                  <div className="metric-box-icon emerald">
+                    <CheckCircle2 size={16} />
+                  </div>
+                </div>
+                <h3 className="metric-box-val">{formatPrice(totalWithdrawn)}</h3>
+                <span className="metric-box-sub">Tất cả các đợt rút</span>
+              </div>
+
+              <div className="payout-metric-box amber">
+                <div className="metric-box-head">
+                  <span className="metric-box-lbl">Đang chờ xử lý</span>
+                  <div className="metric-box-icon amber">
+                    <Clock size={16} />
+                  </div>
+                </div>
+                <h3 className="metric-box-val">{formatPrice(pendingAmount)}</h3>
+                <span className="metric-box-sub">Dự kiến hoàn tất trong 24h</span>
+              </div>
+            </div>
+
+            {/* Payout History Table */}
+            <div className="withdrawals-history-card">
+              <div className="history-table-header">
+                <h3 className="history-table-title">Lịch sử các đợt rút tiền</h3>
+                <span className="history-count-pill">{withdrawList.length} giao dịch</span>
+              </div>
+
+              <div className="table-responsive-wrapper">
+                <table className="withdrawals-data-table">
+                  <thead>
+                    <tr>
+                      <th>Mã giao dịch</th>
+                      <th>Ngày yêu cầu</th>
+                      <th>Số tiền rút</th>
+                      <th>Tài khoản thụ hưởng</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {withdrawList.map((wd) => (
+                      <tr key={wd.id} className="withdrawal-row">
+                        <td className="td-wd-id">
+                          <strong>{wd.id}</strong>
+                        </td>
+                        <td className="td-wd-date">
+                          <span>{formatDate(wd.date)}</span>
+                        </td>
+                        <td className="td-wd-amount">
+                          <strong className="text-primary">{formatPrice(wd.amount)}</strong>
+                        </td>
+                        <td className="td-wd-account">
+                          <div className="wd-account-cell">
+                            <span className="account-bank-name">{wd.bankName}</span>
+                            <span className="account-owner-info">
+                              {wd.accountNumber} • {wd.accountName || 'CHỦ TÀI KHOẢN'}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="td-wd-status">
+                          {wd.status === 'completed' ? (
+                            <span className="status-badge-pill status-active">
+                              <CheckCircle2 size={12} />
+                              <span>Đã chuyển tiền</span>
+                            </span>
+                          ) : (
+                            <span className="status-badge-pill status-pending">
+                              <Clock size={12} />
+                              <span>Đang xử lý</span>
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+      {/* Payout Modal */}
+      {showWithdrawModal && (
+        <div className="modal-backdrop-overlay" onClick={() => setShowWithdrawModal(false)}>
+          <div className="modal-payout-box" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-payout-header">
+              <div className="modal-title-wrap">
+                <CreditCard size={18} className="text-primary" />
+                <h3>Yêu cầu rút tiền về Ngân hàng</h3>
+              </div>
+              <button
+                type="button"
+                className="btn-modal-close"
+                onClick={() => setShowWithdrawModal(false)}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleWithdrawSubmit} className="modal-payout-form">
+              <div className="form-field-group">
+                <label className="form-field-label">
+                  Số tiền muốn rút (VNĐ) <span className="required-star">*</span>
+                </label>
                 <input
                   type="number"
+                  className="form-input-text"
                   value={withdrawForm.amount}
-                  onChange={(e) => setWithdrawForm({...withdrawForm, amount: e.target.value})}
+                  onChange={(e) => setWithdrawForm({ ...withdrawForm, amount: e.target.value })}
+                  placeholder={`Tối thiểu ${minimumWithdraw.toLocaleString()} ₫`}
                   min={minimumWithdraw}
                   max={availableBalance}
                   required
-                  placeholder="Nhập số tiền..."
                 />
-                <div className="form-note">
-                  Số dư khả dụng: <strong>{formatPrice(availableBalance)}</strong>
-                </div>
+                <span className="field-hint-text">
+                  Số dư khả dụng: {formatPrice(availableBalance)}
+                </span>
               </div>
 
-              <div className="form-group">
-                <label>Phương thức *</label>
+              <div className="form-field-group">
+                <label className="form-field-label">
+                  Ngân hàng / Ví nhận tiền <span className="required-star">*</span>
+                </label>
                 <select
-                  value={withdrawForm.method}
-                  onChange={(e) => setWithdrawForm({...withdrawForm, method: e.target.value})}
-                  required
+                  className="form-select-box"
+                  value={withdrawForm.bankName}
+                  onChange={(e) => setWithdrawForm({ ...withdrawForm, bankName: e.target.value })}
                 >
-                  <option value="bank">Ngân hàng</option>
-                  <option value="momo">MoMo</option>
-                  <option value="zalopay">ZaloPay</option>
+                  {VIETNAM_BANKS.map((bank, idx) => (
+                    <option key={idx} value={bank}>
+                      {bank}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              {withdrawForm.method === 'bank' && (
-                <div className="form-group">
-                  <label>Tên ngân hàng *</label>
+              <div className="form-fields-grid-2">
+                <div className="form-field-group">
+                  <label className="form-field-label">
+                    Số tài khoản <span className="required-star">*</span>
+                  </label>
                   <input
                     type="text"
-                    value={withdrawForm.bankName}
-                    onChange={(e) => setWithdrawForm({...withdrawForm, bankName: e.target.value})}
+                    className="form-input-text"
+                    value={withdrawForm.accountNumber}
+                    onChange={(e) =>
+                      setWithdrawForm({ ...withdrawForm, accountNumber: e.target.value })
+                    }
+                    placeholder="Ví dụ: 1029384756"
                     required
-                    placeholder="VD: Vietcombank, Techcombank..."
                   />
                 </div>
-              )}
 
-              <div className="form-group">
-                <label>Số tài khoản *</label>
-                <input
-                  type="text"
-                  value={withdrawForm.accountNumber}
-                  onChange={(e) => setWithdrawForm({...withdrawForm, accountNumber: e.target.value})}
-                  required
-                  placeholder={withdrawForm.method === 'bank' ? 'Số tài khoản ngân hàng' : 'Số điện thoại'}
-                />
+                <div className="form-field-group">
+                  <label className="form-field-label">
+                    Tên chủ tài khoản (In hoa) <span className="required-star">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-input-text"
+                    value={withdrawForm.accountName}
+                    onChange={(e) =>
+                      setWithdrawForm({ ...withdrawForm, accountName: e.target.value })
+                    }
+                    placeholder="NGUYEN VAN A"
+                    required
+                  />
+                </div>
               </div>
 
-              <div className="form-group">
-                <label>Tên tài khoản *</label>
-                <input
-                  type="text"
-                  value={withdrawForm.accountName}
-                  onChange={(e) => setWithdrawForm({...withdrawForm, accountName: e.target.value})}
-                  required
-                  placeholder="Tên chủ tài khoản"
-                />
-              </div>
-
-              <div className="form-actions">
-                <button type="button" onClick={() => setShowWithdrawModal(false)} className="btn-cancel">
-                  Hủy
+              <div className="modal-payout-actions">
+                <button
+                  type="button"
+                  className="btn-modal-cancel"
+                  onClick={() => setShowWithdrawModal(false)}
+                >
+                  Hủy bỏ
                 </button>
-                <button type="submit" className="btn-submit">
+                <button type="submit" className="btn-modal-confirm">
                   Xác nhận rút tiền
                 </button>
               </div>

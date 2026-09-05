@@ -1,67 +1,14 @@
+/* ==========================================================================
+   Home Page Container Styles - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
 .home-page {
   min-height: 100vh;
-  background: #ffffff;
+  background: var(--bg-primary, #ffffff);
   overflow-x: hidden;
-  /* Prevent horizontal scroll */
 }
 
-/* General container spacing between sections */
-.home-page > * + * {
-  margin-top: 0;
-}
-
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Override any default margins */
 .home-page section {
   margin: 0;
-}
-
-/* ============================================
-   📱 RESPONSIVE DESIGN - HOME PAGE
-   ============================================ */
-
-/* Mobile devices (less than 576px) */
-@media (max-width: 576px) {
-  .home-page {
-    padding: 0;
-  }
-
-  .home-page .container {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  /* Ensure all sections have proper spacing */
-  .home-page section {
-    padding: 30px 0;
-  }
-
-  /* Fix any overflow issues */
-  .home-page * {
-    max-width: 100%;
-    overflow-wrap: break-word;
-  }
-}
-
-/* Small to medium devices (576px to 991px) */
-@media (min-width: 576px) and (max-width: 992px) {
-  .home-page section {
-    padding: 40px 0;
-  }
-
-  .home-page .container {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
-/* Large devices (992px and up) */
-@media (min-width: 992px) {
-  .home-page section {
-    padding: 60px 0 0 0;
-  }
+  position: relative;
 }
