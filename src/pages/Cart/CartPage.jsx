@@ -31,6 +31,7 @@ const CartPage = () => {
     } else {
       setSelectedItems([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayItems.length]);
 
   const handleSelectItem = (itemId, checked) => {

@@ -1,15 +1,6 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import {
-  ArrowRight,
-  Sparkles,
-  Store,
-  ShieldCheck,
-  Download,
-  Code2,
-  Users,
-  Star,
-} from 'lucide-react';
+import { ArrowRight, Sparkles, Store, ShieldCheck, Download } from 'lucide-react';
 import './HeroSection.css';
 
 const HeroSection = () => {
