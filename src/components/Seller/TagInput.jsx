@@ -1,40 +1,59 @@
 import React, { useState, useRef } from 'react';
+import { Tag as TagIcon, X, Plus, Sparkles } from 'lucide-react';
 import './TagInput.css';
 
-const TagInput = ({ tags = [], setTags, maxTags = 10, placeholder = 'Add tags...' }) => {
+const TagInput = ({
+  tags = [],
+  setTags,
+  maxTags = 10,
+  placeholder = 'Nhập thẻ tag và nhấn Enter (ví dụ: React, Laravel, Docker)...',
+}) => {
   const [inputValue, setInputValue] = useState('');
   const suggestedTags = [
-    'React', 'JavaScript', 'TypeScript', 'Node.js', 'Python', 'Java',
-    'Web Development', 'Mobile App', 'E-commerce', 'Dashboard', 'API',
-    'Frontend', 'Backend', 'Full Stack', 'UI/UX', 'Bootstrap', 'Tailwind',
-    'MongoDB', 'MySQL', 'PostgreSQL', 'Firebase', 'AWS', 'Docker',
-    'WordPress', 'Laravel', 'Django', 'Flask', 'Express', 'Next.js',
-    'Vue.js', 'Angular', 'Responsive', 'Admin Panel', 'CRM', 'CMS',
+    'React',
+    'JavaScript',
+    'TypeScript',
+    'Node.js',
+    'Python',
+    'Java',
+    'E-commerce',
+    'Dashboard',
+    'REST API',
+    'Spring Boot',
+    'Laravel',
+    'Next.js',
+    'Vue.js',
+    'Tailwind CSS',
+    'Docker',
+    'MySQL',
+    'MongoDB',
+    'PostgreSQL',
+    'Flutter',
+    'Redux Toolkit',
+    'Microservices',
+    'GraphQL',
   ];
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef(null);
 
-  // Filter suggested tags
   const filteredSuggestions = suggestedTags.filter(
-    tag => 
-      !tags.includes(tag) && 
+    (tag) =>
+      !tags.includes(tag) &&
       tag.toLowerCase().includes(inputValue.toLowerCase()) &&
       inputValue.length > 0
   );
 
-  // Add tag
   const addTag = (tag) => {
     const trimmedTag = tag.trim();
-    
     if (!trimmedTag) return;
-    
+
     if (tags.length >= maxTags) {
-      alert(`Maximum ${maxTags} tags allowed!`);
+      alert(`Bạn chỉ được gắn tối đa ${maxTags} thẻ tag!`);
       return;
     }
 
-    if (tags.includes(trimmedTag)) {
-      alert('This tag already exists!');
+    if (tags.some((t) => t.toLowerCase() === trimmedTag.toLowerCase())) {
+      alert('Thẻ tag này đã tồn tại!');
       return;
     }
 
@@ -44,19 +63,16 @@ const TagInput = ({ tags = [], setTags, maxTags = 10, placeholder = 'Add tags...
     inputRef.current?.focus();
   };
 
-  // Remove tag
   const removeTag = (indexToRemove) => {
     setTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
-  // Handle input change
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
     setShowSuggestions(value.length > 0);
   };
 
-  // Handle key down
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
@@ -66,131 +82,104 @@ const TagInput = ({ tags = [], setTags, maxTags = 10, placeholder = 'Add tags...
     }
   };
 
-  // Handle suggestion click
-  const handleSuggestionClick = (tag) => {
-    addTag(tag);
-  };
-
-  // Popular tags by category
-  const popularCategories = {
-    '🔥 Trending': ['React', 'Next.js', 'TypeScript', 'Tailwind', 'Node.js'],
-    '💻 Languages': ['JavaScript', 'Python', 'Java', 'PHP', 'C++'],
-    '🎨 Design': ['UI/UX', 'Responsive', 'Bootstrap', 'Material UI', 'Figma'],
-    '🗄️ Database': ['MongoDB', 'MySQL', 'PostgreSQL', 'Firebase', 'Redis'],
-    '☁️ Cloud': ['AWS', 'Azure', 'Docker', 'Kubernetes', 'Heroku'],
-  };
+  const popularGroups = [
+    { label: 'Thịnh hành', tags: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript'] },
+    { label: 'Backend', tags: ['Laravel', 'Spring Boot', 'Node.js', 'MySQL'] },
+    { label: 'Mobile & App', tags: ['Flutter', 'React Native', 'Firebase'] },
+  ];
 
   return (
-    <div className="tag-input-container">
-      {/* Header */}
-      <div className="tag-input-header">
-        <h3 className="tag-input-title">
-          🏷️ Tags <span className="required">*</span>
-        </h3>
-        <div className="tag-count">
-          <span className={tags.length >= maxTags ? 'count-max' : ''}>
-            {tags.length} / {maxTags}
+    <div className="tag-input-container-modern">
+      <div className="tag-input-head">
+        <div className="tag-title-pair">
+          <TagIcon size={16} className="text-primary" />
+          <span className="tag-title-text">
+            Thẻ công nghệ & Từ khóa tìm kiếm <span className="required-star">*</span>
           </span>
         </div>
+        <span className="tag-counter-badge">
+          {tags.length} / {maxTags} tags
+        </span>
       </div>
 
-      {/* Input Area */}
-      <div className="tag-input-wrapper">
-        <div className="tags-container">
+      {/* Main Tag Container Box */}
+      <div className="tag-box-wrapper" onClick={() => inputRef.current?.focus()}>
+        <div className="tags-chips-flow">
           {tags.map((tag, index) => (
-            <div key={index} className="tag-badge">
-              <span className="tag-text">{tag}</span>
+            <span key={index} className="tag-pill-chip">
+              <span>{tag}</span>
               <button
                 type="button"
-                className="tag-remove"
-                onClick={() => removeTag(index)}
-                aria-label="Remove tag"
+                className="btn-remove-tag"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeTag(index);
+                }}
+                title="Xóa tag này"
               >
-                ✕
+                <X size={12} />
               </button>
-            </div>
+            </span>
           ))}
-          
-          <input
-            ref={inputRef}
-            type="text"
-            className="tag-input"
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            onFocus={() => setShowSuggestions(inputValue.length > 0)}
-            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-            placeholder={tags.length === 0 ? placeholder : ''}
-            disabled={tags.length >= maxTags}
-          />
+
+          {tags.length < maxTags && (
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              onFocus={() => setShowSuggestions(inputValue.length > 0)}
+              placeholder={tags.length === 0 ? placeholder : 'Thêm tag...'}
+              className="tag-raw-input"
+            />
+          )}
         </div>
 
-        {/* Suggestions Dropdown */}
+        {/* Autocomplete Dropdown */}
         {showSuggestions && filteredSuggestions.length > 0 && (
-          <div className="suggestions-dropdown">
-            <div className="suggestions-header">
-              <span className="suggestions-icon">💡</span>
-              <span className="suggestions-title">Suggestions</span>
-            </div>
-            <div className="suggestions-list">
-              {filteredSuggestions.slice(0, 8).map((tag, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  className="suggestion-item"
-                  onClick={() => handleSuggestionClick(tag)}
-                >
-                  <span className="suggestion-icon">🔍</span>
-                  <span className="suggestion-text">{tag}</span>
-                  <span className="suggestion-add">+</span>
-                </button>
-              ))}
-            </div>
+          <div className="tag-suggestions-dropdown">
+            {filteredSuggestions.slice(0, 6).map((suggested, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className="btn-suggestion-item"
+                onClick={() => addTag(suggested)}
+              >
+                <Plus size={12} />
+                <span>{suggested}</span>
+              </button>
+            ))}
           </div>
         )}
       </div>
 
-      {/* Popular Tags */}
-      <div className="popular-tags-section">
-        <div className="popular-header">
-          <span className="popular-icon">✨</span>
-          <span className="popular-title">Popular Tags</span>
+      {/* Recommended Quick Tags */}
+      <div className="recommended-tags-section">
+        <div className="recommended-title-row">
+          <Sparkles size={13} className="text-amber" />
+          <span>Gợi ý thẻ phổ biến:</span>
         </div>
-        
-        {Object.entries(popularCategories).map(([category, categoryTags]) => (
-          <div key={category} className="popular-category">
-            <div className="category-name">{category}</div>
-            <div className="category-tags">
-              {categoryTags.map((tag, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  className={`popular-tag ${tags.includes(tag) ? 'added' : ''}`}
-                  onClick={() => !tags.includes(tag) && addTag(tag)}
-                  disabled={tags.includes(tag) || tags.length >= maxTags}
-                >
-                  {tag}
-                  {tags.includes(tag) && <span className="check-icon">✓</span>}
-                </button>
-              ))}
+        <div className="popular-groups-strip">
+          {popularGroups.map((group, gIdx) => (
+            <div key={gIdx} className="popular-group-box">
+              <span className="group-label">{group.label}:</span>
+              {group.tags.map((t, tIdx) => {
+                const isSelected = tags.includes(t);
+                return (
+                  <button
+                    key={tIdx}
+                    type="button"
+                    disabled={isSelected || tags.length >= maxTags}
+                    className={`btn-quick-tag-chip ${isSelected ? 'selected' : ''}`}
+                    onClick={() => addTag(t)}
+                  >
+                    {t}
+                  </button>
+                );
+              })}
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Tips */}
-      <div className="tag-tips">
-        <div className="tip-item">
-          <span className="tip-icon">💡</span>
-          <span className="tip-text">
-            <strong>Tip:</strong> Press Enter or comma to add a tag. Press Backspace to remove the last tag.
-          </span>
-        </div>
-        <div className="tip-item">
-          <span className="tip-icon">🎯</span>
-          <span className="tip-text">
-            <strong>Best Practice:</strong> Use relevant tags to help buyers find your product easily.
-          </span>
+          ))}
         </div>
       </div>
     </div>

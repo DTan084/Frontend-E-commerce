@@ -1,5 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Package,
+  FileCode2,
+  Tag,
+  ArrowLeft,
+  ArrowRight,
+  Save,
+  ShieldCheck,
+  Globe,
+  FileText,
+  Check,
+  Zap,
+} from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import Breadcrumb from '../../components/Product/Breadcrumb';
 import SellerSidebar from '../../components/Seller/SellerSidebar';
 import ImageUploader from '../../components/Seller/ImageUploader';
 import FileUploader from '../../components/Seller/FileUploader';
@@ -8,531 +23,574 @@ import TagInput from '../../components/Seller/TagInput';
 import './UploadProductPage.css';
 
 const UploadProductPage = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
-  
-  // Form state
+
   const [formData, setFormData] = useState({
-    // Basic Information
     title: '',
     category: '',
     shortDescription: '',
     description: '',
-    
-    // Technical Details
-    version: '',
-    compatibility: [],
+    version: '1.0.0',
+    compatibility: ['React 18+', 'Node.js 18+'],
     demoUrl: '',
     documentationUrl: '',
-    
-    // Pricing
     price: '',
     salePrice: '',
     license: 'regular',
-    
-    // Media
     images: [],
     sourceFile: null,
-    
-    // Tags
-    tags: [],
-    
-    // Options
-    includeDocs: false,
-    freeUpdates: false,
+    tags: ['React', 'Fullstack'],
+    includeDocs: true,
+    freeUpdates: true,
   });
 
   const [errors, setErrors] = useState({});
   const [isSaving, setIsSaving] = useState(false);
 
-  // Categories
   const categories = [
-    { value: '', label: 'Select Category' },
-    { value: 'web-templates', label: '🌐 Web Templates' },
-    { value: 'wordpress', label: '📝 WordPress Themes' },
-    { value: 'mobile-apps', label: '📱 Mobile Apps' },
-    { value: 'ui-kits', label: '🎨 UI Kits' },
-    { value: 'scripts', label: '⚙️ Scripts & Plugins' },
-    { value: 'graphics', label: '🖼️ Graphics & Design' },
+    { value: '', label: '-- Chọn danh mục mã nguồn --' },
+    { value: 'Website TMĐT', label: 'Website Thương Mại Điện Tử & Bán Hàng' },
+    { value: 'Admin Template', label: 'Giao Diện Admin Dashboard & CMS' },
+    { value: 'Fullstack SaaS', label: 'Fullstack SaaS & Web Application' },
+    { value: 'Mobile App', label: 'Ứng Dụng Di Động (Flutter / React Native)' },
+    { value: 'Backend API', label: 'Backend RESTful API & Microservices' },
+    { value: 'AI & Automation', label: 'AI, Machine Learning & Scripts Tự Động' },
   ];
 
-  // Compatibility options
   const compatibilityOptions = [
-    'Chrome', 'Firefox', 'Safari', 'Edge',
-    'Windows', 'MacOS', 'Linux',
-    'iOS', 'Android',
-    'React 18+', 'Node.js 16+',
+    'React 18+',
+    'Next.js 14+',
+    'Vue.js 3+',
+    'Node.js 18+',
+    'Laravel 10+',
+    'Spring Boot 3+',
+    'Flutter 3+',
+    'MySQL 8.0+',
+    'PostgreSQL',
+    'Docker',
+    'Tailwind CSS',
+    'TypeScript',
   ];
 
-  // License types
   const licenseTypes = [
-    { value: 'regular', label: 'Regular License', description: 'For single end product' },
-    { value: 'extended', label: 'Extended License', description: 'For multiple end products' },
+    {
+      value: 'regular',
+      label: 'Regular License (Tiêu chuẩn)',
+      description: 'Dành cho người mua triển khai trên 1 sản phẩm / 1 domain duy nhất.',
+    },
+    {
+      value: 'extended',
+      label: 'Extended License (Mở rộng)',
+      description: 'Cho phép người mua triển khai trên nhiều dự án và thương mại hóa lại.',
+    },
   ];
 
-  // Handle input change
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors((prev) => ({ ...prev, [field]: '' }));
     }
   };
 
-  // Validate step
+  const toggleCompatibility = (option) => {
+    setFormData((prev) => ({
+      ...prev,
+      compatibility: prev.compatibility.includes(option)
+        ? prev.compatibility.filter((item) => item !== option)
+        : [...prev.compatibility, option],
+    }));
+  };
+
   const validateStep = (step) => {
     const newErrors = {};
 
     if (step === 1) {
-      if (!formData.title.trim()) newErrors.title = 'Product title is required';
-      if (!formData.category) newErrors.category = 'Category is required';
-      if (!formData.shortDescription.trim()) newErrors.shortDescription = 'Short description is required';
-      if (!formData.description.trim()) newErrors.description = 'Detailed description is required';
-      if (!formData.price) newErrors.price = 'Price is required';
-      if (formData.price && parseFloat(formData.price) <= 0) newErrors.price = 'Price must be greater than 0';
+      if (!formData.title.trim()) newErrors.title = 'Vui lòng nhập tên mã nguồn';
+      if (!formData.category) newErrors.category = 'Vui lòng chọn danh mục';
+      if (!formData.shortDescription.trim())
+        newErrors.shortDescription = 'Vui lòng nhập tóm tắt ngắn';
+      if (!formData.price) newErrors.price = 'Vui lòng nhập giá bán';
+      if (formData.price && parseFloat(formData.price) <= 0)
+        newErrors.price = 'Giá bán phải lớn hơn 0';
     }
 
     if (step === 2) {
-      if (formData.images.length === 0) newErrors.images = 'At least one product image is required';
-      if (!formData.sourceFile) newErrors.sourceFile = 'Source code file is required';
+      if (formData.images.length === 0) newErrors.images = 'Cần tải lên ít nhất 1 hình ảnh mô tả';
+      if (!formData.sourceFile) newErrors.sourceFile = 'Cần tải lên file mã nguồn nén (.ZIP)';
     }
 
     if (step === 3) {
-      if (formData.tags.length === 0) newErrors.tags = 'At least one tag is required';
+      if (formData.tags.length === 0) newErrors.tags = 'Cần thêm ít nhất 1 thẻ tag công nghệ';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Next step
   const handleNext = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
-  // Previous step
   const handlePrevious = () => {
-    setCurrentStep(prev => prev - 1);
+    setCurrentStep((prev) => prev - 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Save draft
   const handleSaveDraft = () => {
     setIsSaving(true);
-    
     setTimeout(() => {
-      localStorage.setItem('product-draft', JSON.stringify(formData));
+      localStorage.setItem('tmdt_product_draft', JSON.stringify(formData));
       setIsSaving(false);
-      alert('✅ Draft saved successfully!');
-    }, 1000);
+      alert('Đã lưu bản nháp mã nguồn thành công!');
+    }, 600);
   };
 
-  // Submit product
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     if (!validateStep(3)) return;
 
     setIsSaving(true);
-    
     setTimeout(() => {
-      // Build new product object to save as pending
       const newProduct = {
         id: Date.now(),
-        name: formData.title,
+        title: formData.title,
         category: formData.category,
         description: formData.shortDescription,
         price: parseFloat(formData.price) || 0,
+        salePrice: formData.salePrice ? parseFloat(formData.salePrice) : null,
         submitDate: new Date().toISOString().split('T')[0],
-        seller: 'Current Seller',
-        images: formData.images.length > 0
-          ? formData.images
-          : ['https://via.placeholder.com/400x300?text=Product'],
-        technology: formData.tags,
+        seller: user?.name || 'Tác giả CodeMart',
+        image:
+          formData.images.length > 0
+            ? formData.images[0].preview
+            : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400',
+        tags: formData.tags,
         status: 'pending',
-        reason: null,
+        sales: 0,
+        rating: 5.0,
       };
 
-      // Save to pending products in localStorage
       const pending = JSON.parse(localStorage.getItem('tmdt_pending_products') || '[]');
       pending.push(newProduct);
       localStorage.setItem('tmdt_pending_products', JSON.stringify(pending));
+      localStorage.removeItem('tmdt_product_draft');
 
-      localStorage.removeItem('product-draft');
       setIsSaving(false);
       navigate('/seller/products');
-    }, 2000);
+    }, 1200);
   };
 
-  // Toggle compatibility
-  const toggleCompatibility = (option) => {
-    setFormData(prev => ({
-      ...prev,
-      compatibility: prev.compatibility.includes(option)
-        ? prev.compatibility.filter(item => item !== option)
-        : [...prev.compatibility, option]
-    }));
+  const formatVND = (price) => {
+    if (!price && price !== 0) return '0 ₫';
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price);
   };
 
   const steps = [
-    { number: 1, title: 'Product Info', icon: '📝' },
-    { number: 2, title: 'Files & Media', icon: '📁' },
-    { number: 3, title: 'Tags & Publish', icon: '🚀' },
+    { number: 1, title: 'Thông tin & Định giá', icon: Package },
+    { number: 2, title: 'Tệp ZIP & Media', icon: FileCode2 },
+    { number: 3, title: 'Tags & Đăng duyệt', icon: Tag },
   ];
 
   return (
-    <div className="upload-product-page">
-      <SellerSidebar />
-      
-      <div className="upload-content">
-        {/* Header */}
-        <div className="upload-header">
-          <div className="header-left">
-            <button className="back-btn" onClick={() => navigate('/seller/dashboard')}>
-              ← Back
-            </button>
-            <div>
-              <h1 className="page-title">📦 Upload New Product</h1>
-              <p className="page-subtitle">Share your amazing work with the world</p>
-            </div>
-          </div>
-          <div className="header-actions">
-            <button 
-              type="button" 
-              className="draft-btn"
-              onClick={handleSaveDraft}
-              disabled={isSaving}
-            >
-              💾 Save Draft
-            </button>
-          </div>
-        </div>
+    <div className="seller-dashboard-page-modern upload-product-page-modern">
+      <div className="seller-container-inner">
+        {/* Breadcrumb */}
+        <Breadcrumb
+          items={[
+            { label: 'Kênh người bán', path: '/seller/dashboard' },
+            { label: 'Đăng bán mã nguồn', path: null },
+          ]}
+        />
 
-        {/* Step Progress */}
-        <div className="step-progress">
-          {steps.map((step, index) => (
-            <React.Fragment key={step.number}>
-              <div 
-                className={`step-item ${currentStep >= step.number ? 'active' : ''} ${currentStep > step.number ? 'completed' : ''}`}
-                onClick={() => currentStep > step.number && setCurrentStep(step.number)}
-                style={{ cursor: currentStep > step.number ? 'pointer' : 'default' }}
-              >
-                <div className="step-circle">
-                  {currentStep > step.number ? '✓' : step.icon}
-                </div>
-                <div className="step-info">
-                  <div className="step-number">Step {step.number}</div>
-                  <div className="step-title">{step.title}</div>
-                </div>
-              </div>
-              {index < steps.length - 1 && (
-                <div className={`step-line ${currentStep > step.number ? 'active' : ''}`}></div>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
+        <div className="seller-layout-split-row">
+          {/* Sidebar */}
+          <SellerSidebar seller={user} />
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="upload-form">
-          {/* Step 1: Product Information */}
-          {currentStep === 1 && (
-            <div className="form-step" style={{ animation: 'fadeIn 0.5s' }}>
-              <div className="form-section">
-                <h2 className="section-title">📝 Basic Information</h2>
-                
-                <div className="form-group">
-                  <label className="form-label">
-                    Product Title <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className={`form-input ${errors.title ? 'error' : ''}`}
-                    value={formData.title}
-                    onChange={(e) => handleChange('title', e.target.value)}
-                    placeholder="e.g., Modern E-commerce Dashboard Template"
-                    maxLength={100}
-                  />
-                  {errors.title && <div className="error-message">{errors.title}</div>}
-                  <div className="input-hint">{formData.title.length}/100 characters</div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label">
-                      Category <span className="required">*</span>
-                    </label>
-                    <select
-                      className={`form-select ${errors.category ? 'error' : ''}`}
-                      value={formData.category}
-                      onChange={(e) => handleChange('category', e.target.value)}
-                    >
-                      {categories.map(cat => (
-                        <option key={cat.value} value={cat.value}>{cat.label}</option>
-                      ))}
-                    </select>
-                    {errors.category && <div className="error-message">{errors.category}</div>}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">
-                      Version
-                    </label>
-                    <input
-                      type="text"
-                      className="form-input"
-                      value={formData.version}
-                      onChange={(e) => handleChange('version', e.target.value)}
-                      placeholder="e.g., 1.0.0"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">
-                    Short Description <span className="required">*</span>
-                  </label>
-                  <textarea
-                    className={`form-textarea ${errors.shortDescription ? 'error' : ''}`}
-                    value={formData.shortDescription}
-                    onChange={(e) => handleChange('shortDescription', e.target.value)}
-                    placeholder="Brief description of your product (max 200 characters)"
-                    rows={3}
-                    maxLength={200}
-                  />
-                  {errors.shortDescription && <div className="error-message">{errors.shortDescription}</div>}
-                  <div className="input-hint">{formData.shortDescription.length}/200 characters</div>
-                </div>
-
-                <RichTextEditor
-                  value={formData.description}
-                  onChange={(value) => handleChange('description', value)}
-                  placeholder="Write a detailed description of your product, its features, and what makes it special..."
-                />
-                {errors.description && <div className="error-message">{errors.description}</div>}
-              </div>
-
-              <div className="form-section">
-                <h2 className="section-title">💰 Pricing & License</h2>
-                
-                <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label">
-                      Regular Price ($) <span className="required">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      className={`form-input ${errors.price ? 'error' : ''}`}
-                      value={formData.price}
-                      onChange={(e) => handleChange('price', e.target.value)}
-                      placeholder="0.00"
-                      min="0"
-                      step="0.01"
-                    />
-                    {errors.price && <div className="error-message">{errors.price}</div>}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">
-                      Sale Price ($)
-                    </label>
-                    <input
-                      type="number"
-                      className="form-input"
-                      value={formData.salePrice}
-                      onChange={(e) => handleChange('salePrice', e.target.value)}
-                      placeholder="0.00"
-                      min="0"
-                      step="0.01"
-                    />
-                    <div className="input-hint">Optional: Leave empty if no sale</div>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">License Type</label>
-                  <div className="license-options">
-                    {licenseTypes.map(license => (
-                      <label key={license.value} className="license-card">
-                        <input
-                          type="radio"
-                          name="license"
-                          value={license.value}
-                          checked={formData.license === license.value}
-                          onChange={(e) => handleChange('license', e.target.value)}
-                        />
-                        <div className="license-info">
-                          <div className="license-name">{license.label}</div>
-                          <div className="license-desc">{license.description}</div>
-                        </div>
-                        <div className="license-check">✓</div>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-section">
-                <h2 className="section-title">🔧 Technical Details</h2>
-                
-                <div className="form-group">
-                  <label className="form-label">Compatibility</label>
-                  <div className="compatibility-grid">
-                    {compatibilityOptions.map(option => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`compatibility-btn ${formData.compatibility.includes(option) ? 'active' : ''}`}
-                        onClick={() => toggleCompatibility(option)}
-                      >
-                        {option}
-                        {formData.compatibility.includes(option) && <span className="check">✓</span>}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label">
-                      Live Demo URL
-                    </label>
-                    <input
-                      type="url"
-                      className="form-input"
-                      value={formData.demoUrl}
-                      onChange={(e) => handleChange('demoUrl', e.target.value)}
-                      placeholder="https://your-demo.com"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">
-                      Documentation URL
-                    </label>
-                    <input
-                      type="url"
-                      className="form-input"
-                      value={formData.documentationUrl}
-                      onChange={(e) => handleChange('documentationUrl', e.target.value)}
-                      placeholder="https://your-docs.com"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Step 2: Files & Media */}
-          {currentStep === 2 && (
-            <div className="form-step" style={{ animation: 'fadeIn 0.5s' }}>
-              <div className="form-section">
-                <h2 className="section-title">🖼️ Product Images</h2>
-                <ImageUploader
-                  images={formData.images}
-                  setImages={(images) => handleChange('images', images)}
-                  maxImages={5}
-                />
-                {errors.images && <div className="error-message">{errors.images}</div>}
-              </div>
-
-              <div className="form-section">
-                <h2 className="section-title">📦 Source Code</h2>
-                <FileUploader
-                  file={formData.sourceFile}
-                  setFile={(file) => handleChange('sourceFile', file)}
-                  maxSize={100 * 1024 * 1024} // 100MB
-                />
-                {errors.sourceFile && <div className="error-message">{errors.sourceFile}</div>}
-              </div>
-            </div>
-          )}
-
-          {/* Step 3: Tags & Publish */}
-          {currentStep === 3 && (
-            <div className="form-step" style={{ animation: 'fadeIn 0.5s' }}>
-              <div className="form-section">
-                <TagInput
-                  tags={formData.tags}
-                  setTags={(tags) => handleChange('tags', tags)}
-                  maxTags={10}
-                />
-                {errors.tags && <div className="error-message">{errors.tags}</div>}
-              </div>
-
-              <div className="form-section">
-                <h2 className="section-title">📋 Review Your Product</h2>
-                <div className="review-card">
-                  <div className="review-row">
-                    <span className="review-label">Title:</span>
-                    <span className="review-value">{formData.title || 'Not set'}</span>
-                  </div>
-                  <div className="review-row">
-                    <span className="review-label">Category:</span>
-                    <span className="review-value">
-                      {categories.find(c => c.value === formData.category)?.label || 'Not set'}
-                    </span>
-                  </div>
-                  <div className="review-row">
-                    <span className="review-label">Price:</span>
-                    <span className="review-value">
-                      ${formData.price || '0.00'}
-                      {formData.salePrice && <span className="sale-badge">Sale: ${formData.salePrice}</span>}
-                    </span>
-                  </div>
-                  <div className="review-row">
-                    <span className="review-label">Images:</span>
-                    <span className="review-value">{formData.images.length} image(s)</span>
-                  </div>
-                  <div className="review-row">
-                    <span className="review-label">Source File:</span>
-                    <span className="review-value">
-                      {formData.sourceFile ? '✅ Uploaded' : '❌ Not uploaded'}
-                    </span>
-                  </div>
-                  <div className="review-row">
-                    <span className="review-label">Tags:</span>
-                    <span className="review-value">{formData.tags.length} tag(s)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Form Actions */}
-          <div className="form-actions">
-            {currentStep > 1 && (
-              <button
-                type="button"
-                className="btn-secondary"
-                onClick={handlePrevious}
-              >
-                ← Previous
-              </button>
-            )}
-            
-            <div className="actions-right">
-              {currentStep < 3 ? (
+          {/* Form Content */}
+          <main className="seller-main-workspace">
+            {/* Header */}
+            <div className="upload-head-banner">
+              <div className="upload-head-left">
                 <button
                   type="button"
-                  className="btn-primary"
-                  onClick={handleNext}
+                  className="btn-back-link"
+                  onClick={() => navigate('/seller/products')}
                 >
-                  Next Step →
+                  <ArrowLeft size={14} />
+                  <span>Quay lại kho mã nguồn</span>
                 </button>
-              ) : (
+                <h1 className="upload-main-title">Đăng bán mã nguồn mới</h1>
+                <p className="upload-main-subtitle">
+                  Chia sẻ source code chất lượng cao tới cộng đồng 15.000+ lập trình viên trên
+                  CodeMart
+                </p>
+              </div>
+
+              <div className="upload-head-actions">
                 <button
-                  type="submit"
-                  className="btn-submit"
+                  type="button"
+                  className="btn-save-draft"
+                  onClick={handleSaveDraft}
                   disabled={isSaving}
                 >
-                  {isSaving ? '🔄 Publishing...' : '🚀 Publish Product'}
+                  <Save size={14} />
+                  <span>Lưu bản nháp</span>
                 </button>
-              )}
+              </div>
             </div>
-          </div>
-        </form>
+
+            {/* Step Wizard Indicator */}
+            <div className="upload-wizard-progress">
+              {steps.map((step, idx) => {
+                const Icon = step.icon;
+                const isCompleted = currentStep > step.number;
+                const isActive = currentStep === step.number;
+                return (
+                  <React.Fragment key={step.number}>
+                    <div
+                      className={`wizard-step-node ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
+                      onClick={() => isCompleted && setCurrentStep(step.number)}
+                    >
+                      <div className="wizard-step-circle">
+                        {isCompleted ? <Check size={14} /> : <Icon size={14} />}
+                      </div>
+                      <div className="wizard-step-labels">
+                        <span className="step-count-lbl">Bước {step.number}</span>
+                        <span className="step-name-lbl">{step.title}</span>
+                      </div>
+                    </div>
+                    {idx < steps.length - 1 && (
+                      <div
+                        className={`wizard-step-connector ${isCompleted ? 'completed' : ''}`}
+                      ></div>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+
+            {/* Form Steps */}
+            <form onSubmit={handleSubmit} className="upload-product-form-box">
+              {/* STEP 1: Basic Info & Pricing */}
+              {currentStep === 1 && (
+                <div className="form-step-pane">
+                  <div className="form-section-card">
+                    <h3 className="section-card-title">1. Thông tin cơ bản về mã nguồn</h3>
+
+                    <div className="form-field-group">
+                      <label className="form-field-label">
+                        Tên mã nguồn sản phẩm <span className="required-star">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className={`form-input-text ${errors.title ? 'error' : ''}`}
+                        value={formData.title}
+                        onChange={(e) => handleChange('title', e.target.value)}
+                        placeholder="Ví dụ: Fullstack E-commerce Website React & Laravel RESTful API"
+                        maxLength={120}
+                      />
+                      {errors.title && <span className="field-error-msg">{errors.title}</span>}
+                    </div>
+
+                    <div className="form-fields-grid-2">
+                      <div className="form-field-group">
+                        <label className="form-field-label">
+                          Danh mục mã nguồn <span className="required-star">*</span>
+                        </label>
+                        <select
+                          className={`form-select-box ${errors.category ? 'error' : ''}`}
+                          value={formData.category}
+                          onChange={(e) => handleChange('category', e.target.value)}
+                        >
+                          {categories.map((c) => (
+                            <option key={c.value} value={c.value}>
+                              {c.label}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.category && (
+                          <span className="field-error-msg">{errors.category}</span>
+                        )}
+                      </div>
+
+                      <div className="form-field-group">
+                        <label className="form-field-label">Phiên bản ban đầu</label>
+                        <input
+                          type="text"
+                          className="form-input-text"
+                          value={formData.version}
+                          onChange={(e) => handleChange('version', e.target.value)}
+                          placeholder="1.0.0"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-field-group">
+                      <label className="form-field-label">
+                        Tóm tắt ngắn gọn <span className="required-star">*</span>
+                      </label>
+                      <textarea
+                        className={`form-textarea-box ${errors.shortDescription ? 'error' : ''}`}
+                        value={formData.shortDescription}
+                        onChange={(e) => handleChange('shortDescription', e.target.value)}
+                        placeholder="Mô tả tóm tắt giá trị cốt lõi, công nghệ nổi bật trong 1-2 câu ngắn..."
+                        rows={2}
+                        maxLength={220}
+                      />
+                      {errors.shortDescription && (
+                        <span className="field-error-msg">{errors.shortDescription}</span>
+                      )}
+                    </div>
+
+                    <div className="form-field-group">
+                      <label className="form-field-label">Mô tả chi tiết & Hướng dẫn cài đặt</label>
+                      <RichTextEditor
+                        value={formData.description}
+                        onChange={(val) => handleChange('description', val)}
+                        placeholder="Nhập mô tả tính năng chi tiết, hướng dẫn cài đặt, cấu hình môi trường..."
+                      />
+                    </div>
+                  </div>
+
+                  {/* Pricing & License Card */}
+                  <div className="form-section-card">
+                    <h3 className="section-card-title">2. Thiết lập định giá (VND) & Giấy phép</h3>
+
+                    <div className="form-fields-grid-2">
+                      <div className="form-field-group">
+                        <label className="form-field-label">
+                          Giá niêm yết (VNĐ) <span className="required-star">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          className={`form-input-text ${errors.price ? 'error' : ''}`}
+                          value={formData.price}
+                          onChange={(e) => handleChange('price', e.target.value)}
+                          placeholder="Ví dụ: 1500000"
+                          min="0"
+                          step="10000"
+                        />
+                        {errors.price && <span className="field-error-msg">{errors.price}</span>}
+                      </div>
+
+                      <div className="form-field-group">
+                        <label className="form-field-label">Giá khuyến mãi (Tùy chọn)</label>
+                        <input
+                          type="number"
+                          className="form-input-text"
+                          value={formData.salePrice}
+                          onChange={(e) => handleChange('salePrice', e.target.value)}
+                          placeholder="Ví dụ: 1200000"
+                          min="0"
+                          step="10000"
+                        />
+                        <span className="field-hint-text">Để trống nếu không áp dụng giảm giá</span>
+                      </div>
+                    </div>
+
+                    <div className="form-field-group">
+                      <label className="form-field-label">Loại License mặc định</label>
+                      <div className="license-cards-grid">
+                        {licenseTypes.map((lic) => (
+                          <label
+                            key={lic.value}
+                            className={`license-select-card ${formData.license === lic.value ? 'selected' : ''}`}
+                          >
+                            <input
+                              type="radio"
+                              name="license"
+                              value={lic.value}
+                              checked={formData.license === lic.value}
+                              onChange={(e) => handleChange('license', e.target.value)}
+                            />
+                            <div className="license-card-info">
+                              <span className="license-card-title">{lic.label}</span>
+                              <p className="license-card-desc">{lic.description}</p>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 2: Files & Media */}
+              {currentStep === 2 && (
+                <div className="form-step-pane">
+                  <div className="form-section-card">
+                    <h3 className="section-card-title">1. Hình ảnh chụp màn hình & Giao diện</h3>
+                    <ImageUploader
+                      images={formData.images}
+                      setImages={(imgs) => handleChange('images', imgs)}
+                      maxImages={5}
+                    />
+                    {errors.images && <span className="field-error-msg">{errors.images}</span>}
+                  </div>
+
+                  <div className="form-section-card">
+                    <h3 className="section-card-title">2. Tệp nén mã nguồn & Demo</h3>
+                    <FileUploader
+                      file={formData.sourceFile}
+                      setFile={(f) => handleChange('sourceFile', f)}
+                      maxSize={200 * 1024 * 1024}
+                    />
+                    {errors.sourceFile && (
+                      <span className="field-error-msg">{errors.sourceFile}</span>
+                    )}
+
+                    <div className="form-fields-grid-2" style={{ marginTop: '20px' }}>
+                      <div className="form-field-group">
+                        <label className="form-field-label">
+                          <Globe size={14} />
+                          <span>Link Demo trực tuyến (Tùy chọn)</span>
+                        </label>
+                        <input
+                          type="url"
+                          className="form-input-text"
+                          value={formData.demoUrl}
+                          onChange={(e) => handleChange('demoUrl', e.target.value)}
+                          placeholder="https://demo.yourdomain.com"
+                        />
+                      </div>
+
+                      <div className="form-field-group">
+                        <label className="form-field-label">
+                          <FileText size={14} />
+                          <span>Link tài liệu trực tuyến (Tùy chọn)</span>
+                        </label>
+                        <input
+                          type="url"
+                          className="form-input-text"
+                          value={formData.documentationUrl}
+                          onChange={(e) => handleChange('documentationUrl', e.target.value)}
+                          placeholder="https://docs.yourdomain.com"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-section-card">
+                    <h3 className="section-card-title">3. Khả năng tương thích & Môi trường</h3>
+                    <div className="compatibility-chips-grid">
+                      {compatibilityOptions.map((opt) => {
+                        const isChecked = formData.compatibility.includes(opt);
+                        return (
+                          <button
+                            key={opt}
+                            type="button"
+                            className={`btn-compat-chip ${isChecked ? 'active' : ''}`}
+                            onClick={() => toggleCompatibility(opt)}
+                          >
+                            {isChecked && <Check size={12} />}
+                            <span>{opt}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 3: Tags & Review */}
+              {currentStep === 3 && (
+                <div className="form-step-pane">
+                  <div className="form-section-card">
+                    <h3 className="section-card-title">1. Gắn thẻ công nghệ & Tìm kiếm</h3>
+                    <TagInput
+                      tags={formData.tags}
+                      setTags={(t) => handleChange('tags', t)}
+                      maxTags={10}
+                    />
+                    {errors.tags && <span className="field-error-msg">{errors.tags}</span>}
+                  </div>
+
+                  <div className="form-section-card">
+                    <h3 className="section-card-title">
+                      2. Xác nhận thông tin sản phẩm trước khi gửi duyệt
+                    </h3>
+                    <div className="publish-review-summary-grid">
+                      <div className="review-metric-item">
+                        <span className="review-lbl">Tên mã nguồn:</span>
+                        <strong className="review-val">{formData.title || 'Chưa đặt'}</strong>
+                      </div>
+                      <div className="review-metric-item">
+                        <span className="review-lbl">Danh mục:</span>
+                        <strong className="review-val">{formData.category || 'Chưa chọn'}</strong>
+                      </div>
+                      <div className="review-metric-item">
+                        <span className="review-lbl">Giá bán niêm yết:</span>
+                        <strong className="review-val text-primary">
+                          {formatVND(formData.price)}
+                          {formData.salePrice && ` (Khuyến mãi: ${formatVND(formData.salePrice)})`}
+                        </strong>
+                      </div>
+                      <div className="review-metric-item">
+                        <span className="review-lbl">Hình ảnh đính kèm:</span>
+                        <strong className="review-val">{formData.images.length} ảnh</strong>
+                      </div>
+                      <div className="review-metric-item">
+                        <span className="review-lbl">Tệp mã nguồn .ZIP:</span>
+                        <strong className="review-val text-emerald">
+                          {formData.sourceFile ? formData.sourceFile.name : 'Chưa tải lên'}
+                        </strong>
+                      </div>
+                      <div className="review-metric-item">
+                        <span className="review-lbl">Thẻ tags:</span>
+                        <strong className="review-val">
+                          {formData.tags.join(', ') || 'Chưa có'}
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div className="escrow-agreement-banner">
+                      <ShieldCheck size={20} className="text-emerald" />
+                      <div>
+                        <h4>Cam kết kiểm duyệt & Bảo vệ Escrow CodeMart</h4>
+                        <p>
+                          Mã nguồn của bạn sẽ được đội ngũ kỹ thuật CodeMart kiểm tra mã độc và tính
+                          toàn vẹn trong vòng 24h trước khi mở bán công khai.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Form Navigation Controls */}
+              <div className="upload-form-nav-strip">
+                {currentStep > 1 && (
+                  <button type="button" className="btn-wizard-prev" onClick={handlePrevious}>
+                    <ArrowLeft size={14} />
+                    <span>Quay lại bước trước</span>
+                  </button>
+                )}
+
+                <div className="wizard-nav-right">
+                  {currentStep < 3 ? (
+                    <button type="button" className="btn-wizard-next" onClick={handleNext}>
+                      <span>Tiếp theo</span>
+                      <ArrowRight size={14} />
+                    </button>
+                  ) : (
+                    <button type="submit" className="btn-wizard-submit" disabled={isSaving}>
+                      <Zap size={15} />
+                      <span>{isSaving ? 'Đang xử lý gửi duyệt...' : 'Gửi duyệt mã nguồn'}</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </form>
+          </main>
+        </div>
       </div>
     </div>
   );

@@ -1,71 +1,83 @@
 import React, { useState } from 'react';
+import { BarChart3 } from 'lucide-react';
 import './SalesChart.css';
 
 const SalesChart = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('30days');
 
-  // Mock data for last 30 days
+  // Mock data for last 30 days in VND
   const salesData = [
-    { day: 1, sales: 45, revenue: 2250 },
-    { day: 2, sales: 52, revenue: 2600 },
-    { day: 3, sales: 38, revenue: 1900 },
-    { day: 4, sales: 65, revenue: 3250 },
-    { day: 5, sales: 48, revenue: 2400 },
-    { day: 6, sales: 72, revenue: 3600 },
-    { day: 7, sales: 85, revenue: 4250 },
-    { day: 8, sales: 58, revenue: 2900 },
-    { day: 9, sales: 62, revenue: 3100 },
-    { day: 10, sales: 55, revenue: 2750 },
-    { day: 11, sales: 70, revenue: 3500 },
-    { day: 12, sales: 68, revenue: 3400 },
-    { day: 13, sales: 75, revenue: 3750 },
-    { day: 14, sales: 90, revenue: 4500 },
-    { day: 15, sales: 82, revenue: 4100 },
-    { day: 16, sales: 78, revenue: 3900 },
-    { day: 17, sales: 65, revenue: 3250 },
-    { day: 18, sales: 72, revenue: 3600 },
-    { day: 19, sales: 68, revenue: 3400 },
-    { day: 20, sales: 85, revenue: 4250 },
-    { day: 21, sales: 95, revenue: 4750 },
-    { day: 22, sales: 88, revenue: 4400 },
-    { day: 23, sales: 92, revenue: 4600 },
-    { day: 24, sales: 80, revenue: 4000 },
-    { day: 25, sales: 75, revenue: 3750 },
-    { day: 26, sales: 82, revenue: 4100 },
-    { day: 27, sales: 78, revenue: 3900 },
-    { day: 28, sales: 88, revenue: 4400 },
-    { day: 29, sales: 95, revenue: 4750 },
-    { day: 30, sales: 100, revenue: 5000 },
+    { day: 1, sales: 2, revenue: 3000000 },
+    { day: 2, sales: 4, revenue: 5600000 },
+    { day: 3, sales: 1, revenue: 1500000 },
+    { day: 4, sales: 5, revenue: 7500000 },
+    { day: 5, sales: 3, revenue: 4200000 },
+    { day: 6, sales: 6, revenue: 9000000 },
+    { day: 7, sales: 7, revenue: 11500000 },
+    { day: 8, sales: 4, revenue: 6000000 },
+    { day: 9, sales: 5, revenue: 7800000 },
+    { day: 10, sales: 3, revenue: 4500000 },
+    { day: 11, sales: 6, revenue: 8900000 },
+    { day: 12, sales: 5, revenue: 7200000 },
+    { day: 13, sales: 6, revenue: 9400000 },
+    { day: 14, sales: 8, revenue: 12500000 },
+    { day: 15, sales: 7, revenue: 10800000 },
+    { day: 16, sales: 6, revenue: 9200000 },
+    { day: 17, sales: 4, revenue: 5800000 },
+    { day: 18, sales: 5, revenue: 7500000 },
+    { day: 19, sales: 6, revenue: 9100000 },
+    { day: 20, sales: 7, revenue: 11000000 },
+    { day: 21, sales: 9, revenue: 14200000 },
+    { day: 22, sales: 8, revenue: 12600000 },
+    { day: 23, sales: 7, revenue: 11300000 },
+    { day: 24, sales: 6, revenue: 9600000 },
+    { day: 25, sales: 5, revenue: 8000000 },
+    { day: 26, sales: 7, revenue: 11000000 },
+    { day: 27, sales: 6, revenue: 9400000 },
+    { day: 28, sales: 8, revenue: 12800000 },
+    { day: 29, sales: 9, revenue: 14500000 },
+    { day: 30, sales: 10, revenue: 16000000 },
   ];
 
-  const maxSales = Math.max(...salesData.map(d => d.sales));
+  const maxRevenue = Math.max(...salesData.map((d) => d.revenue));
   const totalSales = salesData.reduce((sum, d) => sum + d.sales, 0);
   const totalRevenue = salesData.reduce((sum, d) => sum + d.revenue, 0);
-  const avgSales = (totalSales / salesData.length).toFixed(1);
+  const avgSalesPerDay = (totalSales / salesData.length).toFixed(1);
+
+  const formatVND = (price) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price);
+  };
 
   const periods = [
-    { id: '7days', label: '7 Days' },
-    { id: '30days', label: '30 Days' },
-    { id: '90days', label: '90 Days' },
+    { id: '7days', label: '7 ngày qua' },
+    { id: '30days', label: '30 ngày qua' },
+    { id: '90days', label: '90 ngày qua' },
   ];
 
   return (
-    <div className="sales-chart-container">
-      <div className="chart-header">
-        <div className="chart-title-section">
-          <h2 className="chart-title">
-            📈 Sales Overview
-          </h2>
-          <p className="chart-subtitle">
-            Track your sales performance over time
-          </p>
+    <div className="sales-chart-card-modern">
+      <div className="sales-chart-head">
+        <div className="chart-title-area">
+          <div className="chart-head-icon-wrap">
+            <BarChart3 size={18} className="text-primary" />
+          </div>
+          <div>
+            <h2 className="sales-chart-title">Biểu đồ doanh thu & tăng trưởng</h2>
+            <p className="sales-chart-subtitle">
+              Theo dõi biến động doanh số và lượt tải mã nguồn theo thời gian thực
+            </p>
+          </div>
         </div>
-        
-        <div className="chart-period-selector">
-          {periods.map(period => (
+
+        <div className="chart-period-tabs">
+          {periods.map((period) => (
             <button
               key={period.id}
-              className={`period-btn ${selectedPeriod === period.id ? 'active' : ''}`}
+              type="button"
+              className={`btn-period-tab ${selectedPeriod === period.id ? 'active' : ''}`}
               onClick={() => setSelectedPeriod(period.id)}
             >
               {period.label}
@@ -74,66 +86,57 @@ const SalesChart = () => {
         </div>
       </div>
 
-      {/* Chart Stats */}
-      <div className="chart-stats">
-        <div className="chart-stat-item">
-          <span className="stat-label">Total Sales</span>
-          <strong className="stat-value">{totalSales}</strong>
+      {/* Metric Strip */}
+      <div className="chart-summary-metrics">
+        <div className="summary-metric-box">
+          <span className="summary-lbl">Tổng lượt bán</span>
+          <strong className="summary-val">{totalSales} lượt</strong>
         </div>
-        <div className="chart-stat-divider"></div>
-        <div className="chart-stat-item">
-          <span className="stat-label">Revenue</span>
-          <strong className="stat-value">${totalRevenue.toLocaleString()}</strong>
+        <div className="summary-metric-divider"></div>
+        <div className="summary-metric-box">
+          <span className="summary-lbl">Tổng doanh thu kỳ</span>
+          <strong className="summary-val text-primary">{formatVND(totalRevenue)}</strong>
         </div>
-        <div className="chart-stat-divider"></div>
-        <div className="chart-stat-item">
-          <span className="stat-label">Avg/Day</span>
-          <strong className="stat-value">{avgSales}</strong>
+        <div className="summary-metric-divider"></div>
+        <div className="summary-metric-box">
+          <span className="summary-lbl">Trung bình/ngày</span>
+          <strong className="summary-val">{avgSalesPerDay} đơn/ngày</strong>
         </div>
       </div>
 
       {/* Chart Visualization */}
-      <div className="chart-visualization">
-        <div className="chart-y-axis">
-          <span className="y-axis-label">{maxSales}</span>
-          <span className="y-axis-label">{Math.round(maxSales * 0.75)}</span>
-          <span className="y-axis-label">{Math.round(maxSales * 0.5)}</span>
-          <span className="y-axis-label">{Math.round(maxSales * 0.25)}</span>
-          <span className="y-axis-label">0</span>
+      <div className="chart-bars-viewport">
+        <div className="chart-y-legend">
+          <span>{formatVND(maxRevenue)}</span>
+          <span>{formatVND(maxRevenue * 0.75)}</span>
+          <span>{formatVND(maxRevenue * 0.5)}</span>
+          <span>{formatVND(maxRevenue * 0.25)}</span>
+          <span>0 ₫</span>
         </div>
 
-        <div className="chart-area">
-          {/* Grid Lines */}
-          <div className="chart-grid">
-            {[0, 1, 2, 3, 4].map(i => (
-              <div key={i} className="grid-line"></div>
+        <div className="chart-canvas-area">
+          {/* Background Grid Lines */}
+          <div className="chart-grid-backdrop">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div key={i} className="canvas-grid-line"></div>
             ))}
           </div>
 
-          {/* Bar Chart */}
-          <div className="chart-bars">
+          {/* Dynamic Interactive Bars */}
+          <div className="chart-interactive-bars">
             {salesData.map((data, index) => {
-              const height = (data.sales / maxSales) * 100;
+              const heightPercent = (data.revenue / maxRevenue) * 100;
               return (
-                <div
-                  key={data.day}
-                  className="bar-wrapper"
-                  style={{ animationDelay: `${index * 0.02}s` }}
-                >
-                  <div className="bar-tooltip">
-                    <strong>${data.revenue}</strong>
-                    <span>{data.sales} sales</span>
-                    <small>Day {data.day}</small>
+                <div key={data.day} className="chart-col-wrapper">
+                  <div className="bar-floating-tooltip">
+                    <strong>{formatVND(data.revenue)}</strong>
+                    <span>{data.sales} đơn hàng</span>
+                    <small>Ngày {data.day}</small>
                   </div>
-                  <div
-                    className="bar"
-                    style={{ height: `${height}%` }}
-                  >
-                    <div className="bar-fill"></div>
+                  <div className="bar-pillar-track">
+                    <div className="bar-pillar-fill" style={{ height: `${heightPercent}%` }}></div>
                   </div>
-                  {index % 5 === 0 && (
-                    <span className="bar-label">{data.day}</span>
-                  )}
+                  {index % 5 === 0 && <span className="bar-day-label">N{data.day}</span>}
                 </div>
               );
             })}
@@ -141,16 +144,13 @@ const SalesChart = () => {
         </div>
       </div>
 
-      {/* Chart Legend */}
-      <div className="chart-legend">
-        <div className="legend-item">
-          <div className="legend-color" style={{ background: 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)' }}></div>
-          <span>Daily Sales</span>
+      {/* Chart Footer Note */}
+      <div className="chart-footer-strip">
+        <div className="chart-legend-indicator">
+          <div className="legend-sample-pill"></div>
+          <span>Doanh thu thực nhận sau phí sàn 20%</span>
         </div>
-        <div className="legend-item">
-          <div className="legend-icon">📊</div>
-          <span>Higher bars indicate better performance</span>
-        </div>
+        <span className="chart-live-badge">Dữ liệu cập nhật trực tiếp</span>
       </div>
     </div>
   );

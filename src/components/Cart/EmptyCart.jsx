@@ -1,86 +1,113 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {
+  ShoppingBag,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  Zap,
+  Headphones,
+  Code2,
+  RefreshCw,
+  Search,
+} from 'lucide-react';
+import { getAllCategories } from '../../data/categories';
 import './EmptyCart.css';
 
 const EmptyCart = () => {
+  const quickCategories = (getAllCategories() || []).slice(0, 4);
+
   return (
-    <div className="empty-cart">
-      <div className="empty-cart-content">
-        {/* Animated Icon */}
-        <div className="empty-icon-wrapper">
-          <span className="empty-icon">🛒</span>
-          <div className="icon-circle"></div>
-          <div className="icon-circle-2"></div>
+    <div className="empty-cart-modern">
+      {/* Empty State Card */}
+      <div className="empty-cart-card">
+        <div className="empty-cart-icon-halo">
+          <div className="empty-cart-icon-bg">
+            <ShoppingBag size={40} className="bag-icon" />
+          </div>
+          <Sparkles size={20} className="sparkle-float-1" />
+          <Zap size={16} className="sparkle-float-2" />
         </div>
 
-        {/* Message */}
-        <h2 className="empty-title">Giỏ hàng trống</h2>
-        <p className="empty-description">
-          Bạn chưa thêm sản phẩm nào vào giỏ hàng.
-          <br />
-          Hãy bắt đầu mua sắm để khám phá những sản phẩm tuyệt vời!
+        <h2 className="empty-cart-title">Giỏ hàng của bạn đang trống</h2>
+        <p className="empty-cart-subtitle">
+          Chưa có mã nguồn hay template nào trong giỏ. Khám phá kho mã nguồn chất lượng cao đã được
+          kiểm duyệt kỹ lưỡng để nâng tốc độ phát triển dự án của bạn ngay hôm nay!
         </p>
 
-        {/* Action Buttons */}
-        <div className="empty-actions">
-          <Link to="/products" className="browse-btn">
-            <span className="icon">🔍</span>
-            <span>Xem sản phẩm</span>
-            <span className="arrow">→</span>
+        {/* Primary CTA */}
+        <div className="empty-cart-actions">
+          <Link to="/products" className="btn-empty-explore-primary">
+            <Search size={16} />
+            <span>Khám phá mã nguồn</span>
+            <ArrowRight size={16} />
           </Link>
-          <Link to="/" className="home-btn">
-            <span className="icon">🏠</span>
+          <Link to="/" className="btn-empty-home-secondary">
             <span>Về trang chủ</span>
           </Link>
         </div>
 
-        {/* Suggestions */}
-        <div className="suggestions">
-          <h3 className="suggestions-title">Tại sao mua tại chúng tôi?</h3>
-          <div className="suggestions-grid">
-            <div className="suggestion-item">
-              <span className="suggestion-icon">✨</span>
-              <h4>Chất lượng cao</h4>
-              <p>Mã nguồn và template chất lượng cao</p>
-            </div>
-            <div className="suggestion-item">
-              <span className="suggestion-icon">🚀</span>
-              <h4>Truy cập ngay lập tức</h4>
-              <p>Tải xuống ngay sau khi mua</p>
-            </div>
-            <div className="suggestion-item">
-              <span className="suggestion-icon">💬</span>
-              <h4>Hỗ trợ chuyên nghiệp</h4>
-              <p>Hỗ trợ tận tình trong 6 tháng</p>
-            </div>
-            <div className="suggestion-item">
-              <span className="suggestion-icon">🔄</span>
-              <h4>Cập nhật miễn phí</h4>
-              <p>Cập nhật trọn đời cho tất cả sản phẩm</p>
-            </div>
+        {/* Category Quick Links */}
+        <div className="empty-cart-quick-categories">
+          <span className="quick-cats-label">Danh mục phổ biến:</span>
+          <div className="quick-cats-pills">
+            {quickCategories.map((cat) => (
+              <Link
+                key={cat.id}
+                to={`/products?category=${cat.id}`}
+                className="quick-cat-pill-link"
+              >
+                <Code2 size={13} />
+                <span>{cat.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 4 Value Proposition Cards */}
+      <div className="empty-cart-value-props-grid">
+        <div className="value-prop-box">
+          <div className="prop-icon-bubble emerald">
+            <ShieldCheck size={20} />
+          </div>
+          <div className="prop-text-wrap">
+            <h4 className="prop-heading">100% Đã kiểm duyệt</h4>
+            <p className="prop-desc">Mã nguồn chạy thử an toàn, không chứa mã độc</p>
           </div>
         </div>
 
-        {/* Popular Categories */}
-        <div className="popular-categories">
-          <h3 className="categories-title">Danh mục phổ biến</h3>
-          <div className="categories-grid">
-            <Link to="/products?category=ban-hang-tmdt" className="category-link">
-              <span className="category-icon">🛍️</span>
-              <span>Bán hàng - TMĐT</span>
-            </Link>
-            <Link to="/products?category=quan-ly" className="category-link">
-              <span className="category-icon">📊</span>
-              <span>Quản lý</span>
-            </Link>
-            <Link to="/products?category=gioi-thieu-dich-vu" className="category-link">
-              <span className="category-icon">🎨</span>
-              <span>Giới thiệu - Dịch vụ</span>
-            </Link>
-            <Link to="/products?category=giao-duc-y-te" className="category-link">
-              <span className="category-icon">📱</span>
-              <span>Giáo dục - Y tế</span>
-            </Link>
+        <div className="value-prop-box">
+          <div className="prop-icon-bubble indigo">
+            <Zap size={20} />
+          </div>
+          <div className="prop-text-wrap">
+            <h4 className="prop-heading">Tải về tức thì</h4>
+            <p className="prop-desc">
+              Nhận link Google Drive / Github & License ngay khi thanh toán
+            </p>
+          </div>
+        </div>
+
+        <div className="value-prop-box">
+          <div className="prop-icon-bubble blue">
+            <RefreshCw size={20} />
+          </div>
+          <div className="prop-text-wrap">
+            <h4 className="prop-heading">Cập nhật miễn phí</h4>
+            <p className="prop-desc">Tải các bản vá lỗi và nâng cấp phiên bản mới trọn đời</p>
+          </div>
+        </div>
+
+        <div className="value-prop-box">
+          <div className="prop-icon-bubble purple">
+            <Headphones size={20} />
+          </div>
+          <div className="prop-text-wrap">
+            <h4 className="prop-heading">Hỗ trợ kỹ thuật 24/7</h4>
+            <p className="prop-desc">
+              Tác giả và đội ngũ CodeMart hỗ trợ cài đặt trực tiếp qua UltraView
+            </p>
           </div>
         </div>
       </div>

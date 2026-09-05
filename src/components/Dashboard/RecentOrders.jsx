@@ -1,171 +1,179 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Package,
+  Calendar,
+  ArrowRight,
+  Download,
+  Eye,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  RefreshCw,
+  ShoppingBag,
+} from 'lucide-react';
 import './RecentOrders.css';
 
 const RecentOrders = ({ orders = [] }) => {
   const navigate = useNavigate();
 
-  // Mock data if no orders provided
-  const defaultOrders = orders.length > 0 ? orders : [
-    {
-      id: '12345',
-      date: '2025-10-28',
-      status: 'delivered',
-      total: 99,
-      productName: 'Premium Admin Dashboard Template',
-      productImage: 'https://via.placeholder.com/80',
-      downloadUrl: '#',
-    },
-    {
-      id: '12344',
-      date: '2025-10-25',
-      status: 'processing',
-      total: 149,
-      productName: 'E-commerce React Components Pack',
-      productImage: 'https://via.placeholder.com/80',
-      downloadUrl: '#',
-    },
-    {
-      id: '12343',
-      date: '2025-10-20',
-      status: 'completed',
-      total: 79,
-      productName: 'Landing Page UI Kit',
-      productImage: 'https://via.placeholder.com/80',
-      downloadUrl: '#',
-    },
-  ];
+  const defaultOrders =
+    orders.length > 0
+      ? orders
+      : [
+          {
+            id: 'ORD-8921034',
+            date: '2026-08-28',
+            status: 'completed',
+            total: 1500000,
+            productName: 'Mã Nguồn Website Thương Mại Điện Tử - React + PHP',
+            productImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400',
+            downloadUrl: '#',
+          },
+          {
+            id: 'ORD-8921033',
+            date: '2026-08-20',
+            status: 'processing',
+            total: 1200000,
+            productName: 'Mã Nguồn Website Tin Tức - Laravel + Vue.js',
+            productImage: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=400',
+            downloadUrl: '#',
+          },
+          {
+            id: 'ORD-8921032',
+            date: '2026-08-15',
+            status: 'completed',
+            total: 900000,
+            productName: 'Admin Dashboard - React Material UI',
+            productImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400',
+            downloadUrl: '#',
+          },
+        ];
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      delivered: { label: 'Delivered', color: '#48bb78', icon: '✓' },
-      processing: { label: 'Processing', color: '#ed8936', icon: '⏳' },
-      completed: { label: 'Completed', color: '#667eea', icon: '✓' },
-      pending: { label: 'Pending', color: '#a0aec0', icon: '⏱️' },
-      cancelled: { label: 'Cancelled', color: '#e53e3e', icon: '✕' },
+      delivered: { label: 'Đã hoàn thành', color: '#059669', icon: CheckCircle2 },
+      completed: { label: 'Đã hoàn thành', color: '#059669', icon: CheckCircle2 },
+      processing: { label: 'Đang xử lý', color: '#2563eb', icon: RefreshCw },
+      pending: { label: 'Chờ thanh toán', color: '#d97706', icon: Clock },
+      cancelled: { label: 'Đã hủy', color: '#ef4444', icon: XCircle },
     };
-    return statusConfig[status] || statusConfig.pending;
+    return statusConfig[status] || statusConfig.completed;
+  };
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('vi-VN').format(Math.round(price)) + '₫';
   };
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    }).format(date);
+    try {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }).format(date);
+    } catch {
+      return dateString;
+    }
   };
 
   return (
-    <div className="recent-orders-container">
-      <div className="section-header">
-        <div className="section-title-wrapper">
-          <h2 className="section-title">Đơn hàng gần đây</h2>
-          <span className="order-count">{defaultOrders.length} đơn hàng</span>
+    <div className="recent-orders-card-modern">
+      <div className="orders-card-head">
+        <div className="orders-head-title-wrap">
+          <Package size={18} className="text-indigo" />
+          <h3 className="orders-section-title">Đơn hàng gần đây</h3>
+          <span className="orders-count-chip">{defaultOrders.length} đơn</span>
         </div>
-        <button 
-          className="view-all-btn"
+        <button
+          type="button"
+          className="btn-view-all-orders"
           onClick={() => navigate('/user/orders')}
         >
-          Xem tất cả
-          <span className="arrow">→</span>
+          <span>Xem tất cả</span>
+          <ArrowRight size={14} />
         </button>
       </div>
 
-      <div className="orders-list">
-        {defaultOrders.map((order, index) => {
+      <div className="recent-orders-list">
+        {defaultOrders.map((order) => {
           const statusBadge = getStatusBadge(order.status);
+          const StatusIcon = statusBadge.icon;
+
           return (
-            <div 
-              key={order.id} 
-              className="order-card"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Order Header */}
-              <div className="order-header">
-                <div className="order-id-wrapper">
-                  <span className="order-label">Order</span>
-                  <span className="order-id">#{order.id}</span>
-                </div>
-                <div className="order-meta">
-                  <span className="order-date">
-                    <span className="date-icon">📅</span>
-                    {formatDate(order.date)}
+            <div key={order.id} className="recent-order-row-item">
+              <div className="order-thumb-wrap">
+                <img
+                  src={order.productImage || '/placeholder-product.png'}
+                  alt={order.productName}
+                  className="order-product-img"
+                  onError={(e) => {
+                    e.target.src =
+                      'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400';
+                  }}
+                />
+              </div>
+
+              <div className="order-main-info">
+                <div className="order-id-meta-row">
+                  <span className="order-code-badge">#{order.id}</span>
+                  <span className="order-date-text">
+                    <Calendar size={12} />
+                    <span>{formatDate(order.date)}</span>
                   </span>
-                  <span 
-                    className="order-status-badge"
-                    style={{ 
-                      background: `${statusBadge.color}15`,
-                      color: statusBadge.color 
+                  <span
+                    className="order-status-pill"
+                    style={{
+                      color: statusBadge.color,
+                      background: `${statusBadge.color}14`,
                     }}
                   >
-                    <span className="status-icon">{statusBadge.icon}</span>
-                    {statusBadge.label}
+                    <StatusIcon size={12} />
+                    <span>{statusBadge.label}</span>
                   </span>
                 </div>
+
+                <h4 className="order-product-title">{order.productName}</h4>
               </div>
 
-              {/* Order Body */}
-              <div className="order-body">
-                <div className="product-image-wrapper">
-                  <img 
-                    src={order.productImage} 
-                    alt={order.productName}
-                    className="product-image"
-                  />
-                  <div className="image-overlay">
-                    <span className="overlay-icon">👁️</span>
-                  </div>
-                </div>
-
-                <div className="product-info">
-                  <h4 className="product-name">{order.productName}</h4>
-                  <div className="product-meta">
-                    <span className="product-type">
-                      <span className="type-icon">📦</span>
-                      Digital Product
-                    </span>
-                  </div>
-                </div>
-
-                <div className="order-price">
-                  <span className="price-label">Total</span>
-                  <span className="price-value">${order.total}</span>
+              <div className="order-price-and-actions">
+                <span className="order-total-price">{formatPrice(order.total)}</span>
+                <div className="order-actions-group">
+                  <button
+                    type="button"
+                    className="btn-order-action-download"
+                    onClick={() => alert(`Đang tải mã nguồn cho đơn hàng #${order.id}`)}
+                  >
+                    <Download size={13} />
+                    <span>Tải .ZIP</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-order-action-view"
+                    onClick={() => navigate('/user/orders')}
+                  >
+                    <Eye size={13} />
+                    <span>Chi tiết</span>
+                  </button>
                 </div>
               </div>
-
-              {/* Order Actions */}
-              <div className="order-actions">
-                <button className="action-btn download-btn">
-                  <span className="btn-icon">⬇</span>
-                  Download
-                </button>
-                <button 
-                  className="action-btn view-btn"
-                  onClick={() => navigate(`/user/orders/${order.id}`)}
-                >
-                  <span className="btn-icon">👁️</span>
-                  View Details
-                </button>
-              </div>
-
-              {/* Hover Effect Border */}
-              <div className="card-border"></div>
             </div>
           );
         })}
       </div>
 
       {defaultOrders.length === 0 && (
-        <div className="empty-orders">
-          <div className="empty-icon">📦</div>
-          <h3>No Orders Yet</h3>
-          <p>Start shopping to see your orders here!</p>
-          <button 
-            className="shop-now-btn"
+        <div className="empty-recent-orders-view">
+          <ShoppingBag size={36} className="text-muted" />
+          <h4>Chưa có đơn hàng nào</h4>
+          <p>Khám phá kho mã nguồn để bắt đầu dự án mới của bạn!</p>
+          <button
+            type="button"
+            className="btn-explore-now-action"
             onClick={() => navigate('/products')}
           >
-            Browse Products
+            Khám phá mã nguồn
           </button>
         </div>
       )}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import './Pagination.css';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
@@ -7,19 +8,16 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     const showEllipsis = totalPages > 7;
 
     if (!showEllipsis) {
-      // Show all pages if 7 or fewer
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Always show first page
       pages.push(1);
 
       if (currentPage > 3) {
         pages.push('...');
       }
 
-      // Show pages around current page
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
 
@@ -31,7 +29,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         pages.push('...');
       }
 
-      // Always show last page
       pages.push(totalPages);
     }
 
@@ -62,25 +59,27 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   if (totalPages <= 1) return null;
 
   return (
-    <div className="pagination-container">
-      <nav className="pagination">
+    <div className="pagination-wrapper">
+      <nav className="pagination-nav" aria-label="Phân trang danh sách">
         {/* Previous Button */}
         <button
-          className={`pagination-btn prev-btn ${currentPage === 1 ? 'disabled' : ''}`}
+          type="button"
+          className={`pagination-nav-btn prev-btn ${currentPage === 1 ? 'disabled' : ''}`}
           onClick={handlePrevious}
           disabled={currentPage === 1}
-          aria-label="Previous page"
+          aria-label="Trang trước"
         >
-          <span className="arrow">←</span>
-          <span className="text">Previous</span>
+          <ChevronLeft size={16} />
+          <span className="btn-text">Trước</span>
         </button>
 
         {/* Page Numbers */}
-        <div className="page-numbers">
+        <div className="page-numbers-group">
           {getPageNumbers().map((page, index) => (
             <button
               key={index}
-              className={`page-btn ${page === currentPage ? 'active' : ''} ${page === '...' ? 'ellipsis' : ''}`}
+              type="button"
+              className={`page-num-btn ${page === currentPage ? 'active' : ''} ${page === '...' ? 'ellipsis' : ''}`}
               onClick={() => handlePageClick(page)}
               disabled={page === '...'}
             >
@@ -91,19 +90,21 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
         {/* Next Button */}
         <button
-          className={`pagination-btn next-btn ${currentPage === totalPages ? 'disabled' : ''}`}
+          type="button"
+          className={`pagination-nav-btn next-btn ${currentPage === totalPages ? 'disabled' : ''}`}
           onClick={handleNext}
           disabled={currentPage === totalPages}
-          aria-label="Next page"
+          aria-label="Trang sau"
         >
-          <span className="text">Next</span>
-          <span className="arrow">→</span>
+          <span className="btn-text">Sau</span>
+          <ChevronRight size={16} />
         </button>
       </nav>
 
       {/* Page Info */}
-      <div className="page-info">
-        Page <span className="current">{currentPage}</span> of <span className="total">{totalPages}</span>
+      <div className="pagination-info-text">
+        Trang <strong className="current-page">{currentPage}</strong> /{' '}
+        <span className="total-pages">{totalPages}</span>
       </div>
     </div>
   );

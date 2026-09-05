@@ -1,205 +1,171 @@
 import React from 'react';
+import { Lock, ShieldCheck, CheckCircle2, Eye, Database, KeyRound, FileCheck } from 'lucide-react';
 import './PolicyPages.css';
 
 const PrivacyPage = () => {
   return (
-    <div className="policy-page">
-      <section className="policy-hero">
+    <div className="policy-page-modern">
+      {/* Hero Banner */}
+      <section className="policy-hero-banner">
         <div className="container">
-          <h1 className="page-title">🔒 Privacy Policy</h1>
-          <p className="page-subtitle">Last updated: November 19, 2025</p>
+          <div className="policy-hero-content">
+            <div className="policy-brand-tag">
+              <Lock size={13} />
+              <span>Bảo Vệ Dữ Liệu & Quyền Riêng Tư</span>
+            </div>
+            <h1 className="policy-hero-title">Chính Sách Bảo Mật (Privacy Policy)</h1>
+            <p className="policy-hero-subtitle">
+              Cập nhật lần cuối: Ngày 28 tháng 08 năm 2026 • Cam kết an toàn thông tin tuyệt đối cho
+              khách hàng và tác giả
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="policy-content">
+      {/* Main Document */}
+      <section className="policy-main-section">
         <div className="container">
-          <div className="policy-document">
-            <div className="policy-intro">
+          <div className="policy-doc-container">
+            <div className="policy-intro-alert-box">
+              <ShieldCheck size={24} className="text-primary flex-shrink-0" />
               <p>
-                At CodeMarket, we take your privacy seriously. This Privacy Policy explains
-                how we collect, use, disclose, and safeguard your information when you use
-                our platform.
+                <strong>CodeMart</strong> coi trọng việc bảo vệ quyền riêng tư của bạn. Chính sách
+                này giải thích cách thức chúng tôi thu thập, xử lý, mã hóa và bảo vệ dữ liệu cá nhân
+                khi bạn tương tác trên nền tảng.
               </p>
             </div>
 
-            <div className="policy-section">
-              <h2>1. Information We Collect</h2>
-              <h3>1.1 Personal Information</h3>
-              <p>We collect information that you provide directly to us:</p>
-              <ul>
-                <li>Name and contact information (email, phone)</li>
-                <li>Account credentials (username, password)</li>
-                <li>Payment information (processed securely through third parties)</li>
-                <li>Profile information (avatar, bio, website)</li>
-                <li>Communication history with support</li>
-              </ul>
-
-              <h3>1.2 Automatically Collected Information</h3>
-              <ul>
-                <li>Device information (IP address, browser type, OS)</li>
-                <li>Usage data (pages visited, time spent, clicks)</li>
-                <li>Cookies and similar tracking technologies</li>
-                <li>Location data (approximate, based on IP)</li>
-              </ul>
-
-              <h3>1.3 Information from Third Parties</h3>
-              <ul>
-                <li>Social media profile data (if you sign in via OAuth)</li>
-                <li>Payment processor information</li>
-                <li>Analytics providers</li>
-              </ul>
-            </div>
-
-            <div className="policy-section">
-              <h2>2. How We Use Your Information</h2>
-              <p>We use your information to:</p>
-              <ul>
-                <li>Provide and maintain our services</li>
-                <li>Process your transactions and send confirmations</li>
-                <li>Send you important updates and notifications</li>
-                <li>Respond to your comments and questions</li>
-                <li>Prevent fraud and enhance security</li>
-                <li>Analyze usage patterns to improve our platform</li>
-                <li>Send marketing communications (with your consent)</li>
-                <li>Comply with legal obligations</li>
-              </ul>
-            </div>
-
-            <div className="policy-section">
-              <h2>3. How We Share Your Information</h2>
-              <p>We may share your information with:</p>
-              
-              <h3>3.1 Service Providers</h3>
-              <ul>
-                <li>Payment processors (Stripe, PayPal)</li>
-                <li>Email service providers</li>
-                <li>Cloud hosting providers</li>
-                <li>Analytics services</li>
-              </ul>
-
-              <h3>3.2 Business Transfers</h3>
+            {/* Section 1 */}
+            <div className="policy-doc-section">
+              <h2 className="policy-section-heading">
+                <Database size={18} className="text-primary" />
+                <span>1. Thông tin chúng tôi thu thập</span>
+              </h2>
               <p>
-                If CodeMarket is involved in a merger, acquisition, or sale of assets,
-                your information may be transferred as part of that transaction.
+                Chúng tôi chỉ thu thập các thông tin cần thiết phục vụ cho việc vận hành dịch vụ và
+                hoàn tất giao dịch:
               </p>
-
-              <h3>3.3 Legal Requirements</h3>
-              <p>We may disclose your information if required by law or in response to:</p>
-              <ul>
-                <li>Court orders or legal processes</li>
-                <li>Government requests</li>
-                <li>Protection of our rights and safety</li>
-              </ul>
-
-              <h3>3.4 With Your Consent</h3>
-              <p>We may share your information for other purposes with your explicit consent.</p>
-            </div>
-
-            <div className="policy-section">
-              <h2>4. Data Security</h2>
-              <p>We implement industry-standard security measures:</p>
-              <ul>
-                <li>SSL/TLS encryption for data transmission</li>
-                <li>Encrypted storage for sensitive data</li>
-                <li>Regular security audits and updates</li>
-                <li>Access controls and authentication</li>
-                <li>Firewall protection</li>
-              </ul>
-              <p>
-                However, no method of transmission over the Internet is 100% secure.
-                While we strive to protect your data, we cannot guarantee absolute security.
-              </p>
-            </div>
-
-            <div className="policy-section">
-              <h2>5. Your Privacy Rights</h2>
-              <p>You have the right to:</p>
-              <ul>
-                <li><strong>Access:</strong> Request a copy of your personal data</li>
-                <li><strong>Correction:</strong> Update inaccurate or incomplete data</li>
-                <li><strong>Deletion:</strong> Request deletion of your data ("right to be forgotten")</li>
-                <li><strong>Data Portability:</strong> Receive your data in a portable format</li>
-                <li><strong>Opt-Out:</strong> Unsubscribe from marketing communications</li>
-                <li><strong>Object:</strong> Object to certain data processing activities</li>
-              </ul>
-              <p>
-                To exercise these rights, contact us at privacy@codemarket.com
-              </p>
-            </div>
-
-            <div className="policy-section">
-              <h2>6. Cookies and Tracking</h2>
-              <h3>Types of Cookies We Use:</h3>
-              <ul>
-                <li><strong>Essential Cookies:</strong> Required for the platform to function</li>
-                <li><strong>Analytics Cookies:</strong> Help us understand user behavior</li>
-                <li><strong>Marketing Cookies:</strong> Used for advertising and retargeting</li>
-                <li><strong>Preference Cookies:</strong> Remember your settings and preferences</li>
-              </ul>
-              <p>
-                You can control cookies through your browser settings. Note that disabling
-                certain cookies may affect platform functionality.
-              </p>
-            </div>
-
-            <div className="policy-section">
-              <h2>7. Children's Privacy</h2>
-              <p>
-                CodeMarket is not intended for users under the age of 16. We do not
-                knowingly collect personal information from children. If you believe
-                we have collected information from a child, please contact us immediately.
-              </p>
-            </div>
-
-            <div className="policy-section">
-              <h2>8. International Data Transfers</h2>
-              <p>
-                Your information may be transferred to and processed in countries other
-                than your own. We ensure appropriate safeguards are in place for such
-                transfers, including:
-              </p>
-              <ul>
-                <li>Standard contractual clauses approved by authorities</li>
-                <li>Privacy Shield certification (where applicable)</li>
-                <li>Adequacy decisions by relevant authorities</li>
+              <ul className="policy-checklist">
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    <strong>Thông tin định danh:</strong> Họ tên, địa chỉ email, số điện thoại và
+                    ảnh đại diện khi đăng ký tài khoản.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    <strong>Thông tin thanh toán:</strong> Mã giao dịch ngân hàng, lịch sử mua hàng,
+                    mã License Key được tạo tự động.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    <strong>Thông tin kỹ thuật:</strong> Địa chỉ IP, trình duyệt và thiết bị truy
+                    cập để ngăn chặn các hành vi gian lận.
+                  </span>
+                </li>
               </ul>
             </div>
 
-            <div className="policy-section">
-              <h2>9. Data Retention</h2>
-              <p>We retain your information for as long as:</p>
-              <ul>
-                <li>Your account is active</li>
-                <li>Needed to provide services</li>
-                <li>Required by law or regulations</li>
-                <li>Necessary for legitimate business purposes</li>
+            {/* Section 2 */}
+            <div className="policy-doc-section">
+              <h2 className="policy-section-heading">
+                <FileCheck size={18} className="text-primary" />
+                <span>2. Mục đích sử dụng thông tin</span>
+              </h2>
+              <p>Dữ liệu của bạn được sử dụng cho các mục đích chính đáng sau:</p>
+              <ul className="policy-checklist">
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>Cung cấp quyền tải xuống mã nguồn và bàn giao License Key bản quyền.</span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    Vận hành luồng bảo lưu Ký quỹ Escrow 3 ngày và xử lý hoàn tiền khi phát sinh yêu
+                    cầu.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    Gửi thông báo cập nhật phiên bản mới của mã nguồn từ tác giả bạn đã mua.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    Hỗ trợ kỹ thuật và giải quyết các khiếu nại phát sinh trong quá trình sử dụng.
+                  </span>
+                </li>
               </ul>
-              <p>
-                After account deletion, we may retain certain data for up to 90 days
-                for backup and recovery purposes.
-              </p>
             </div>
 
-            <div className="policy-section">
-              <h2>10. Changes to Privacy Policy</h2>
-              <p>
-                We may update this Privacy Policy from time to time. We will notify you
-                of significant changes via email or prominent notice on our platform.
-                Your continued use after changes indicates acceptance of the updated policy.
-              </p>
+            {/* Section 3 */}
+            <div className="policy-doc-section">
+              <h2 className="policy-section-heading">
+                <KeyRound size={18} className="text-primary" />
+                <span>3. Tiêu chuẩn An toàn & Mã hóa Giao dịch</span>
+              </h2>
+              <p>CodeMart áp dụng các tiêu chuẩn bảo mật ngân hàng cao cấp:</p>
+              <ul className="policy-checklist">
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    Mã hóa đường truyền toàn diện với giao thức <strong>SSL/TLS 256-bit</strong>.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    <strong>Không lưu trữ thông tin thẻ:</strong> Mọi thanh toán qua thẻ quốc tế hay
+                    mã QR đều được xử lý trực tiếp qua cổng thanh toán VNPay, VietQR và MoMo đạt
+                    chuẩn bảo mật PCI-DSS.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    File mã nguồn được lưu trữ trên hạ tầng Cloud Storage bảo mật cao, chỉ cho phép
+                    tải sau khi hoàn tất xác thực quyền sở hữu.
+                  </span>
+                </li>
+              </ul>
             </div>
 
-            <div className="policy-section">
-              <h2>11. Contact Us</h2>
-              <p>
-                For questions or concerns about this Privacy Policy or our data practices:
-              </p>
-              <ul>
-                <li><strong>Email:</strong> privacy@codemarket.com</li>
-                <li><strong>Data Protection Officer:</strong> dpo@codemarket.com</li>
-                <li><strong>Phone:</strong> +84 (028) 1234 5678</li>
-                <li><strong>Mail:</strong> 123 Tech Street, District 1, Ho Chi Minh City, Vietnam</li>
+            {/* Section 4 */}
+            <div className="policy-doc-section">
+              <h2 className="policy-section-heading">
+                <Eye size={18} className="text-primary" />
+                <span>4. Quyền của Người dùng đối với Dữ liệu</span>
+              </h2>
+              <p>Bạn có toàn quyền kiểm soát dữ liệu cá nhân của mình:</p>
+              <ul className="policy-checklist">
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>Xem và cập nhật thông tin hồ sơ bất kỳ lúc nào trong trang cá nhân.</span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    Yêu cầu trích xuất toàn bộ lịch sử mua hàng và danh sách License Key sở hữu.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    Yêu cầu đóng tài khoản và xóa vĩnh viễn dữ liệu cá nhân khỏi hệ thống máy chủ.
+                  </span>
+                </li>
               </ul>
+            </div>
+
+            <div className="policy-doc-footer-note">
+              <span>CodeMart Việt Nam • Đơn vị Bảo vệ Dữ liệu Khách hàng</span>
+              <span>Email: privacy@codemart.vn</span>
             </div>
           </div>
         </div>

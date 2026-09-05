@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Edit, Eye, Trash2, Check, X, AlertTriangle } from 'lucide-react';
 import './ProductActions.css';
 
 const ProductActions = ({ product, onEdit, onView, onDelete }) => {
@@ -18,54 +19,55 @@ const ProductActions = ({ product, onEdit, onView, onDelete }) => {
   };
 
   return (
-    <div className="product-actions">
+    <div className="product-actions-modern">
       {!showDeleteConfirm ? (
-        <div className="action-buttons">
+        <div className="action-buttons-strip">
           <button
-            className="action-btn edit-btn"
+            type="button"
+            className="btn-action-icon edit"
             onClick={() => onEdit(product.id)}
-            title="Edit Product"
+            title="Chỉnh sửa mã nguồn"
           >
-            <span className="btn-icon">✏️</span>
-            <span className="btn-text">Edit</span>
+            <Edit size={14} />
           </button>
-          
+
           <button
-            className="action-btn view-btn"
+            type="button"
+            className="btn-action-icon view"
             onClick={() => onView(product.id)}
-            title="View Product"
+            title="Xem chi tiết trên sàn"
           >
-            <span className="btn-icon">👁️</span>
-            <span className="btn-text">View</span>
+            <Eye size={14} />
           </button>
-          
+
           <button
-            className="action-btn delete-btn"
+            type="button"
+            className="btn-action-icon delete"
             onClick={handleDelete}
-            title="Delete Product"
+            title="Xóa mã nguồn"
           >
-            <span className="btn-icon">🗑️</span>
-            <span className="btn-text">Delete</span>
+            <Trash2 size={14} />
           </button>
         </div>
       ) : (
-        <div className="delete-confirmation">
-          <div className="confirm-message">
-            <span className="confirm-icon">⚠️</span>
-            <span className="confirm-text">Delete?</span>
+        <div className="delete-confirm-box-inline">
+          <div className="confirm-prompt-text">
+            <AlertTriangle size={13} className="text-danger" />
+            <span>Xác nhận xóa?</span>
           </div>
-          <div className="confirm-actions">
+          <div className="confirm-btn-pair">
             <button
-              className="confirm-btn yes-btn"
+              type="button"
+              className="btn-confirm-yes"
               onClick={confirmDelete}
+              title="Đồng ý xóa"
             >
-              ✓ Yes
+              <Check size={12} />
+              <span>Xóa</span>
             </button>
-            <button
-              className="confirm-btn no-btn"
-              onClick={cancelDelete}
-            >
-              ✕ No
+            <button type="button" className="btn-confirm-no" onClick={cancelDelete} title="Hủy bỏ">
+              <X size={12} />
+              <span>Hủy</span>
             </button>
           </div>
         </div>

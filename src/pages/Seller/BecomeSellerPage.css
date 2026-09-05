@@ -1,368 +1,454 @@
-.become-seller-page {
-  min-height: 100vh;
-  background: linear-gradient(to bottom, #f8f9fa 0%, white 100%);
+/* ==========================================================================
+   Become Seller Page - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
+.become-seller-page-modern {
+  min-height: calc(100vh - var(--header-height, 76px));
+  background: var(--bg-secondary, #f8fafc);
+  padding: 24px 0 80px;
 }
 
-.seller-hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 100px 20px;
+.seller-landing-container {
+  max-width: var(--max-width-main, 1280px);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Unauth Hero Card */
+.unauth-hero-card {
+  max-width: 600px;
+  margin: 60px auto;
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 16px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+  padding: 48px 32px;
   text-align: center;
-  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.seller-hero h1 {
-  font-size: 56px;
-  font-weight: 800;
+.unauth-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(79, 70, 229, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 20px;
 }
 
-.seller-hero p {
-  font-size: 20px;
-  opacity: 0.95;
-  max-width: 600px;
-  margin: 0 auto 30px;
+.unauth-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text-primary, #0f172a);
+  margin: 0 0 10px;
 }
 
-.hero-actions {
+.unauth-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary, #64748b);
+  margin: 0 0 28px;
+  line-height: 1.5;
+}
+
+.unauth-btn-row {
   display: flex;
-  gap: 15px;
-  justify-content: center;
+  gap: 12px;
+  width: 100%;
 }
 
-.btn-primary, .btn-secondary {
-  padding: 16px 40px;
-  border-radius: 50px;
-  font-size: 18px;
-  font-weight: 600;
+.btn-unauth {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: var(--border-radius-md, 10px);
+  font-size: 13.5px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s;
-  border: 2px solid white;
+  transition: all 0.15s ease;
 }
 
-.btn-primary {
-  background: white;
-  color: #667eea;
+.btn-unauth.primary {
+  background: var(--primary-color, #4f46e5);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+.btn-unauth.primary:hover {
+  background: var(--primary-hover, #4338ca);
 }
 
-.btn-secondary {
-  background: transparent;
-  color: white;
+.btn-unauth.secondary {
+  background: #ffffff;
+  color: var(--text-primary, #0f172a);
+  border: 1px solid var(--border-color, #cbd5e1);
 }
 
-.btn-secondary:hover {
-  background: white;
-  color: #667eea;
+.btn-unauth.secondary:hover {
+  background: var(--gray-50, #f8fafc);
+}
+
+/* Creator Hero Banner */
+.creator-hero-banner {
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 20px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
+  padding: 48px 40px;
+  margin: 16px 0 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.creator-pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--primary-color, #4f46e5);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.creator-hero-headline {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--text-primary, #0f172a);
+  margin: 0 0 14px;
+  letter-spacing: -0.8px;
+  max-width: 760px;
+  line-height: 1.3;
+}
+
+.creator-hero-desc {
+  font-size: 15px;
+  color: var(--text-secondary, #64748b);
+  max-width: 680px;
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+
+.creator-stats-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 16px 36px;
+  background: var(--gray-50, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: var(--border-radius-lg, 16px);
+}
+
+.ribbon-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.ribbon-stat-item strong {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--primary-color, #4f46e5);
+}
+
+.ribbon-stat-item span {
+  font-size: 12px;
+  color: var(--text-secondary, #64748b);
+  font-weight: 600;
+}
+
+.ribbon-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--border-color, #e2e8f0);
 }
 
 /* Benefits Section */
-.benefits-section {
-  padding: 80px 20px;
+.creator-benefits-section {
+  margin-bottom: 48px;
 }
 
-.section-title {
+.section-title-center {
   text-align: center;
-  font-size: 42px;
-  font-weight: 800;
-  color: #2d3748;
-  margin-bottom: 60px;
+  margin-bottom: 32px;
 }
 
-.benefits-grid {
+.section-title-center h2 {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text-primary, #0f172a);
+  margin: 0 0 8px;
+}
+
+.section-title-center p {
+  font-size: 14px;
+  color: var(--text-secondary, #64748b);
+  margin: 0;
+}
+
+.benefits-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
-.benefit-card {
-  background: white;
-  padding: 40px 30px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  text-align: center;
-  transition: transform 0.3s;
+.benefit-feature-card {
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 16px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.15s ease;
 }
 
-.benefit-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+.benefit-feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+  border-color: #cbd5e1;
 }
 
-.benefit-icon {
-  font-size: 64px;
-  margin-bottom: 20px;
-}
-
-.benefit-card h3 {
-  font-size: 24px;
-  color: #2d3748;
-  margin-bottom: 12px;
-}
-
-.benefit-card p {
-  color: #718096;
-  line-height: 1.7;
-}
-
-/* Requirements Section */
-.requirements-section {
-  padding: 80px 20px;
-  background: #f7fafc;
-}
-
-.requirements-card {
-  max-width: 800px;
-  margin: 0 auto;
-  background: white;
-  padding: 50px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.requirements-list {
-  list-style: none;
-  padding: 0;
-}
-
-.requirements-list li {
-  position: relative;
-  padding: 20px 20px 20px 50px;
-  margin-bottom: 15px;
-  background: #f7fafc;
+.benefit-icon-box {
+  width: 48px;
+  height: 48px;
   border-radius: 12px;
-  font-size: 16px;
-  line-height: 1.6;
-  color: #2d3748;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
 }
 
-.requirements-list li::before {
-  content: '✓';
-  position: absolute;
-  left: 20px;
-  color: #667eea;
-  font-size: 24px;
-  font-weight: bold;
+.benefit-icon-box.indigo {
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--primary-color, #4f46e5);
+}
+
+.benefit-icon-box.blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+.benefit-icon-box.emerald {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.benefit-icon-box.amber {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+.benefit-icon-box.purple {
+  background: rgba(147, 51, 234, 0.1);
+  color: #9333ea;
+}
+
+.benefit-icon-box.rose {
+  background: rgba(244, 63, 94, 0.1);
+  color: #e11d48;
+}
+
+.benefit-feature-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary, #0f172a);
+  margin: 0;
+}
+
+.benefit-feature-desc {
+  font-size: 13px;
+  color: var(--text-secondary, #64748b);
+  margin: 0;
+  line-height: 1.5;
 }
 
 /* Application Section */
-.application-section {
-  padding: 80px 20px;
+.application-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 28px;
+  align-items: flex-start;
 }
 
-.application-card {
-  max-width: 700px;
-  margin: 0 auto;
-  background: white;
-  padding: 50px;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+.guidelines-card {
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 16px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  padding: 24px;
 }
 
-.application-card h2 {
-  text-align: center;
-  font-size: 32px;
-  color: #2d3748;
-  margin-bottom: 30px;
-}
-
-.progress-bar {
+.guidelines-head {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 40px;
-  position: relative;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
-.progress-bar::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #e2e8f0;
-  z-index: 0;
-}
-
-.progress-step {
-  position: relative;
-  z-index: 1;
-  background: #e2e8f0;
-  padding: 12px 24px;
-  border-radius: 50px;
-  font-weight: 600;
-  color: #a0aec0;
-  transition: all 0.3s;
-}
-
-.progress-step.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-/* Form */
-.seller-form .form-step {
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.form-step h3 {
-  font-size: 24px;
-  color: #2d3748;
-  margin-bottom: 25px;
-}
-
-.form-group {
-  margin-bottom: 25px;
-}
-
-.form-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #4a5568;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 14px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
+.guidelines-head h3 {
   font-size: 16px;
-  transition: all 0.3s;
+  font-weight: 800;
+  color: var(--text-primary, #0f172a);
+  margin: 0;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+.guidelines-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.checkbox-group {
-  margin-top: 30px;
-}
-
-.checkbox-label {
+.guideline-item {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  cursor: pointer;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary, #334155);
+  line-height: 1.45;
 }
 
-.checkbox-label input[type="checkbox"] {
-  margin-top: 4px;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
+.guideline-item svg {
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.checkbox-label a {
-  color: #667eea;
-  text-decoration: underline;
+.escrow-note-box {
+  padding: 14px 16px;
+  background: rgba(79, 70, 229, 0.04);
+  border: 1px solid rgba(79, 70, 229, 0.15);
+  border-radius: var(--border-radius-md, 12px);
 }
 
-.form-actions {
+.escrow-note-box h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-color, #4f46e5);
+  margin: 0 0 4px;
+}
+
+.escrow-note-box p {
+  font-size: 12px;
+  color: var(--text-secondary, #64748b);
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Application Form Card */
+.application-form-card {
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 16px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  padding: 28px;
+}
+
+.form-card-head {
   display: flex;
-  gap: 15px;
-  justify-content: space-between;
-  margin-top: 30px;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 20px;
 }
 
-.btn-next, .btn-back, .btn-submit {
-  padding: 14px 32px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
+.form-card-head h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-primary, #0f172a);
+  margin: 0 0 3px;
+}
+
+.form-card-head p {
+  font-size: 12.5px;
+  color: var(--text-secondary, #64748b);
+  margin: 0;
+}
+
+.creator-form-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.terms-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--text-secondary, #475569);
+  line-height: 1.45;
   cursor: pointer;
-  transition: all 0.3s;
+  margin: 4px 0;
+}
+
+.terms-checkbox-label input {
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.btn-submit-application {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--primary-color, #4f46e5);
+  color: #ffffff;
   border: none;
+  border-radius: var(--border-radius-md, 10px);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+  transition: all 0.15s ease;
 }
 
-.btn-next, .btn-submit {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  flex: 1;
+.btn-submit-application:hover:not(:disabled) {
+  background: var(--primary-hover, #4338ca);
+  transform: translateY(-1px);
 }
 
-.btn-next:hover, .btn-submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+.btn-submit-application:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.btn-back {
-  background: #e2e8f0;
-  color: #4a5568;
-}
-
-.btn-back:hover {
-  background: #cbd5e0;
-}
-
-.review-info {
-  background: #f7fafc;
-  padding: 25px;
-  border-radius: 12px;
-  margin-bottom: 25px;
-}
-
-.review-item {
-  padding: 12px 0;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 15px;
-}
-
-.review-item:last-child {
-  border-bottom: none;
-}
-
-.review-item strong {
-  color: #2d3748;
-  margin-right: 10px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .seller-hero h1 {
-    font-size: 36px;
+@media (max-width: 1024px) {
+  .benefits-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-
-  .benefits-grid {
+  .application-grid-layout {
     grid-template-columns: 1fr;
   }
+}
 
-  .application-card {
-    padding: 30px 20px;
+@media (max-width: 640px) {
+  .creator-hero-banner {
+    padding: 32px 20px;
   }
-
-  .progress-step {
-    padding: 8px 16px;
-    font-size: 14px;
+  .creator-hero-headline {
+    font-size: 24px;
   }
-
-  .form-actions {
+  .creator-stats-ribbon {
     flex-direction: column;
+    gap: 16px;
+    width: 100%;
   }
-
-  .btn-back {
-    order: 2;
+  .ribbon-divider {
+    display: none;
+  }
+  .benefits-cards-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  PlusCircle,
+  Search,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+} from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import Breadcrumb from '../../components/Product/Breadcrumb';
 import SellerSidebar from '../../components/Seller/SellerSidebar';
 import ProductsTable from '../../components/Seller/ProductsTable';
 import './MyProductsPage.css';
 
 const MyProductsPage = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Mock data source for seller product management UI
-  const [allProducts] = useState([
+  const [allProducts, setAllProducts] = useState([
     {
       id: 1,
-      title: 'Modern Admin Dashboard Template',
-      category: 'Web Templates',
-      price: 99,
-      salePrice: 79,
-      image: 'https://via.placeholder.com/300x200?text=Admin+Dashboard',
+      title: 'Mã Nguồn E-commerce React + Laravel',
+      category: 'Website TMĐT',
+      price: 1800000,
+      salePrice: 1500000,
+      image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400',
       status: 'active',
       sales: 50,
       rating: 4.8,
@@ -24,59 +36,60 @@ const MyProductsPage = () => {
     },
     {
       id: 2,
-      title: 'E-commerce Shop Template',
-      category: 'Web Templates',
-      price: 149,
-      image: 'https://via.placeholder.com/300x200?text=E-commerce',
+      title: 'Giao Diện Admin Dashboard Pro Vue.js',
+      category: 'Admin Template',
+      price: 1500000,
+      salePrice: 1200000,
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400',
+      status: 'active',
+      sales: 42,
+      rating: 4.8,
+      uploadedAt: '2025-10-15',
+      isFeatured: true,
+    },
+    {
+      id: 3,
+      title: 'Fullstack SaaS Boilerplate Next.js 14',
+      category: 'Fullstack SaaS',
+      price: 3500000,
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400',
       status: 'pending',
       sales: 0,
       uploadedAt: '2025-10-25',
       isFeatured: false,
     },
     {
-      id: 3,
-      title: 'Landing Page Pro',
-      category: 'Marketing',
-      price: 79,
-      image: 'https://via.placeholder.com/300x200?text=Landing+Page',
-      status: 'rejected',
-      sales: 12,
-      rating: 4.2,
-      uploadedAt: '2025-09-15',
-      rejectionReason: 'Low quality screenshots. Please update with high-resolution images.',
+      id: 4,
+      title: 'Ứng Dụng Flutter Đặt Đồ Ăn 2 Đầu',
+      category: 'Mobile App',
+      price: 3000000,
+      salePrice: 2800000,
+      image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400',
+      status: 'active',
+      sales: 25,
+      rating: 4.6,
+      uploadedAt: '2025-09-10',
       isFeatured: false,
     },
     {
-      id: 4,
-      title: 'React UI Kit - Premium',
-      category: 'UI Kits',
-      price: 199,
-      salePrice: 149,
-      image: 'https://via.placeholder.com/300x200?text=React+UI+Kit',
-      status: 'active',
-      sales: 85,
-      rating: 4.9,
-      uploadedAt: '2025-08-10',
-      isFeatured: true,
-    },
-    {
       id: 5,
-      title: 'WordPress Blog Theme',
-      category: 'WordPress',
-      price: 59,
-      image: 'https://via.placeholder.com/300x200?text=WP+Theme',
-      status: 'active',
-      sales: 120,
-      rating: 4.7,
-      uploadedAt: '2025-07-20',
+      title: 'RESTful API Microservices Spring Boot',
+      category: 'Backend API',
+      price: 2200000,
+      image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400',
+      status: 'rejected',
+      sales: 0,
+      uploadedAt: '2025-10-20',
+      rejectionReason: 'Thiếu tệp Docker Compose và hướng dẫn cấu hình database MySQL.',
       isFeatured: false,
     },
   ]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
 
   // Filter products
   const filteredProducts = allProducts.filter((product) => {
@@ -84,7 +97,8 @@ const MyProductsPage = () => {
       product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.category.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === 'all' || product.status === filterStatus;
-    return matchesSearch && matchesStatus;
+    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+    return matchesSearch && matchesStatus && matchesCategory;
   });
 
   // Pagination
@@ -99,235 +113,192 @@ const MyProductsPage = () => {
     pending: allProducts.filter((p) => p.status === 'pending').length,
     rejected: allProducts.filter((p) => p.status === 'rejected').length,
     totalSales: allProducts.reduce((sum, p) => sum + (p.sales || 0), 0),
-    totalRevenue: allProducts.reduce(
-      (sum, p) => sum + (p.sales || 0) * (p.salePrice || p.price),
-      0
-    ),
   };
 
-  // Handlers
   const handleEdit = (id) => {
     navigate(`/seller/products/${id}/edit`);
   };
 
   const handleView = (id) => {
-    navigate(`/products/${id}`);
+    navigate(`/product/${id}`);
   };
 
   const handleDelete = (id) => {
-    console.log('Delete product:', id);
-    // Implement delete logic
+    setAllProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
-  const handleFilterChange = (status) => {
-    setFilterStatus(status);
-    setCurrentPage(1);
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    setCurrentPage(1);
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const filterTabs = [
+    { id: 'all', label: 'Tất cả mã nguồn', count: stats.total },
+    {
+      id: 'active',
+      label: 'Đang bán',
+      count: stats.active,
+      icon: CheckCircle2,
+      color: 'text-emerald',
+    },
+    { id: 'pending', label: 'Chờ duyệt', count: stats.pending, icon: Clock, color: 'text-amber' },
+    {
+      id: 'rejected',
+      label: 'Cần chỉnh sửa',
+      count: stats.rejected,
+      icon: AlertCircle,
+      color: 'text-danger',
+    },
+  ];
 
   return (
-    <div className="seller-dashboard-page my-products-page">
-      <div className="seller-dashboard-container">
-        <SellerSidebar />
+    <div className="seller-dashboard-page-modern my-products-page-modern">
+      <div className="seller-container-inner">
+        {/* Breadcrumb */}
+        <Breadcrumb
+          items={[
+            { label: 'Kênh người bán', path: '/seller/dashboard' },
+            { label: 'Kho mã nguồn của tôi', path: null },
+          ]}
+        />
 
-        <main className="seller-main-content products-content">
-          {/* Header */}
-          <div className="products-header">
-            <div className="header-left">
-              <h1 className="page-title">
-                My Products <span className="products-count">({stats.total})</span>
-              </h1>
-              <p className="page-subtitle">Manage your digital products and track performance</p>
-            </div>
-            <button className="upload-new-btn" onClick={() => navigate('/seller/upload')}>
-              <span className="btn-icon">⬆️</span>
-              <span className="btn-text">Upload New Product</span>
-            </button>
-          </div>
+        <div className="seller-layout-split-row">
+          {/* Sidebar */}
+          <SellerSidebar seller={user} />
 
-          {/* Statistics Cards */}
-          <div className="stats-cards">
-            <div className="stat-card total-card">
-              <div className="stat-icon-wrapper total-icon">
-                <span className="stat-icon">📦</span>
+          {/* Main Content Area */}
+          <main className="seller-main-workspace">
+            {/* Header */}
+            <div className="my-products-head-banner">
+              <div>
+                <h1 className="my-products-title">
+                  Kho mã nguồn của tôi <span className="title-count-chip">({stats.total})</span>
+                </h1>
+                <p className="my-products-subtitle">
+                  Quản lý danh sách source code đã tải lên, cập nhật phiên bản và theo dõi trạng
+                  thái kiểm duyệt
+                </p>
               </div>
-              <div className="stat-details">
-                <strong className="stat-value">{stats.total}</strong>
-                <span className="stat-label">Total Products</span>
-              </div>
-            </div>
 
-            <div className="stat-card active-card">
-              <div className="stat-icon-wrapper active-icon">
-                <span className="stat-icon">🟢</span>
-              </div>
-              <div className="stat-details">
-                <strong className="stat-value">{stats.active}</strong>
-                <span className="stat-label">Active</span>
-              </div>
-            </div>
-
-            <div className="stat-card pending-card">
-              <div className="stat-icon-wrapper pending-icon">
-                <span className="stat-icon">🟡</span>
-              </div>
-              <div className="stat-details">
-                <strong className="stat-value">{stats.pending}</strong>
-                <span className="stat-label">Pending</span>
-              </div>
-            </div>
-
-            <div className="stat-card rejected-card">
-              <div className="stat-icon-wrapper rejected-icon">
-                <span className="stat-icon">🔴</span>
-              </div>
-              <div className="stat-details">
-                <strong className="stat-value">{stats.rejected}</strong>
-                <span className="stat-label">Rejected</span>
-              </div>
-            </div>
-
-            <div className="stat-card sales-card">
-              <div className="stat-icon-wrapper sales-icon">
-                <span className="stat-icon">🛒</span>
-              </div>
-              <div className="stat-details">
-                <strong className="stat-value">{stats.totalSales}</strong>
-                <span className="stat-label">Total Sales</span>
-              </div>
-            </div>
-
-            <div className="stat-card revenue-card">
-              <div className="stat-icon-wrapper revenue-icon">
-                <span className="stat-icon">💰</span>
-              </div>
-              <div className="stat-details">
-                <strong className="stat-value">${stats.totalRevenue.toLocaleString()}</strong>
-                <span className="stat-label">Total Revenue</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Filters and Search */}
-          <div className="filters-section">
-            <div className="filter-buttons">
               <button
-                className={`filter-btn ${filterStatus === 'all' ? 'active' : ''}`}
-                onClick={() => handleFilterChange('all')}
+                type="button"
+                className="btn-head-upload"
+                onClick={() => navigate('/seller/upload')}
               >
-                <span className="filter-icon">📋</span>
-                <span className="filter-label">All</span>
-                <span className="filter-count">{stats.total}</span>
-              </button>
-              <button
-                className={`filter-btn ${filterStatus === 'active' ? 'active' : ''}`}
-                onClick={() => handleFilterChange('active')}
-              >
-                <span className="filter-icon">🟢</span>
-                <span className="filter-label">Active</span>
-                <span className="filter-count">{stats.active}</span>
-              </button>
-              <button
-                className={`filter-btn ${filterStatus === 'pending' ? 'active' : ''}`}
-                onClick={() => handleFilterChange('pending')}
-              >
-                <span className="filter-icon">🟡</span>
-                <span className="filter-label">Pending</span>
-                <span className="filter-count">{stats.pending}</span>
-              </button>
-              <button
-                className={`filter-btn ${filterStatus === 'rejected' ? 'active' : ''}`}
-                onClick={() => handleFilterChange('rejected')}
-              >
-                <span className="filter-icon">🔴</span>
-                <span className="filter-label">Rejected</span>
-                <span className="filter-count">{stats.rejected}</span>
+                <PlusCircle size={16} />
+                <span>Đăng bán mã nguồn mới</span>
               </button>
             </div>
 
-            <div className="search-box">
-              <span className="search-icon">🔍</span>
-              <input
-                type="text"
-                className="search-input"
-                placeholder="Search products by title or category..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              {searchQuery && (
-                <button className="clear-search-btn" onClick={() => setSearchQuery('')}>
-                  ✕
+            {/* Filter Tabs Bar */}
+            <div className="product-status-tabs-row">
+              {filterTabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    className={`btn-status-tab ${filterStatus === tab.id ? 'active' : ''}`}
+                    onClick={() => {
+                      setFilterStatus(tab.id);
+                      setCurrentPage(1);
+                    }}
+                  >
+                    {Icon && <Icon size={14} className={tab.color} />}
+                    <span>{tab.label}</span>
+                    <span className="tab-count-pill">{tab.count}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Search & Category Filter Controls */}
+            <div className="my-products-toolbar">
+              <div className="search-input-box-wrapper">
+                <Search size={16} className="search-icon-prefix" />
+                <input
+                  type="text"
+                  placeholder="Tìm kiếm theo tên mã nguồn hoặc từ khóa..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="search-input-field"
+                />
+              </div>
+
+              <div className="category-select-wrapper">
+                <Filter size={14} className="filter-select-icon" />
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="category-dropdown-select"
+                >
+                  <option value="all">Tất cả danh mục</option>
+                  <option value="Website TMĐT">Website TMĐT</option>
+                  <option value="Admin Template">Admin Template</option>
+                  <option value="Fullstack SaaS">Fullstack SaaS</option>
+                  <option value="Mobile App">Mobile App</option>
+                  <option value="Backend API">Backend API</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Products Table */}
+            <ProductsTable
+              products={currentProducts}
+              onEdit={handleEdit}
+              onView={handleView}
+              onDelete={handleDelete}
+            />
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="my-products-pagination">
+                <button
+                  type="button"
+                  className="btn-page-nav"
+                  disabled={currentPage === 1}
+                  onClick={() => {
+                    setCurrentPage((p) => p - 1);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
+                  <ChevronLeft size={16} />
+                  <span>Trang trước</span>
                 </button>
-              )}
-            </div>
-          </div>
 
-          {/* Products Table */}
-          <ProductsTable
-            products={currentProducts}
-            onEdit={handleEdit}
-            onView={handleView}
-            onDelete={handleDelete}
-          />
+                <div className="page-numbers-strip">
+                  {[...Array(totalPages)].map((_, i) => (
+                    <button
+                      key={i + 1}
+                      type="button"
+                      className={`btn-page-number ${currentPage === i + 1 ? 'active' : ''}`}
+                      onClick={() => {
+                        setCurrentPage(i + 1);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="pagination">
-              <button
-                className="page-btn prev-btn"
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                ← Previous
-              </button>
-
-              <div className="page-numbers">
-                {[...Array(totalPages)].map((_, index) => {
-                  const page = index + 1;
-                  if (
-                    page === 1 ||
-                    page === totalPages ||
-                    (page >= currentPage - 1 && page <= currentPage + 1)
-                  ) {
-                    return (
-                      <button
-                        key={page}
-                        className={`page-number ${currentPage === page ? 'active' : ''}`}
-                        onClick={() => handlePageChange(page)}
-                      >
-                        {page}
-                      </button>
-                    );
-                  } else if (page === currentPage - 2 || page === currentPage + 2) {
-                    return (
-                      <span key={page} className="page-dots">
-                        ...
-                      </span>
-                    );
-                  }
-                  return null;
-                })}
+                <button
+                  type="button"
+                  className="btn-page-nav"
+                  disabled={currentPage === totalPages}
+                  onClick={() => {
+                    setCurrentPage((p) => p + 1);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
+                  <span>Trang sau</span>
+                  <ChevronRight size={16} />
+                </button>
               </div>
-
-              <button
-                className="page-btn next-btn"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Next →
-              </button>
-            </div>
-          )}
-        </main>
+            )}
+          </main>
+        </div>
       </div>
     </div>
   );

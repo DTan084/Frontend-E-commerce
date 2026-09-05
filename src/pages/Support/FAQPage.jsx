@@ -1,191 +1,217 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  HelpCircle,
+  Search,
+  ShoppingBag,
+  Lock,
+  Award,
+  Store,
+  Headphones,
+  ChevronDown,
+  ChevronUp,
+  MessageSquare,
+  ArrowRight,
+  Sparkles,
+} from 'lucide-react';
 import './FAQPage.css';
 
 const FAQPage = () => {
-  const [activeCategory, setActiveCategory] = useState('general');
-  const [openFAQ, setOpenFAQ] = useState(null);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [openFAQId, setOpenFAQId] = useState(1);
 
   const categories = [
-    { id: 'general', name: '📋 General', icon: '📋' },
-    { id: 'purchase', name: '💳 Purchase & Payment', icon: '💳' },
-    { id: 'download', name: '📥 Download & Installation', icon: '📥' },
-    { id: 'license', name: '📜 License & Usage', icon: '📜' },
-    { id: 'seller', name: '🏪 Selling', icon: '🏪' },
-    { id: 'support', name: '🛟 Support', icon: '🛟' }
+    { id: 'all', name: 'Tất cả câu hỏi', icon: HelpCircle },
+    { id: 'purchase', name: 'Mua & Tải mã nguồn', icon: ShoppingBag },
+    { id: 'escrow', name: 'Ký quỹ Escrow & Bảo vệ', icon: Lock },
+    { id: 'license', name: 'Giấy phép Bản quyền (License)', icon: Award },
+    { id: 'seller', name: 'Bán Code & Hoa hồng 20%', icon: Store },
+    { id: 'support', name: 'Hỗ trợ Kỹ thuật', icon: Headphones },
   ];
 
-  const faqs = {
-    general: [
-      {
-        question: 'What is CodeMarket?',
-        answer: 'CodeMarket is a premium marketplace for source code, templates, plugins, and digital products. We connect developers and designers with buyers looking for high-quality, ready-to-use code solutions.'
-      },
-      {
-        question: 'How do I create an account?',
-        answer: 'Click the "Sign Up" button in the top right corner, fill in your details, and verify your email. You can also sign up using your Google or GitHub account for faster registration.'
-      },
-      {
-        question: 'Is my personal information secure?',
-        answer: 'Yes, we use industry-standard encryption (SSL/TLS) to protect your data. We never share your personal information with third parties without your consent.'
-      }
-    ],
-    purchase: [
-      {
-        question: 'What payment methods do you accept?',
-        answer: 'We accept Visa, Mastercard, PayPal, and various local payment methods. All transactions are processed securely through our payment partners.'
-      },
-      {
-        question: 'Can I get a refund?',
-        answer: 'Yes, we offer a 30-day money-back guarantee if the product doesn\'t work as described or has major bugs. Check our Refund Policy for full details.'
-      },
-      {
-        question: 'Do I need to pay for updates?',
-        answer: 'No! All future updates for products you\'ve purchased are completely free. You\'ll receive notifications when new versions are available.'
-      },
-      {
-        question: 'Can I purchase for multiple sites/projects?',
-        answer: 'This depends on the license type. Regular licenses are for single use, while Extended licenses allow multiple uses. Check the product description for details.'
-      }
-    ],
-    download: [
-      {
-        question: 'How do I download my purchase?',
-        answer: 'After purchase, go to "My Purchases" in your dashboard. Click the download button next to the product. Files are available in various formats (ZIP, RAR, etc.).'
-      },
-      {
-        question: 'Can I re-download after purchase?',
-        answer: 'Yes! You can download your purchases unlimited times. All your purchases are saved in your account forever.'
-      },
-      {
-        question: 'The download link isn\'t working. What should I do?',
-        answer: 'Try using a different browser or clearing your cache. If the problem persists, contact support with your order number and we\'ll provide an alternative download link.'
-      }
-    ],
-    license: [
-      {
-        question: 'What\'s the difference between Regular and Extended licenses?',
-        answer: 'Regular License: For single end product (free or commercial). Extended License: For end products sold to multiple clients or with a subscription model.'
-      },
-      {
-        question: 'Can I modify the source code?',
-        answer: 'Yes! You have full rights to modify, customize, and adapt the code to fit your needs. You can even remove copyright notices if allowed by the license.'
-      },
-      {
-        question: 'Can I use the code in client projects?',
-        answer: 'Yes, with the appropriate license. Regular license covers one client project, Extended license covers multiple client projects.'
-      }
-    ],
-    seller: [
-      {
-        question: 'How do I become a seller?',
-        answer: 'Click "Become a Seller" in the footer, fill out the application form, and submit your first product for review. Approval typically takes 1-3 business days.'
-      },
-      {
-        question: 'What are the fees?',
-        answer: 'We charge a 30% commission on each sale. There are no upfront fees or monthly charges. You only pay when you make a sale.'
-      },
-      {
-        question: 'How do I get paid?',
-        answer: 'Payments are processed monthly via PayPal, bank transfer, or Payoneer. Minimum withdrawal amount is $50. You\'ll receive payment within 7 days of request.'
-      },
-      {
-        question: 'What products can I sell?',
-        answer: 'Source code, templates, themes, plugins, UI kits, design files, and digital services. All products must be original work and pass our quality review.'
-      }
-    ],
-    support: [
-      {
-        question: 'How can I contact support?',
-        answer: 'You can reach us via: Live chat (24/7), Email at support@codemarket.com, or submit a ticket through your dashboard. Average response time is under 2 hours.'
-      },
-      {
-        question: 'Do products come with support?',
-        answer: 'Yes! Most products include 6 months of free support from the author. You can contact them directly through the product page or your dashboard.'
-      },
-      {
-        question: 'What if the product has bugs?',
-        answer: 'Contact the author first for a fix. If unresponsive, contact our support team and we\'ll assist with a resolution or refund.'
-      }
-    ]
-  };
+  const faqData = [
+    {
+      id: 1,
+      category: 'purchase',
+      question: 'Sau khi thanh toán thành công, tôi có thể tải mã nguồn ở đâu?',
+      answer:
+        'Ngay sau khi giao dịch được xác nhận (qua VietQR, VNPay, MoMo hoặc Thẻ quốc tế), bạn có thể truy cập mục "Mã nguồn đã mua" trong trang cá nhân để tải trực tiếp file .ZIP bản quyền và nhận License Key kích hoạt ngay lập tức.',
+    },
+    {
+      id: 2,
+      category: 'purchase',
+      question: 'Tôi có thể tải lại mã nguồn bao nhiêu lần sau khi mua?',
+      answer:
+        'Không giới hạn số lần tải! Mã nguồn bạn đã mua sẽ được lưu trữ vĩnh viễn trong tài khoản CodeMart của bạn, kèm theo quyền tải xuống các bản cập nhật sửa lỗi miễn phí trong tương lai từ tác giả.',
+    },
+    {
+      id: 3,
+      category: 'escrow',
+      question: 'Cơ chế Ký quỹ Escrow 3 ngày bảo vệ người mua như thế nào?',
+      answer:
+        'Khi bạn thanh toán, số tiền được hệ thống Escrow CodeMart bảo lưu an toàn trong 3 ngày. Trong thời gian này, bạn kiểm tra mã nguồn xem có khớp với mô tả và có lỗi gì không. Nếu file bị lỗi nghiêm trọng hoặc thiếu file mà tác giả không hỗ trợ trong 48h, bạn có quyền yêu cầu hoàn tiền 100%.',
+    },
+    {
+      id: 4,
+      category: 'escrow',
+      question: 'Quy trình yêu cầu hoàn tiền diễn ra như thế nào?',
+      answer:
+        'Bạn chỉ cần vào mục "Lịch sử mua hàng", chọn đơn hàng cần hỗ trợ và nhấn "Yêu cầu hoàn tiền Escrow", đính kèm ảnh chụp màn hình lỗi. Ban quản trị CodeMart sẽ tiến hành kiểm tra mã nguồn và xử lý hoàn tiền về tài khoản ngân hàng của bạn trong 24h.',
+    },
+    {
+      id: 5,
+      category: 'license',
+      question: 'Sự khác biệt giữa Giấy phép Standard License và Extended License?',
+      answer:
+        'Standard License cho phép bạn triển khai mã nguồn trên 1 dự án / tên miền thương mại hoặc học tập. Extended License cho phép bạn tùy biến, tích hợp vào sản phẩm SaaS bán lại cho nhiều khách hàng trả phí.',
+    },
+    {
+      id: 6,
+      category: 'license',
+      question: 'Tôi có được phép chỉnh sửa mã nguồn sau khi mua không?',
+      answer:
+        'Hoàn toàn được phép! Bạn sở hữu 100% quyền tùy biến, thay đổi giao diện, thêm tính năng, thay đổi cơ sở dữ liệu để phù hợp với dự án của riêng mình.',
+    },
+    {
+      id: 7,
+      category: 'seller',
+      question: 'Chính sách phân chia doanh thu và phí sàn tại CodeMart là bao nhiêu?',
+      answer:
+        'Tác giả nhận tới 80% giá trị mỗi đơn hàng bán ra. CodeMart chỉ thu 20% phí nền tảng để duy trì hệ thống máy chủ, quét bảo mật, cổng thanh toán tự động và hỗ trợ khách hàng.',
+    },
+    {
+      id: 8,
+      category: 'seller',
+      question: 'Rút tiền doanh thu về tài khoản ngân hàng mất bao lâu?',
+      answer:
+        'Sau khi đơn hàng qua thời hạn Escrow 3 ngày, số dư sẵn sàng rút sẽ hiển thị trong ví tác giả. Bạn có thể tạo lệnh rút về mọi ngân hàng Việt Nam (Vietcombank, MB Bank, Techcombank...), tiền về tài khoản trong vòng 2 - 4 giờ làm việc.',
+    },
+    {
+      id: 9,
+      category: 'support',
+      question: 'Nếu tôi gặp khó khăn khi cài đặt mã nguồn trên localhost thì sao?',
+      answer:
+        'Mỗi mã nguồn trên CodeMart đều bắt buộc có file README.md hướng dẫn chi tiết từng câu lệnh setup. Ngoài ra, bạn có thể nhắn tin trực tiếp cho tác giả qua kênh trao đổi đơn hàng hoặc gửi ticket để kỹ thuật viên CodeMart hỗ trợ.',
+    },
+  ];
 
-  const toggleFAQ = (index) => {
-    setOpenFAQ(openFAQ === index ? null : index);
+  const filteredFAQs = faqData.filter((item) => {
+    const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
+    const matchesSearch =
+      item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.answer.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const toggleFAQ = (id) => {
+    setOpenFAQId(openFAQId === id ? null : id);
   };
 
   return (
-    <div className="faq-page">
-      <section className="faq-hero">
+    <div className="faq-page-modern">
+      {/* Hero Banner */}
+      <section className="faq-hero-banner">
         <div className="container">
-          <h1 className="page-title">❓ Frequently Asked Questions</h1>
-          <p className="page-subtitle">
-            Find answers to common questions about CodeMarket
-          </p>
-          <div className="search-box">
-            <input type="text" placeholder="Search for answers..." />
-            <button>🔍 Search</button>
+          <div className="faq-hero-content">
+            <div className="faq-brand-tag">
+              <Sparkles size={14} />
+              <span>Trung Tâm Hỏi Đáp & Kiến Thức</span>
+            </div>
+            <h1 className="faq-hero-title">Câu Hỏi Thường Gặp (FAQ)</h1>
+            <p className="faq-hero-subtitle">
+              Tìm kiếm câu trả lời nhanh chóng cho mọi thắc mắc về quy trình mua bán mã nguồn, bảo
+              vệ Escrow và bản quyền số tại CodeMart.
+            </p>
+
+            {/* Live Search Input */}
+            <div className="faq-search-box-wrap">
+              <Search size={18} className="faq-search-icon" />
+              <input
+                type="text"
+                className="faq-search-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Nhập từ khóa tìm kiếm (ví dụ: Escrow, hoàn tiền, license, rút tiền...)"
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="faq-content">
+      {/* Main Content */}
+      <section className="faq-main-section">
         <div className="container">
-          <div className="faq-layout">
-            {/* Categories Sidebar */}
-            <div className="faq-categories">
-              <h3>Categories</h3>
-              {categories.map(cat => (
+          {/* Category Filter Pills */}
+          <div className="faq-categories-bar">
+            {categories.map((cat) => {
+              const Icon = cat.icon;
+              return (
                 <button
                   key={cat.id}
-                  className={`category-btn ${activeCategory === cat.id ? 'active' : ''}`}
+                  type="button"
+                  className={`faq-cat-pill-btn ${activeCategory === cat.id ? 'active' : ''}`}
                   onClick={() => setActiveCategory(cat.id)}
                 >
-                  <span className="cat-icon">{cat.icon}</span>
-                  {cat.name}
+                  <Icon size={14} />
+                  <span>{cat.name}</span>
                 </button>
-              ))}
-            </div>
+              );
+            })}
+          </div>
 
-            {/* FAQ List */}
-            <div className="faq-list">
-              <h2>
-                {categories.find(c => c.id === activeCategory)?.icon}{' '}
-                {categories.find(c => c.id === activeCategory)?.name}
-              </h2>
-              <div className="faq-items">
-                {faqs[activeCategory]?.map((faq, index) => (
-                  <div 
-                    key={index} 
-                    className={`faq-item ${openFAQ === index ? 'open' : ''}`}
-                  >
-                    <button 
-                      className="faq-question"
-                      onClick={() => toggleFAQ(index)}
+          {/* FAQ Accordion List */}
+          <div className="faq-accordion-container">
+            {filteredFAQs.length === 0 ? (
+              <div className="faq-empty-state">
+                <HelpCircle size={40} className="text-muted" />
+                <h3>Không tìm thấy câu hỏi phù hợp</h3>
+                <p>Thử tìm kiếm với từ khóa khác hoặc liên hệ đội ngũ hỗ trợ của chúng tôi.</p>
+              </div>
+            ) : (
+              filteredFAQs.map((faq) => {
+                const isOpen = openFAQId === faq.id;
+                return (
+                  <div key={faq.id} className={`faq-accordion-item ${isOpen ? 'open' : ''}`}>
+                    <button
+                      type="button"
+                      className="faq-accordion-question-btn"
+                      onClick={() => toggleFAQ(faq.id)}
                     >
-                      <span>{faq.question}</span>
-                      <span className="faq-icon">
-                        {openFAQ === index ? '−' : '+'}
+                      <span className="faq-question-text">{faq.question}</span>
+                      <span className="faq-toggle-icon">
+                        {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                       </span>
                     </button>
-                    {openFAQ === index && (
-                      <div className="faq-answer">
+
+                    {isOpen && (
+                      <div className="faq-accordion-answer-box">
                         <p>{faq.answer}</p>
                       </div>
                     )}
                   </div>
-                ))}
-              </div>
-            </div>
+                );
+              })
+            )}
           </div>
 
-          {/* Still Need Help */}
-          <div className="help-cta">
-            <h3>Still need help?</h3>
-            <p>Can't find what you're looking for? Our support team is here to help.</p>
-            <div className="help-buttons">
-              <button className="help-btn primary">💬 Live Chat</button>
-              <button className="help-btn">📧 Contact Support</button>
+          {/* Need More Help Banner */}
+          <div className="faq-help-footer-card">
+            <div className="help-card-left">
+              <MessageSquare size={24} className="text-primary" />
+              <div>
+                <h3>Bạn vẫn còn câu hỏi chưa được giải đáp?</h3>
+                <p>
+                  Đội ngũ kỹ thuật viên và chăm sóc khách hàng CodeMart luôn sẵn sàng trợ giúp bạn
+                  24/7.
+                </p>
+              </div>
             </div>
+
+            <Link to="/contact" className="btn-faq-contact-cta">
+              <span>Gửi Yêu Cầu Hỗ Trợ</span>
+              <ArrowRight size={15} />
+            </Link>
           </div>
         </div>
       </section>

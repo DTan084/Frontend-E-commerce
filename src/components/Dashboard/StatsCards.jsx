@@ -1,95 +1,78 @@
 import React from 'react';
+import { Package, Code2, CreditCard, KeyRound, ArrowUpRight } from 'lucide-react';
 import './StatsCards.css';
 
 const StatsCards = ({ stats }) => {
-  const defaultStats = [
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('vi-VN').format(Math.round(price)) + '₫';
+  };
+
+  const statItems = [
     {
       id: 'orders',
       title: 'Tổng đơn hàng',
-      value: stats?.totalOrders || 12,
-      subtitle: 'All time',
-      icon: '📦',
-      color: '#667eea',
+      value: stats?.totalOrders || 0,
+      subtitle: 'Đơn đã giao dịch',
+      icon: Package,
+      color: '#4f46e5',
       trend: '+12%',
-      trendUp: true,
     },
     {
       id: 'products',
-      title: 'Sản phẩm hoạt động',
-      value: stats?.activeProducts || 8,
-      subtitle: 'In library',
-      icon: '🎨',
-      color: '#48bb78',
-      trend: '+3',
-      trendUp: true,
+      title: 'Mã nguồn sở hữu',
+      value: stats?.activeProducts || 0,
+      subtitle: 'Trong thư viện cá nhân',
+      icon: Code2,
+      color: '#059669',
+      trend: 'Trọn đời',
     },
     {
-      id: 'revenue',
-      title: 'Total Spent',
-      value: stats?.totalRevenue ? `$${stats.totalRevenue.toLocaleString()}` : '$1,250',
-      subtitle: 'Lifetime value',
-      icon: '💰',
-      color: '#ed8936',
-      trend: '+$150',
-      trendUp: true,
+      id: 'spent',
+      title: 'Tổng chi tiêu',
+      value: stats?.totalRevenue ? formatPrice(stats.totalRevenue) : '0₫',
+      subtitle: 'Giá trị tích lũy',
+      icon: CreditCard,
+      color: '#d97706',
+      trend: 'VIP',
     },
     {
-      id: 'rating',
-      title: 'Đánh giá trung bình',
-      value: stats?.averageRating || '4.8',
-      subtitle: 'From sellers',
-      icon: '⭐',
-      color: '#f6ad55',
-      trend: '+0.2',
-      trendUp: true,
+      id: 'licenses',
+      title: 'License kích hoạt',
+      value: stats?.activeProducts || 0,
+      subtitle: 'Key bản quyền active',
+      icon: KeyRound,
+      color: '#7c3aed',
+      trend: '100%',
     },
   ];
 
   return (
-    <div className="stats-cards-container">
-      {defaultStats.map((stat, index) => (
-        <div 
-          key={stat.id} 
-          className="stat-card"
-          style={{ 
-            animationDelay: `${index * 0.1}s`,
-            '--card-color': stat.color 
-          }}
-        >
-          <div className="stat-card-header">
-            <div className="stat-icon-wrapper" style={{ background: stat.color }}>
-              <span className="stat-icon">{stat.icon}</span>
+    <div className="stats-cards-grid-modern">
+      {statItems.map((item) => {
+        const Icon = item.icon;
+        return (
+          <div key={item.id} className="stat-card-modern">
+            <div className="stat-card-top">
+              <div
+                className="stat-icon-halo"
+                style={{ color: item.color, background: `${item.color}14` }}
+              >
+                <Icon size={20} />
+              </div>
+              <div className="stat-trend-badge">
+                <ArrowUpRight size={13} />
+                <span>{item.trend}</span>
+              </div>
             </div>
-            <div 
-              className={`stat-trend ${stat.trendUp ? 'trend-up' : 'trend-down'}`}
-            >
-              <span className="trend-icon">{stat.trendUp ? '↗' : '↘'}</span>
-              <span className="trend-value">{stat.trend}</span>
-            </div>
-          </div>
 
-          <div className="stat-card-body">
-            <h3 className="stat-title">{stat.title}</h3>
-            <div className="stat-value">{stat.value}</div>
-            <p className="stat-subtitle">{stat.subtitle}</p>
-          </div>
-
-          <div className="stat-card-footer">
-            <div className="stat-progress-bar">
-              <div 
-                className="stat-progress-fill"
-                style={{ 
-                  width: `${Math.random() * 40 + 60}%`,
-                  background: stat.color 
-                }}
-              ></div>
+            <div className="stat-content-wrap">
+              <span className="stat-title-label">{item.title}</span>
+              <h3 className="stat-main-number">{item.value}</h3>
+              <p className="stat-sub-caption">{item.subtitle}</p>
             </div>
           </div>
-
-          {/* Background decoration */}
-          <div className="stat-card-bg" style={{ background: stat.color }}></div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

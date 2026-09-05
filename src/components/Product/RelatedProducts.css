@@ -1,178 +1,94 @@
-/* Related Products Section - Premium Design */
-.related-products-section {
-  background: #fff;
-  border-radius: 16px;
-  padding: 40px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  margin-bottom: 40px;
-  animation: fadeInUp 0.6s ease-out;
+/* ==========================================================================
+   Related Products - CodeMart Modern Tech Marketplace
+   ========================================================================== */
+
+.related-products-modern {
+  background: #ffffff;
+  border-radius: var(--border-radius-lg, 16px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  padding: 28px;
 }
 
-/* Section Header */
-.related-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.section-title {
-  font-size: 36px;
-  font-weight: 800;
-  color: #2d3748;
-  margin: 0 0 12px 0;
+/* Header Row */
+.related-header-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light, #f1f5f9);
+  flex-wrap: wrap;
   gap: 12px;
 }
 
-.section-title .icon {
-  font-size: 40px;
-  animation: pulse 2s ease-in-out infinite;
+.related-header-row .header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.section-subtitle {
-  font-size: 16px;
-  color: #718096;
-  margin: 0;
+.related-header-row .badge-flair {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: rgba(79, 70, 229, 0.08);
+  border-radius: 999px;
+  color: var(--primary-color, #4f46e5);
+  font-size: 12px;
+  font-weight: 700;
+  width: fit-content;
 }
 
-/* Products Grid - Sử dụng ProductCard component */
+.related-header-row .section-title {
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  color: var(--text-primary, #0f172a) !important;
+  margin: 0 !important;
+}
+
+.view-all-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: var(--border-radius-sm, 8px);
+  color: var(--text-primary, #0f172a);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: all 0.15s ease;
+}
+
+.view-all-link-btn:hover {
+  border-color: var(--primary-color, #4f46e5);
+  color: var(--primary-color, #4f46e5);
+  background: rgba(79, 70, 229, 0.04);
+}
+
+/* Products Grid */
 .related-products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  margin-bottom: 40px;
+  gap: 20px;
 }
 
-/* View All Button */
-.view-all-container {
-  display: flex;
-  justify-content: center;
-  padding-top: 20px;
-  border-top: 2px solid #f5f5f5;
-}
-
-.view-all-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: #fff;
-  color: #667eea;
-  border: 2px solid #667eea;
-  padding: 14px 36px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.view-all-btn:hover {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-}
-
-.view-all-btn .arrow {
-  font-size: 20px;
-  transition: transform 0.3s ease;
-}
-
-.view-all-btn:hover .arrow {
-  transform: translateX(5px);
-}
-
-/* Responsive Design */
-@media (max-width: 1199px) {
-  .related-products-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-  }
-
-  .related-products-section {
-    padding: 35px;
-  }
-
-  .section-title {
-    font-size: 32px;
-  }
-}
-
-@media (max-width: 991px) {
+@media (max-width: 1100px) {
   .related-products-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .related-products-section {
-    padding: 30px;
-  }
-
-  .section-title {
-    font-size: 28px;
-  }
-
-  .section-title .icon {
-    font-size: 32px;
+    gap: 16px;
   }
 }
 
-@media (max-width: 767px) {
-  .related-products-section {
-    padding: 25px 20px;
-    border-radius: 12px;
-  }
-
-  .section-title {
-    font-size: 24px;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .section-title .icon {
-    font-size: 28px;
-  }
-
-  .section-subtitle {
-    font-size: 14px;
-  }
-
-  .related-products-grid {
-    gap: 15px;
-  }
-
-  .view-all-btn {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 575px) {
+@media (max-width: 640px) {
   .related-products-grid {
     grid-template-columns: 1fr;
   }
-}
 
-/* Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
+  .related-products-modern {
+    padding: 20px 16px;
   }
 }

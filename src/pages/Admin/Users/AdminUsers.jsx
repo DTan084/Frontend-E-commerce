@@ -1,316 +1,417 @@
 import React, { useState } from 'react';
+import {
+  Users,
+  Search,
+  Filter,
+  UserCheck,
+  Shield,
+  Store,
+  UserX,
+  Edit3,
+  Trash2,
+  Lock,
+  Unlock,
+  X,
+  CheckCircle2,
+} from 'lucide-react';
 import './AdminUsers.css';
 
+const initialUsers = [
+  {
+    id: 1,
+    name: 'Super Admin',
+    email: 'admin@test.com',
+    role: 'admin',
+    status: 'active',
+    avatar: 'https://ui-avatars.com/api/?name=Admin+Master&background=4f46e5&color=fff',
+    joinDate: '15/01/2025',
+    lastLogin: 'Hôm nay, 10:30',
+    totalOrders: 0,
+    totalSpent: 0,
+  },
+  {
+    id: 2,
+    name: 'Nguyễn Văn Long',
+    email: 'user@test.com',
+    role: 'buyer',
+    status: 'active',
+    avatar: 'https://ui-avatars.com/api/?name=Nguyen+Van+Long&background=0284c7&color=fff',
+    joinDate: '20/02/2025',
+    lastLogin: 'Hôm qua, 18:45',
+    totalOrders: 12,
+    totalSpent: 18500000,
+  },
+  {
+    id: 3,
+    name: 'Trần Thị Bích',
+    email: 'tranthib@gmail.com',
+    role: 'buyer',
+    status: 'active',
+    avatar: 'https://ui-avatars.com/api/?name=Tran+Thi+Bich&background=ec4899&color=fff',
+    joinDate: '10/03/2025',
+    lastLogin: '2 ngày trước',
+    totalOrders: 8,
+    totalSpent: 12400000,
+  },
+  {
+    id: 4,
+    name: 'Demo Seller Studio',
+    email: 'demo@test.com',
+    role: 'seller',
+    status: 'active',
+    avatar: 'https://ui-avatars.com/api/?name=Demo+Seller&background=10b981&color=fff',
+    joinDate: '01/04/2025',
+    lastLogin: 'Vừa xong',
+    totalOrders: 25,
+    totalSpent: 75000000,
+  },
+  {
+    id: 5,
+    name: 'Lê Văn Cường',
+    email: 'levanc@gmail.com',
+    role: 'buyer',
+    status: 'inactive',
+    avatar: 'https://ui-avatars.com/api/?name=Le+Van+Cuong&background=f59e0b&color=fff',
+    joinDate: '12/05/2025',
+    lastLogin: '3 tuần trước',
+    totalOrders: 2,
+    totalSpent: 2800000,
+  },
+  {
+    id: 6,
+    name: 'Phạm Minh Tuấn',
+    email: 'phamminhtuan@dev.io',
+    role: 'seller',
+    status: 'active',
+    avatar: 'https://ui-avatars.com/api/?name=Pham+Minh+Tuan&background=8b5cf6&color=fff',
+    joinDate: '18/06/2025',
+    lastLogin: '3 giờ trước',
+    totalOrders: 18,
+    totalSpent: 42000000,
+  },
+  {
+    id: 7,
+    name: 'Hoàng Văn Em',
+    email: 'hoangvanem@spammer.net',
+    role: 'buyer',
+    status: 'suspended',
+    avatar: 'https://ui-avatars.com/api/?name=Hoang+Van+Em&background=ef4444&color=fff',
+    joinDate: '22/07/2025',
+    lastLogin: '1 tháng trước',
+    totalOrders: 0,
+    totalSpent: 0,
+  },
+];
+
 const AdminUsers = () => {
+  const [usersList, setUsersList] = useState(initialUsers);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  // Mock users data
-  const users = [
-    {
-      id: 1,
-      name: 'Admin User',
-      email: 'admin@test.com',
-      role: 'admin',
-      status: 'active',
-      avatar: 'https://ui-avatars.com/api/?name=Admin+User&background=667eea&color=fff',
-      joinDate: '2025-01-15',
-      lastLogin: '2025-10-31',
-      totalOrders: 0,
-      totalSpent: '$0',
-    },
-    {
-      id: 2,
-      name: 'Nguyễn Văn A',
-      email: 'user@test.com',
-      role: 'buyer',
-      status: 'active',
-      avatar: 'https://ui-avatars.com/api/?name=Nguyen+Van+A&background=764ba2&color=fff',
-      joinDate: '2025-02-20',
-      lastLogin: '2025-10-30',
-      totalOrders: 12,
-      totalSpent: '$1,245',
-    },
-    {
-      id: 3,
-      name: 'Trần Thị B',
-      email: 'tranthib@gmail.com',
-      role: 'buyer',
-      status: 'active',
-      avatar: 'https://ui-avatars.com/api/?name=Tran+Thi+B&background=f093fb&color=fff',
-      joinDate: '2025-03-10',
-      lastLogin: '2025-10-29',
-      totalOrders: 8,
-      totalSpent: '$892',
-    },
-    {
-      id: 4,
-      name: 'Demo Seller',
-      email: 'demo@test.com',
-      role: 'seller',
-      status: 'active',
-      avatar: 'https://ui-avatars.com/api/?name=Demo+Seller&background=4caf50&color=fff',
-      joinDate: '2025-04-01',
-      lastLogin: '2025-10-31',
-      totalOrders: 25,
-      totalSpent: '$3,240',
-    },
-    {
-      id: 5,
-      name: 'Lê Văn C',
-      email: 'levanc@gmail.com',
-      role: 'buyer',
-      status: 'inactive',
-      avatar: 'https://ui-avatars.com/api/?name=Le+Van+C&background=ff9800&color=fff',
-      joinDate: '2025-05-12',
-      lastLogin: '2025-08-15',
-      totalOrders: 3,
-      totalSpent: '$156',
-    },
-    {
-      id: 6,
-      name: 'Phạm Thị D',
-      email: 'phamthid@gmail.com',
-      role: 'seller',
-      status: 'active',
-      avatar: 'https://ui-avatars.com/api/?name=Pham+Thi+D&background=e91e63&color=fff',
-      joinDate: '2025-06-18',
-      lastLogin: '2025-10-30',
-      totalOrders: 18,
-      totalSpent: '$2,150',
-    },
-    {
-      id: 7,
-      name: 'Hoàng Văn E',
-      email: 'hoangvane@gmail.com',
-      role: 'buyer',
-      status: 'suspended',
-      avatar: 'https://ui-avatars.com/api/?name=Hoang+Van+E&background=9c27b0&color=fff',
-      joinDate: '2025-07-22',
-      lastLogin: '2025-09-10',
-      totalOrders: 5,
-      totalSpent: '$420',
-    },
-  ];
+  const formatVND = (price) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price);
+  };
 
-  // Filter users
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
+  const handleToggleStatus = (userId) => {
+    setUsersList((prev) =>
+      prev.map((u) => {
+        if (u.id === userId) {
+          const newStatus = u.status === 'active' ? 'suspended' : 'active';
+          return { ...u, status: newStatus };
+        }
+        return u;
+      })
+    );
+  };
+
+  const handleDeleteUser = (userId) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa tài khoản người dùng này?')) {
+      setUsersList((prev) => prev.filter((u) => u.id !== userId));
+    }
+  };
+
+  const filteredUsers = usersList.filter((user) => {
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === 'all' || user.role === filterRole;
     const matchesStatus = filterStatus === 'all' || user.status === filterStatus;
     return matchesSearch && matchesRole && matchesStatus;
   });
 
-  const stats = {
-    total: users.length,
-    active: users.filter(u => u.status === 'active').length,
-    sellers: users.filter(u => u.role === 'seller').length,
-    buyers: users.filter(u => u.role === 'buyer').length,
-  };
-
-  const handleViewDetails = (userId) => {
-    console.log('View user:', userId);
-  };
-
-  const handleEditUser = (userId) => {
-    console.log('Edit user:', userId);
-  };
-
-  const handleDeleteUser = (userId) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      console.log('Delete user:', userId);
-    }
-  };
-
-  const handleToggleStatus = (userId, currentStatus) => {
-    const newStatus = currentStatus === 'active' ? 'suspended' : 'active';
-    console.log(`Toggle user ${userId} status to ${newStatus}`);
-  };
+  const countBuyers = usersList.filter((u) => u.role === 'buyer').length;
+  const countSellers = usersList.filter((u) => u.role === 'seller').length;
+  const countAdmins = usersList.filter((u) => u.role === 'admin').length;
 
   return (
-    <div className="admin-users-page">
-      {/* Header */}
-      <div className="page-header">
-        <div className="header-content">
-          <h1 className="page-title">
-            <span className="title-icon">👥</span>
-            Users Management
-          </h1>
-          <p className="page-subtitle">Manage all users, sellers, and administrators</p>
+    <div className="admin-page-container">
+      {/* Header Banner */}
+      <div className="admin-page-header-banner">
+        <div className="header-banner-copy">
+          <div className="header-tag-pill">
+            <Users size={13} />
+            <span>Quản trị Thành viên & Phân quyền</span>
+          </div>
+          <h1 className="admin-page-main-title">Quản lý Tài khoản Người dùng</h1>
+          <p className="admin-page-main-desc">
+            Theo dõi, phân quyền vai trò (Admin / Seller / Buyer) và kiểm soát trạng thái hoạt động
+            của toàn bộ tài khoản
+          </p>
         </div>
-        <button className="add-user-btn">
-          <span className="btn-icon">➕</span>
-          Add New User
-        </button>
-      </div>
 
-      {/* Stats Cards */}
-      <div className="users-stats">
-        <div className="stat-card blue">
-          <div className="stat-icon-wrapper">
-            <span className="stat-icon">👤</span>
+        <div className="header-stats-badges-row">
+          <div className="stat-chip blue">
+            <UserCheck size={14} />
+            <span>{countBuyers} Khách mua</span>
           </div>
-          <div className="stat-content">
-            <span className="stat-value">{stats.total}</span>
-            <span className="stat-label">Total Users</span>
+          <div className="stat-chip emerald">
+            <Store size={14} />
+            <span>{countSellers} Tác giả</span>
           </div>
-        </div>
-        <div className="stat-card green">
-          <div className="stat-icon-wrapper">
-            <span className="stat-icon">✅</span>
-          </div>
-          <div className="stat-content">
-            <span className="stat-value">{stats.active}</span>
-            <span className="stat-label">Active Users</span>
-          </div>
-        </div>
-        <div className="stat-card purple">
-          <div className="stat-icon-wrapper">
-            <span className="stat-icon">🏪</span>
-          </div>
-          <div className="stat-content">
-            <span className="stat-value">{stats.sellers}</span>
-            <span className="stat-label">Sellers</span>
-          </div>
-        </div>
-        <div className="stat-card orange">
-          <div className="stat-icon-wrapper">
-            <span className="stat-icon">🛍️</span>
-          </div>
-          <div className="stat-content">
-            <span className="stat-value">{stats.buyers}</span>
-            <span className="stat-label">Buyers</span>
+          <div className="stat-chip purple">
+            <Shield size={14} />
+            <span>{countAdmins} Super Admin</span>
           </div>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="users-filters">
-        <div className="search-box">
-          <span className="search-icon">🔍</span>
+      {/* Filter & Search Toolbar */}
+      <div className="admin-table-toolbar-box">
+        <div className="toolbar-search-wrap">
+          <Search size={15} className="toolbar-search-icon" />
           <input
             type="text"
-            placeholder="Search by name or email..."
+            className="toolbar-search-input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Tìm theo họ tên, email tài khoản..."
           />
         </div>
-        <div className="filter-group">
-          <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
-            <option value="all">All Roles</option>
-            <option value="admin">Admin</option>
-            <option value="seller">Seller</option>
-            <option value="buyer">Buyer</option>
-          </select>
-          <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="suspended">Suspended</option>
-          </select>
-        </div>
-      </div>
 
-      {/* Users Table */}
-      <div className="users-table-container">
-        <table className="users-table">
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Join Date</th>
-              <th>Last Login</th>
-              <th>Orders</th>
-              <th>Spent</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.map((user, index) => (
-              <tr key={user.id} style={{ animationDelay: `${index * 0.05}s` }}>
-                <td>
-                  <div className="user-info">
-                    <img src={user.avatar} alt={user.name} className="user-avatar" />
-                    <span className="user-name">{user.name}</span>
-                  </div>
-                </td>
-                <td className="user-email">{user.email}</td>
-                <td>
-                  <span className={`role-badge ${user.role}`}>
-                    {user.role === 'admin' && '🛡️'}
-                    {user.role === 'seller' && '🏪'}
-                    {user.role === 'buyer' && '🛍️'}
-                    {user.role}
-                  </span>
-                </td>
-                <td>
-                  <span className={`status-badge ${user.status}`}>
-                    {user.status}
-                  </span>
-                </td>
-                <td className="date-cell">{user.joinDate}</td>
-                <td className="date-cell">{user.lastLogin}</td>
-                <td className="orders-cell">{user.totalOrders}</td>
-                <td className="spent-cell">{user.totalSpent}</td>
-                <td>
-                  <div className="action-buttons">
-                    <button
-                      className="action-btn view"
-                      onClick={() => handleViewDetails(user.id)}
-                      title="View Details"
-                    >
-                      👁️
-                    </button>
-                    <button
-                      className="action-btn edit"
-                      onClick={() => handleEditUser(user.id)}
-                      title="Edit User"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      className="action-btn toggle"
-                      onClick={() => handleToggleStatus(user.id, user.status)}
-                      title={user.status === 'active' ? 'Suspend' : 'Activate'}
-                    >
-                      {user.status === 'active' ? '🔒' : '🔓'}
-                    </button>
-                    <button
-                      className="action-btn delete"
-                      onClick={() => handleDeleteUser(user.id)}
-                      title="Delete User"
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {filteredUsers.length === 0 && (
-          <div className="no-results">
-            <span className="no-results-icon">🔍</span>
-            <p>No users found</p>
+        <div className="toolbar-filters-row">
+          <div className="toolbar-select-wrap">
+            <Filter size={13} className="select-icon" />
+            <select
+              value={filterRole}
+              onChange={(e) => setFilterRole(e.target.value)}
+              className="toolbar-select-dropdown"
+            >
+              <option value="all">Tất cả vai trò</option>
+              <option value="buyer">Khách mua (Buyer)</option>
+              <option value="seller">Tác giả (Seller)</option>
+              <option value="admin">Quản trị (Admin)</option>
+            </select>
           </div>
-        )}
+
+          <div className="toolbar-select-wrap">
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="toolbar-select-dropdown"
+            >
+              <option value="all">Tất cả trạng thái</option>
+              <option value="active">Đang hoạt động</option>
+              <option value="inactive">Tạm ngưng</option>
+              <option value="suspended">Bị khóa</option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      {/* Pagination */}
-      <div className="pagination">
-        <button className="page-btn">Previous</button>
-        <div className="page-numbers">
-          <button className="page-number active">1</button>
-          <button className="page-number">2</button>
-          <button className="page-number">3</button>
+      {/* Users Data Table */}
+      <div className="admin-data-table-card">
+        <div className="table-responsive-wrapper">
+          <table className="admin-data-table">
+            <thead>
+              <tr>
+                <th>Thành viên</th>
+                <th>Vai trò</th>
+                <th>Trạng thái</th>
+                <th>Ngày gia nhập</th>
+                <th>Lần đăng nhập cuối</th>
+                <th>Tổng đơn / Chi tiêu</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="td-empty-table">
+                    <UserX size={32} className="text-muted" />
+                    <p>Không tìm thấy người dùng phù hợp với bộ lọc</p>
+                  </td>
+                </tr>
+              ) : (
+                filteredUsers.map((u) => (
+                  <tr key={u.id} className="admin-table-row">
+                    <td className="td-user-profile">
+                      <div className="user-cell-flex">
+                        <img src={u.avatar} alt={u.name} className="user-table-avatar" />
+                        <div className="user-names-col">
+                          <strong className="user-name-txt">{u.name}</strong>
+                          <span className="user-email-txt">{u.email}</span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="td-role-pill">
+                      {u.role === 'admin' && (
+                        <span className="role-pill-badge admin">
+                          <Shield size={11} />
+                          <span>Super Admin</span>
+                        </span>
+                      )}
+                      {u.role === 'seller' && (
+                        <span className="role-pill-badge seller">
+                          <Store size={11} />
+                          <span>Tác giả (Seller)</span>
+                        </span>
+                      )}
+                      {u.role === 'buyer' && (
+                        <span className="role-pill-badge buyer">
+                          <UserCheck size={11} />
+                          <span>Khách mua</span>
+                        </span>
+                      )}
+                    </td>
+
+                    <td className="td-status-pill">
+                      {u.status === 'active' && (
+                        <span className="status-badge-pill emerald">
+                          <CheckCircle2 size={11} />
+                          <span>Hoạt động</span>
+                        </span>
+                      )}
+                      {u.status === 'inactive' && (
+                        <span className="status-badge-pill amber">
+                          <span>Tạm ngưng</span>
+                        </span>
+                      )}
+                      {u.status === 'suspended' && (
+                        <span className="status-badge-pill rose">
+                          <Lock size={11} />
+                          <span>Bị khóa</span>
+                        </span>
+                      )}
+                    </td>
+
+                    <td className="td-date">{u.joinDate}</td>
+                    <td className="td-date text-muted">{u.lastLogin}</td>
+
+                    <td className="td-financial">
+                      <strong>{u.totalOrders} đơn</strong>
+                      <small>{formatVND(u.totalSpent)}</small>
+                    </td>
+
+                    <td className="td-actions-buttons">
+                      <div className="actions-btn-strip">
+                        <button
+                          type="button"
+                          className="btn-tbl-action"
+                          onClick={() => setSelectedUser(u)}
+                          title="Xem chi tiết"
+                        >
+                          <Edit3 size={13} />
+                        </button>
+
+                        {u.role !== 'admin' && (
+                          <button
+                            type="button"
+                            className={`btn-tbl-action ${u.status === 'active' ? 'lock' : 'unlock'}`}
+                            onClick={() => handleToggleStatus(u.id)}
+                            title={u.status === 'active' ? 'Khóa tài khoản' : 'Mở khóa'}
+                          >
+                            {u.status === 'active' ? <Lock size={13} /> : <Unlock size={13} />}
+                          </button>
+                        )}
+
+                        {u.role !== 'admin' && (
+                          <button
+                            type="button"
+                            className="btn-tbl-action delete"
+                            onClick={() => handleDeleteUser(u.id)}
+                            title="Xóa tài khoản"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
-        <button className="page-btn">Next</button>
       </div>
+
+      {/* User Details Modal */}
+      {selectedUser && (
+        <div className="modal-backdrop-overlay" onClick={() => setSelectedUser(null)}>
+          <div className="modal-user-box" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-user-head">
+              <h3>Thông tin Tài khoản #{selectedUser.id}</h3>
+              <button
+                type="button"
+                className="btn-modal-close"
+                onClick={() => setSelectedUser(null)}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="modal-user-body">
+              <div className="modal-user-profile-header">
+                <img
+                  src={selectedUser.avatar}
+                  alt={selectedUser.name}
+                  className="modal-avatar-lg"
+                />
+                <div>
+                  <h4>{selectedUser.name}</h4>
+                  <p>{selectedUser.email}</p>
+                </div>
+              </div>
+
+              <div className="modal-info-grid">
+                <div className="modal-info-field">
+                  <span className="field-lbl">Vai trò hiện tại</span>
+                  <span className="field-val">{selectedUser.role.toUpperCase()}</span>
+                </div>
+                <div className="modal-info-field">
+                  <span className="field-lbl">Trạng thái</span>
+                  <span className="field-val">{selectedUser.status}</span>
+                </div>
+                <div className="modal-info-field">
+                  <span className="field-lbl">Ngày gia nhập</span>
+                  <span className="field-val">{selectedUser.joinDate}</span>
+                </div>
+                <div className="modal-info-field">
+                  <span className="field-lbl">Tổng chi tiêu</span>
+                  <span className="field-val text-primary">
+                    {formatVND(selectedUser.totalSpent)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="modal-user-footer">
+              <button
+                type="button"
+                className="btn-modal-close-action"
+                onClick={() => setSelectedUser(null)}
+              >
+                Đóng cửa sổ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

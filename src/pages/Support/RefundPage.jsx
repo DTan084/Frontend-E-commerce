@@ -1,186 +1,159 @@
 import React from 'react';
+import { ShieldCheck, CheckCircle2, XCircle, Clock, RotateCcw } from 'lucide-react';
 import './PolicyPages.css';
 
 const RefundPage = () => {
   return (
-    <div className="policy-page">
-      <section className="policy-hero">
+    <div className="policy-page-modern">
+      {/* Hero Banner */}
+      <section className="policy-hero-banner">
         <div className="container">
-          <h1 className="page-title">💰 Refund Policy</h1>
-          <p className="page-subtitle">Last updated: November 19, 2025</p>
+          <div className="policy-hero-content">
+            <div className="policy-brand-tag">
+              <RotateCcw size={13} />
+              <span>Chính Sách Bảo Vệ Quyền Lợi Khách Hàng</span>
+            </div>
+            <h1 className="policy-hero-title">Chính Sách Hoàn Tiền & Ký Quỹ Escrow</h1>
+            <p className="policy-hero-subtitle">
+              Cập nhật lần cuối: Ngày 28 tháng 08 năm 2026 • Cam kết hoàn tiền 100% trong 72 giờ bảo
+              lưu Escrow nếu mã nguồn lỗi
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="policy-content">
+      {/* Main Document */}
+      <section className="policy-main-section">
         <div className="container">
-          <div className="policy-document">
-            <div className="policy-intro">
+          <div className="policy-doc-container">
+            <div className="policy-intro-alert-box">
+              <ShieldCheck size={24} className="text-emerald flex-shrink-0" />
               <p>
-                We want you to be completely satisfied with your purchase. If you're not happy
-                with a product, we offer a 30-day money-back guarantee under certain conditions.
+                Tại <strong>CodeMart</strong>, 100% giao dịch mã nguồn đều được bảo vệ bởi cơ chế{' '}
+                <strong>Ký quỹ Escrow 3 ngày (72 giờ)</strong>. Khoản thanh toán chỉ được chuyển cho
+                Tác giả khi bạn đã kiểm tra và hài lòng với chất lượng mã nguồn nhận được.
               </p>
             </div>
 
-            <div className="policy-section">
-              <h2>1. 30-Day Money-Back Guarantee</h2>
+            {/* Section 1 */}
+            <div className="policy-doc-section">
+              <h2 className="policy-section-heading">
+                <CheckCircle2 size={18} className="text-emerald" />
+                <span>1. Các trường hợp được CHẤP THUẬN hoàn tiền 100%</span>
+              </h2>
               <p>
-                You can request a refund within 30 days of purchase if:
+                Bạn có quyền yêu cầu hoàn lại toàn bộ số tiền thanh toán trong vòng 72 giờ kể từ khi
+                mua nếu thuộc một trong các trường hợp sau:
               </p>
-              <ul>
-                <li>The product doesn't work as described in the listing</li>
-                <li>The product has major bugs that prevent its use</li>
-                <li>The product is incompatible with the stated requirements</li>
-                <li>The seller doesn't provide advertised support</li>
-                <li>The product files are corrupt or incomplete</li>
+              <ul className="policy-checklist">
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    <strong>File bị lỗi hoặc thiếu tệp cốt lõi:</strong> Tệp .ZIP tải về bị lỗi giải
+                    nén, thiếu file source code chính, hoặc không thể cài đặt theo hướng dẫn README.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    <strong>Không đúng mô tả:</strong> Tính năng thực tế của mã nguồn khác biệt lớn
+                    so với mô tả, video demo hoặc ảnh chụp màn hình do tác giả cung cấp.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    <strong>Tác giả không hỗ trợ trong 48 giờ:</strong> Khi bạn báo lỗi nghiêm trọng
+                    không thể chạy được dự án và tác giả không phản hồi khắc phục sau 48 giờ làm
+                    việc.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-emerald flex-shrink-0" />
+                  <span>
+                    <strong>Vi phạm bảo mật / Bản quyền:</strong> Mã nguồn bị phát hiện chứa mã độc,
+                    backdoor hoặc vi phạm bản quyền sở hữu trí tuệ đã được xác thực.
+                  </span>
+                </li>
               </ul>
             </div>
 
-            <div className="policy-section">
-              <h2>2. Non-Refundable Situations</h2>
-              <p>
-                Refunds will NOT be provided if:
-              </p>
-              <ul>
-                <li>You simply changed your mind</li>
-                <li>You bought a product by mistake (without reviewing details)</li>
-                <li>You don't have sufficient expertise to use the product</li>
-                <li>The product works as described, but doesn't meet your expectations</li>
-                <li>You've already used the product in a completed project</li>
-                <li>The refund is requested after 30 days from purchase</li>
-                <li>You violated the Terms of Service</li>
+            {/* Section 2 */}
+            <div className="policy-doc-section">
+              <h2 className="policy-section-heading">
+                <XCircle size={18} className="text-danger" />
+                <span>2. Các trường hợp KHÔNG ĐƯỢC áp dụng hoàn tiền</span>
+              </h2>
+              <p>Yêu cầu hoàn tiền sẽ bị từ chối trong các trường hợp sau:</p>
+              <ul className="policy-checklist">
+                <li>
+                  <XCircle size={15} className="text-danger flex-shrink-0" />
+                  <span>
+                    <strong>Quá thời hạn Escrow 3 ngày:</strong> Đơn hàng đã quá 72 giờ kể từ khi
+                    thanh toán thành công và tiền đã được giải ngân cho Tác giả.
+                  </span>
+                </li>
+                <li>
+                  <XCircle size={15} className="text-danger flex-shrink-0" />
+                  <span>
+                    <strong>Thay đổi ý định cá nhân:</strong> Bạn đổi ý không muốn làm dự án nữa sau
+                    khi đã tải thành công mã nguồn về máy tính.
+                  </span>
+                </li>
+                <li>
+                  <XCircle size={15} className="text-danger flex-shrink-0" />
+                  <span>
+                    <strong>Thiếu môi trường hoặc kiến thức kỹ thuật cơ bản:</strong> Mã nguồn hoạt
+                    động bình thường nhưng bạn chưa cài đặt Node.js/PHP/Java/Docker theo đúng cấu
+                    hình yêu cầu đã nêu rõ trong phần mô tả sản phẩm.
+                  </span>
+                </li>
               </ul>
             </div>
 
-            <div className="policy-section">
-              <h2>3. Refund Process</h2>
-              <h3>Step 1: Contact the Seller</h3>
-              <p>
-                Before requesting a refund, you must first contact the seller through
-                the product support page. Give them at least 48 hours to respond and
-                attempt to resolve the issue.
-              </p>
-
-              <h3>Step 2: Request a Refund</h3>
-              <p>
-                If the seller cannot resolve the issue, go to "My Purchases" and click
-                "Request Refund" on the product. Provide:
-              </p>
-              <ul>
-                <li>Detailed reason for the refund request</li>
-                <li>Screenshots or evidence of the issue</li>
-                <li>Communication history with the seller (if any)</li>
-              </ul>
-
-              <h3>Step 3: Review Process</h3>
-              <p>
-                Our team will review your request within 3-5 business days. We may:
-              </p>
-              <ul>
-                <li>Contact you for additional information</li>
-                <li>Test the product ourselves</li>
-                <li>Mediate between you and the seller</li>
-              </ul>
-
-              <h3>Step 4: Decision and Payout</h3>
-              <p>
-                Once approved, refunds are processed within 7-10 business days to your
-                original payment method. You'll receive an email confirmation.
-              </p>
-            </div>
-
-            <div className="policy-section">
-              <h2>4. Partial Refunds</h2>
-              <p>
-                In some cases, we may offer partial refunds:
-              </p>
-              <ul>
-                <li>The product works but with minor issues</li>
-                <li>The seller provides compensation (credits, discounts)</li>
-                <li>You've used some but not all parts of a bundle</li>
+            {/* Section 3 */}
+            <div className="policy-doc-section">
+              <h2 className="policy-section-heading">
+                <Clock size={18} className="text-primary" />
+                <span>3. Quy trình 4 bước Hoàn tiền Escrow</span>
+              </h2>
+              <p>Quy trình xử lý hoàn tiền được thực hiện hoàn toàn tự động và minh bạch:</p>
+              <ul className="policy-checklist">
+                <li>
+                  <CheckCircle2 size={15} className="text-primary flex-shrink-0" />
+                  <span>
+                    <strong>Bước 1 - Gửi yêu cầu:</strong> Vào mục <em>"Mã nguồn đã mua"</em> &rarr;
+                    Chọn đơn hàng &rarr; Nhấn <em>"Yêu cầu Hoàn tiền Escrow"</em> và mô tả lỗi kèm
+                    ảnh/video.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-primary flex-shrink-0" />
+                  <span>
+                    <strong>Bước 2 - Tác giả đối soát:</strong> Tác giả có 24h để hỗ trợ khắc phục
+                    hoặc xác nhận đồng ý hoàn tiền.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-primary flex-shrink-0" />
+                  <span>
+                    <strong>Bước 3 - Kiểm tra độc lập:</strong> Nếu tác giả không phản hồi, kỹ thuật
+                    viên CodeMart sẽ trực tiếp chạy thử mã nguồn để thẩm định.
+                  </span>
+                </li>
+                <li>
+                  <CheckCircle2 size={15} className="text-primary flex-shrink-0" />
+                  <span>
+                    <strong>Bước 4 - Hoàn trả tiền:</strong> Sau khi chấp thuận, tiền được hoàn 100%
+                    về tài khoản ngân hàng hoặc ví điện tử của bạn trong vòng 24 - 48 giờ làm việc.
+                  </span>
+                </li>
               </ul>
             </div>
 
-            <div className="policy-section">
-              <h2>5. Refund for Extended Licenses</h2>
-              <p>
-                Extended license purchases can be refunded to Regular license status if:
-              </p>
-              <ul>
-                <li>You haven't used the extended license features</li>
-                <li>You request within 14 days of purchase</li>
-              </ul>
-              <p>
-                You'll receive a partial refund equal to the price difference between
-                Regular and Extended licenses.
-              </p>
-            </div>
-
-            <div className="policy-section">
-              <h2>6. Seller Responsibilities</h2>
-              <p>
-                Sellers are responsible for:
-              </p>
-              <ul>
-                <li>Providing accurate product descriptions</li>
-                <li>Offering the advertised level of support</li>
-                <li>Fixing legitimate bugs and issues</li>
-                <li>Responding to customer inquiries within 48 hours</li>
-              </ul>
-              <p>
-                Sellers with excessive refund rates ({'>'}10%) may face account suspension.
-              </p>
-            </div>
-
-            <div className="policy-section">
-              <h2>7. Refund Abuse</h2>
-              <p>
-                We take refund abuse seriously. The following actions may result in
-                account termination:
-              </p>
-              <ul>
-                <li>Requesting refunds for products you've already used</li>
-                <li>Attempting to keep product files after refund</li>
-                <li>Filing multiple frivolous refund requests</li>
-                <li>Violating license terms and then requesting refunds</li>
-              </ul>
-            </div>
-
-            <div className="policy-section">
-              <h2>8. Dispute Resolution</h2>
-              <p>
-                If you disagree with a refund decision:
-              </p>
-              <ul>
-                <li>You can appeal within 7 days of the decision</li>
-                <li>Provide new evidence or information</li>
-                <li>Our senior team will conduct a final review</li>
-                <li>The final decision is binding</li>
-              </ul>
-            </div>
-
-            <div className="policy-section">
-              <h2>9. Payment Processing Fees</h2>
-              <p>
-                Please note:
-              </p>
-              <ul>
-                <li>Payment processing fees (usually 3-5%) are non-refundable</li>
-                <li>International transaction fees may apply</li>
-                <li>Currency conversion rates at time of refund may differ from purchase</li>
-              </ul>
-            </div>
-
-            <div className="policy-section">
-              <h2>10. Questions?</h2>
-              <p>
-                If you have questions about our refund policy or need assistance with
-                a refund request:
-              </p>
-              <ul>
-                <li><strong>Email:</strong> refunds@codemarket.com</li>
-                <li><strong>Live Chat:</strong> Available 24/7 on our website</li>
-                <li><strong>Phone:</strong> +84 (028) 1234 5678 (Mon-Fri, 9AM-6PM GMT+7)</li>
-              </ul>
+            <div className="policy-doc-footer-note">
+              <span>CodeMart Việt Nam • Bộ phận Giải quyết Tranh chấp Escrow</span>
+              <span>Email: refund@codemart.vn</span>
             </div>
           </div>
         </div>

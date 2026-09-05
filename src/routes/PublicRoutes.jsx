@@ -29,6 +29,7 @@ import CartPage from '../pages/Cart/CartPage';
 import WishlistPage from '../pages/User/WishlistPage';
 import DashboardPage from '../pages/User/DashboardPage';
 import OrdersPage from '../pages/User/OrdersPage';
+import MyPurchasesPage from '../pages/User/MyPurchasesPage';
 import CheckoutPage from '../pages/Checkout/CheckoutPage';
 import CheckoutSuccessPage from '../pages/Checkout/CheckoutSuccessPage';
 import ProfilePage from '../pages/User/ProfilePage';
@@ -83,6 +84,14 @@ const PublicRoutes = () => (
       element={
         <ProtectedRoute>
           <OrdersPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path={ROUTE_PATHS.USER.PURCHASES}
+      element={
+        <ProtectedRoute>
+          <MyPurchasesPage />
         </ProtectedRoute>
       }
     />

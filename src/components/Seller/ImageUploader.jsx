@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { Image, UploadCloud, ChevronLeft, ChevronRight, Trash2, Star } from 'lucide-react';
 import './ImageUploader.css';
 
 const ImageUploader = ({ images, setImages, maxImages = 5 }) => {
@@ -30,14 +31,14 @@ const ImageUploader = ({ images, setImages, maxImages = 5 }) => {
   };
 
   const handleFiles = (files) => {
-    const imageFiles = files.filter(file => file.type.startsWith('image/'));
-    
+    const imageFiles = files.filter((file) => file.type.startsWith('image/'));
+
     if (images.length + imageFiles.length > maxImages) {
-      alert(`You can only upload up to ${maxImages} images`);
+      alert(`Bạn chỉ có thể tải lên tối đa ${maxImages} hình ảnh`);
       return;
     }
 
-    const newImages = imageFiles.map(file => ({
+    const newImages = imageFiles.map((file) => ({
       id: Date.now() + Math.random(),
       file,
       preview: URL.createObjectURL(file),
@@ -49,15 +50,15 @@ const ImageUploader = ({ images, setImages, maxImages = 5 }) => {
   };
 
   const removeImage = (id) => {
-    setImages(images.filter(img => img.id !== id));
+    setImages(images.filter((img) => img.id !== id));
   };
 
   const moveImage = (index, direction) => {
     const newImages = [...images];
     const newIndex = direction === 'left' ? index - 1 : index + 1;
-    
+
     if (newIndex < 0 || newIndex >= images.length) return;
-    
+
     [newImages[index], newImages[newIndex]] = [newImages[newIndex], newImages[index]];
     setImages(newImages);
   };
@@ -67,66 +68,71 @@ const ImageUploader = ({ images, setImages, maxImages = 5 }) => {
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
   return (
-    <div className="image-uploader-container">
-      <div className="uploader-header">
-        <h4 className="uploader-title">
-          🖼️ Product Images
-          <span className="required">*</span>
-        </h4>
-        <span className="image-count">
-          {images.length} / {maxImages} images
+    <div className="image-uploader-container-modern">
+      <div className="uploader-header-modern">
+        <div className="uploader-title-pair">
+          <Image size={16} className="text-primary" />
+          <span className="uploader-title-text">
+            Ảnh minh họa sản phẩm <span className="required-star">*</span>
+          </span>
+        </div>
+        <span className="image-count-badge">
+          {images.length} / {maxImages} ảnh
         </span>
       </div>
 
       {/* Image Previews */}
       {images.length > 0 && (
-        <div className="image-previews">
+        <div className="image-previews-grid">
           {images.map((image, index) => (
-            <div key={image.id} className="image-preview-card">
+            <div key={image.id} className="image-preview-item-card">
               {index === 0 && (
-                <div className="primary-badge">Primary</div>
-              )}
-              
-              <img src={image.preview} alt={image.name} className="preview-image" />
-              
-              <div className="preview-overlay">
-                <div className="preview-info">
-                  <p className="preview-name">{image.name}</p>
-                  <p className="preview-size">{formatFileSize(image.size)}</p>
+                <div className="primary-cover-chip">
+                  <Star size={10} fill="#ffffff" color="#ffffff" />
+                  <span>Ảnh bìa chính</span>
                 </div>
-                
-                <div className="preview-actions">
+              )}
+
+              <img src={image.preview} alt={image.name} className="preview-img-tag" />
+
+              <div className="preview-hover-overlay">
+                <div className="preview-file-meta">
+                  <span className="preview-file-title">{image.name}</span>
+                  <span className="preview-file-bytes">{formatFileSize(image.size)}</span>
+                </div>
+
+                <div className="preview-btn-actions">
                   {index > 0 && (
                     <button
                       type="button"
-                      className="preview-btn move-btn"
+                      className="btn-preview-ctrl"
                       onClick={() => moveImage(index, 'left')}
-                      title="Move left"
+                      title="Chuyển sang trái"
                     >
-                      ←
+                      <ChevronLeft size={14} />
                     </button>
                   )}
                   {index < images.length - 1 && (
                     <button
                       type="button"
-                      className="preview-btn move-btn"
+                      className="btn-preview-ctrl"
                       onClick={() => moveImage(index, 'right')}
-                      title="Move right"
+                      title="Chuyển sang phải"
                     >
-                      →
+                      <ChevronRight size={14} />
                     </button>
                   )}
                   <button
                     type="button"
-                    className="preview-btn delete-btn"
+                    className="btn-preview-ctrl delete"
                     onClick={() => removeImage(image.id)}
-                    title="Remove"
+                    title="Xóa ảnh này"
                   >
-                    🗑️
+                    <Trash2 size={14} />
                   </button>
                 </div>
               </div>
@@ -135,10 +141,10 @@ const ImageUploader = ({ images, setImages, maxImages = 5 }) => {
         </div>
       )}
 
-      {/* Upload Area */}
+      {/* Upload Drop Area */}
       {images.length < maxImages && (
         <div
-          className={`upload-area ${dragActive ? 'drag-active' : ''}`}
+          className={`dropzone-upload-area ${dragActive ? 'drag-active' : ''}`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
@@ -149,34 +155,26 @@ const ImageUploader = ({ images, setImages, maxImages = 5 }) => {
             ref={fileInputRef}
             type="file"
             multiple
-            accept="image/*"
+            accept="image/png, image/jpeg, image/webp"
             onChange={handleChange}
             style={{ display: 'none' }}
           />
-          
-          <div className="upload-icon">📸</div>
-          <h4 className="upload-title">
-            {images.length === 0 ? 'Add Product Images' : 'Add More Images'}
-          </h4>
-          <p className="upload-subtitle">
-            Drag & drop or click to browse
-          </p>
-          <p className="upload-hint">
-            PNG, JPG, GIF up to 10MB each
-          </p>
+
+          <div className="dropzone-icon-box">
+            <UploadCloud size={24} className="text-primary" />
+          </div>
+
+          <div className="dropzone-labels">
+            <p className="dropzone-primary-txt">
+              <strong>Nhấn để chọn ảnh</strong> hoặc kéo thả vào đây
+            </p>
+            <p className="dropzone-hint-txt">
+              PNG, JPG, WEBP chất lượng cao (Tối đa 5MB/ảnh). Ảnh đầu tiên sẽ được làm ảnh bìa
+              chính.
+            </p>
+          </div>
         </div>
       )}
-
-      <div className="uploader-tips">
-        <div className="tip-item">
-          <span className="tip-icon">💡</span>
-          <span className="tip-text">First image will be used as primary thumbnail</span>
-        </div>
-        <div className="tip-item">
-          <span className="tip-icon">📐</span>
-          <span className="tip-text">Recommended size: 1200x800px</span>
-        </div>
-      </div>
     </div>
   );
 };

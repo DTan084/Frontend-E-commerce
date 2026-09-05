@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import AdminSidebar from '../components/Admin/AdminSidebar';
+import AdminHeader from '../components/Admin/AdminHeader';
 import './AdminLayout.css';
 import '../styles/AdminCommon.css';
 
@@ -22,26 +23,22 @@ const AdminLayout = () => {
   }, [isSidebarOpen]);
 
   return (
-    <div className={`admin-layout ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <button
-        type="button"
-        className="mobile-menu-toggle"
-        onClick={() => setIsSidebarOpen((prev) => !prev)}
-        aria-label="Toggle admin menu"
-      >
-        ☰
-      </button>
-
+    <div className={`admin-layout-modern ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      {/* Mobile Backdrop */}
       <div
-        className={`sidebar-overlay ${isSidebarOpen ? 'active' : ''}`}
+        className={`admin-sidebar-overlay ${isSidebarOpen ? 'active' : ''}`}
         onClick={() => setIsSidebarOpen(false)}
       />
 
+      {/* Sidebar */}
       <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <div className="admin-main">
-        <div className="admin-content">
+
+      {/* Main Workspace Area */}
+      <div className="admin-main-viewport">
+        <AdminHeader onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
+        <main className="admin-content-area">
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   );
